@@ -1,0 +1,23 @@
+# --- OS Metadata ---
+.DS_Store
+Thumbs.db
+.directory
+
+# --- Obsidian Internals ---
+# Ignore the entire .obsidian folder if you want a completely "naked" vault, 
+# but usually, it's better to only ignore the "noisy" parts:
+
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+.obsidian/appearance.json
+.obsidian/core-plugins-migration.json
+
+# --- Plugin & Cache data ---
+.obsidian/plugins/*/data.json
+.obsidian/cache/
+.trash/
+
+# --- Sync & Conflict files ---
+*.sync-conflict-*
+[Cc]onflict*
