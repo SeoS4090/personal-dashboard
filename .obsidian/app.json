@@ -2,5 +2,6 @@
   "promptDelete": false,
   "alwaysUpdateLinks": true,
   "newLinkFormat": "relative",
-  "newFileLocation": "current"
+  "newFileLocation": "current",
+  "spellcheck": false
 }

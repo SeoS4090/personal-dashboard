@@ -1,0 +1,8 @@
+{
+	"nodes":[
+		{"id":"32f60741de1b6a6c","type":"group","x":-220,"y":300,"width":320,"height":200,"label":"템플릿"},
+		{"id":"bd987fd8bb048b6f","type":"file","file":"99. Temp/Template Daily.md","x":-200,"y":340,"width":280,"height":50},
+		{"id":"8a88f2b561dd816c","type":"file","file":"99. Temp/Template Schedule.md","x":-200,"y":420,"width":280,"height":50}
+	],
+	"edges":[]
+}
