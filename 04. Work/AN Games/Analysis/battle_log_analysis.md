@@ -1,3 +1,11 @@
+---
+tags:
+  - system/battle
+  - status/done
+aliases:
+  - 전투 로그 분석
+---
+
 # 전투 로그 분석 요약 (battle log.txt)
 
 소켓에서 수신한 `fleet_battle_pvp` / `fleet_battle_msg` / `fleet_battle_end` 데이터를 기준으로 전투 변화를 정리한 문서입니다.

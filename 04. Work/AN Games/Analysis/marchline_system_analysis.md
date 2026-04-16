@@ -1,3 +1,15 @@
+---
+tags:
+  - system/troop
+  - system/ui
+  - system/network
+  - concern/readability
+  - concern/performance
+  - status/done
+aliases:
+  - MarchLine 시스템 분석
+---
+
 # MarchLine 시스템 분석 및 학습 내용
 
 ## 개요
@@ -500,3 +512,19 @@ MarchLine
 ## 결론
 
 `MarchLine` 시스템은 게임의 군단(행군) 기능을 구현하는 핵심 시스템입니다. 데이터 중심 설계, 관심사 분리, 상태 기반 UI 등 Unity 6 프로젝트의 모범 사례를 보여주는 구조입니다. 다만 일부 함수와 클래스의 크기가 크므로, 리팩토링을 통해 유지보수성을 향상시킬 수 있습니다.
+
+---
+
+## 9. 2026-03 추적 동기화 이슈 반영
+
+- 대상 함수: `MarchLine.UpdateAttacker()`, `Troop_Manager.StartMove()`
+- 이슈 요약:
+  - 추적군 상태 분기에서 조기 `return`으로 전체 재계산이 중단되는 경로 존재
+  - `UpdateDefenser`/`UpdateAttacker`의 동시 `Request_GetFleetData(3057)`가 overlap 병합되어 `UpdateAttacker` 콜백 누락 가능
+- 반영 내용:
+  - 조기 중단 분기 `continue` 전환
+  - `UpdateAttacker` 조회에 `_isOverlapBlock=false` 적용으로 콜백 보장
+  - `[TroopTrace]` 로그 체계 추가로 입력값, 해결값, 전송 보장 단계 추적 가능
+- 관련 문서:
+  - [[Troop_Manager_StartMove_UpdateAttacker_Analysis]]
+  - [[TroopTrace_StartMove_UpdateAttacker_LogGuide]]

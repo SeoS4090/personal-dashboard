@@ -52,3 +52,12 @@ Army[i].Item2.text = MKCommon.NumberToString(units[i].Item2);
 ### 4.2 개선 제안
 *   **LINQ 할당:** `SetData`가 호출될 때마다 `Select(...).ToList()`를 수행하여 새로운 리스트를 힙에 할당합니다. 스크롤 뷰처럼 자주 호출되는 곳에서는 GC(Garbage Collection) 부하가 발생할 수 있습니다. `for` 문으로 직접 접근하거나 미리 할당된 리스트를 재사용하는 방식으로 최적화가 가능합니다.
 *   **하드코딩된 인덱스:** 생성자에서 `i <= 6`으로 6개 슬롯을 고정하고 있습니다. 만약 기획 변경으로 슬롯 수가 변한다면 코드를 수정해야 합니다. UI의 자식 개수를 기반으로 동적으로 리스트를 구성하는 방법도 고려해볼 수 있습니다.
+
+---
+
+## 5. 관련 장애 이력 (2026-03-25)
+
+- 증상: `Update_DefenseItemOne` 집계(`Sum(x => x.GetCorps().Count())`) 중 `ArgumentNullException(value)`
+- 직접 원인: `ally_def_memberSlot.GetCorps()`가 `corps == null`을 방어하지 못함
+- 맥락 원인: `def_join` 푸시 기반 임시 데이터가 `reinforce_memberList`에 합쳐지는 동안 `corps` 누락 가능
+- 대응 상세: [[Ally_war_rally_DefJoin_corps_Null_Incident_Analysis]]

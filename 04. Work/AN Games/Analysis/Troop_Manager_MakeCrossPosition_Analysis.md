@@ -77,3 +77,40 @@
 - **이진 탐색의 가정**:
   - 2단계 탐색에서 `(to_pos + searched_pos) / 2`와 같은 단순 중간 지점 계산은 NavMesh 상의 실제 이동 거리와 다를 수 있습니다 (장애물이 있는 경우).
   - 단순 거리 비례가 아닌, 경로 상의 거리(`Path Distance`)를 기준으로 계산해야 정확도가 높아집니다.
+
+---
+
+## 4. 적용된 수정 (2026-04-15)
+
+### 4.1. 2단계 이진탐색 — `def_path == null` null 가드
+
+**문제**: 이진탐색 중간값(`searched_pos`)이 NavMesh 밖 위치에 해당할 경우 `FindPath`가 `null`을 반환하는데, 이를 null 체크 없이 `path.AddRange(def_path)`에 바로 넘겨 `ArgumentNullException` 발생.
+
+```csharp
+// 수정 전
+var def_path = MKNavMeshManager.Instance.FindPath(..., searched_pos);
+var path = defenser.move_path_slot.Where(...).ToList();
+path.AddRange(def_path); // ← def_path가 null이면 ArgumentNullException
+```
+
+**수정 후**: null이면 `to_pos` 방향으로 탐색 범위를 좁히고 `continue`로 이진탐색 계속 진행.
+
+```csharp
+var def_path = MKNavMeshManager.Instance.FindPath(..., searched_pos);
+if (def_path == null)
+{
+    to_pos = searched_pos;
+    searched_pos = (from_pos + searched_pos) / 2;
+    continue;
+}
+var path = defenser.move_path_slot.Where(...).ToList();
+path.AddRange(def_path);
+```
+
+**효과**: NavMesh 밖 중간값을 자동으로 건너뛰고 유효 구역 쪽으로 탐색이 수렴. 예외 없이 안정적으로 종료.
+
+---
+
+## 관련 문서
+- [[Troop_Manager_crossPath_Analysis]]
+- [[NetworkTroop_UpdateAttacker_Analysis]]

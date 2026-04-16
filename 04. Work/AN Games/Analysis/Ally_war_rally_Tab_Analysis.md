@@ -1,3 +1,12 @@
+---
+tags:
+  - system/ui
+  - concern/readability
+  - status/done
+aliases:
+  - Ally_war_rally Tab 분석
+---
+
 # Ally_war_rally.Tab 클래스 분석 보고서
 
 ## 1. 개요
