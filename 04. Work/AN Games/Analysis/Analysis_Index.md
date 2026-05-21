@@ -174,6 +174,8 @@ Analysis_Index (마스터 MOC)
 | [[TroopFormation_WorldTroopPanel_Overlap_Fix_Analysis]] | 부대 편성 팝업 열림 시 WorldTroopPanel 겹침 버그 수정 (AWQA-5822, troopPanelsActive 플래그) | `#system/ui` `#system/troop` `#concern/bug` |
 | [[TroopFormation_SelectIndex_Static_BugFix_AWQA6161]] | AWQA-6161 — OnEnable b__12 ArgumentOutOfRangeException, 방어 가드 3개 추가 완료, 근본 원인(sort Query OOB 가설 등) 추가 조사 필요 **[WIP]** | `#system/ui` `#system/troop` `#concern/bug` `#status/wip` |
 | [[WarAlert_ReconnectIcon_BugAnalysis_AWQA5814]] | AWQA-5814 — CrossEnterBattleField PushFortWar 콜백 Request_WarAlert 누락으로 요새전 진입 시 경고 아이콘 미노출 수정 완료 | `#system/ui` `#system/network` `#concern/bug` `#status/done` |
+| [[TroopManagement_WarAlert_Stale_BugFix]] | RefreshTroop 호출 시 Request_WarAlert 누락으로 Troop_Management 팝업에서 공격자 프로필 미표시 — BATTLE 군단 유무 조건부 cc3071 호출 + 콜백 null 가드 추가 (수정 완료) | `#system/ui` `#system/troop` `#system/network` `#concern/bug` `#status/done` |
+| [[Troop_Management_Analysis]] | 행군·정찰 슬롯 목록 팝업 분석 — CreateMarchLineItem ~350줄 모놀리식, CreateScoutLineItem TYPE_TOWN else 분기 KeyNotFoundException crash 위험, btn_return/retreat/dismissal 동일 콜백, LINQ 전투력 계산 성능 | `#system/ui` `#system/troop` `#concern/bug` `#concern/performance` `#status/done` |
 | [[WorldSearchPopup_Analysis]] | 오브젝트 찾기 팝업 전체 분석 — searchBlockDict 구독 관리, NPC 소환 위치 계산, OnDisable 누수, 소환 로직 중복, searchBlockDict 소실 버그(수정완료) | `#system/ui` `#system/world` `#system/battle` `#concern/bug` `#status/done` |
 
 ---
@@ -257,6 +259,7 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 - [[WorldManager_RefreshPushBlockJoinLeave_SearchBlockLeak_BugFix]]
 - [[WorldSearchPopup_Analysis]]
 - [[TroopLOD_MakeUnits_Duplicate_Analysis]]
+- [[TroopManagement_WarAlert_Stale_BugFix]]
 - [[AWPL-7423_PVP_NavMesh_Outside_Move_Analysis]]
 - [[AWPL-7595_RallyLeader_Succession_RetreatPath_Analysis]]
 - [[AWQA-6260_RallyParticipant_PathLine_DuplicateLine_BugFix_Analysis]]
@@ -306,13 +309,13 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 |------|---------|
 | Troop (부대) | 29 |
 | Battle (전투) | 38 |
-| UI (인터페이스) | 12 (AWQA-6161 WIP) |
+| UI (인터페이스) | 14 (AWQA-6161 WIP) |
 | Network (네트워크) | 4 |
 | World (월드맵) | 4 |
 | Infrastructure (인프라) | 1 |
 | Improvements (개선) | 2 |
-| **합계** | **88** |
+| **합계** | **89** |
 
 ---
 
-*마지막 업데이트: 2026-05-21 (분석 문서 9종 전면 재작성 — WorldManager searchBlockDict 누수 버그, AWQA-6070 요새전 조기 종료 구름 정지, WorldSocketDataModel GetCurrentDetailPos 계약 변경, AWPL-7423 PVP NavMesh 외부 이동, AWQA-6325 방어 지원 전멸 패배 이펙트, AWQA-6326 집결 참가 취소 NRE, TroopLOD BattlePosition 3차 정제, TroopLOD IS_ANNIHILATION Grey 버그, EventUi Achievement 시스템)*
+*마지막 업데이트: 2026-05-21 (Troop_Management 팝업 전체 분석 신규 추가 — CreateMarchLineItem 모놀리식 구조, CreateScoutLineItem TYPE_TOWN else 분기 crash 위험, btn 동일 콜백, LINQ 성능)*

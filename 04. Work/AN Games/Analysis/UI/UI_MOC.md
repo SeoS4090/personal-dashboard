@@ -5,9 +5,9 @@ tags:
 aliases:
   - UI MOC
   - 인터페이스 MOC
-description: 무한 스크롤, 팝업, 이벤트 UI, 연맹전 랠리, 부대 편성 UI 분석 MOC
+description: 무한 스크롤, 팝업, 이벤트 UI, 연맹전 랠리, 부대 편성·관리 UI 분석 MOC
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-05-21
 ---
 
 # UI — 인터페이스 시스템 MOC
@@ -44,6 +44,14 @@ updated: 2026-05-20
 
 ---
 
+## 부대 관리 팝업
+
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[Troop_Management_Analysis]] | 행군·정찰 슬롯 목록 팝업 전체 분석 — 모놀리식 CreateMarchLineItem, else 분기 crash 위험, 버튼 동일 콜백 | done |
+
+---
+
 ## 부대 편성
 
 | 문서 | 핵심 주제 | 상태 |
@@ -67,6 +75,7 @@ updated: 2026-05-20
 | 문서 | 핵심 주제 | 상태 |
 |------|-----------|------|
 | [[WarAlert_ReconnectIcon_BugAnalysis_AWQA5814]] | 요새전 진입 시 경고 아이콘 미노출 수정 (AWQA-5814) | done |
+| [[TroopManagement_WarAlert_Stale_BugFix]] | RefreshTroop 시 warAlertList 스테일로 공격자 프로필 미표시 수정 | done |
 
 ---
 
@@ -75,3 +84,4 @@ updated: 2026-05-20
 - [[WorldSearchPopup_Analysis]] ↔ [[WorldManager_RefreshPushBlockJoinLeave_SearchBlockLeak_BugFix]] (searchBlockDict 소실 근본 원인 공유)
 - [[EventUi_Achievement_System_Analysis]] ↔ [[SVS_Eve_RankingRewardPopup_Analysis]] (SVS_Event_Eve 상속 구조 공유)
 - [[InfiniteScrollManager_Analysis]] ↔ [[MKCommon_ReplaceAllDataKeepingVisualElements_Analysis]] (가상 스크롤 데이터 교체 쌍)
+- [[WarAlert_ReconnectIcon_BugAnalysis_AWQA5814]] ↔ [[TroopManagement_WarAlert_Stale_BugFix]] (비동기 콜백 시점에 UI 참조 무효화 가능성 — 동일 null 가드 패턴 공유)
