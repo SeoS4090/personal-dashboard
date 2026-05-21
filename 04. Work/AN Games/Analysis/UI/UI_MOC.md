@@ -8,6 +8,7 @@ aliases:
 description: 무한 스크롤, 팝업, 이벤트 UI, 연맹전 랠리, 부대 편성·관리 UI 분석 MOC
 created: 2026-05-20
 updated: 2026-05-21
+
 ---
 
 # UI — 인터페이스 시스템 MOC
@@ -32,6 +33,7 @@ updated: 2026-05-21
 |------|-----------|------|
 | [[WorldUseMoveCityItemPopup_CheckCanMove_RefreshAllData_Analysis]] | 도시 이동 팝업 CheckCanMove + MOVE_CASE 판정 | - |
 | [[WorldSearchPopup_Analysis]] | 오브젝트 찾기 팝업 searchBlockDict 구독·NPC 소환 위치 | done |
+| [[WorldTroopPanel_Function_Analysis]] | 부대 클릭 시 정보 패널 — 9그리드 POS, DOTween Fade, HP 슬라이더, 오브젝트 클릭 디스패치 | done |
 
 ---
 
@@ -49,6 +51,7 @@ updated: 2026-05-21
 | 문서 | 핵심 주제 | 상태 |
 |------|-----------|------|
 | [[Troop_Management_Analysis]] | 행군·정찰 슬롯 목록 팝업 전체 분석 — 모놀리식 CreateMarchLineItem, else 분기 crash 위험, 버튼 동일 콜백 | done |
+| [[WorldTroopButton_Function_Analysis]] | 부대 선택 시 13개 액션 버튼 메뉴 — 내/아군/적 × 상태별 가시성 매트릭스, 집결 리더 처리 | done |
 
 ---
 

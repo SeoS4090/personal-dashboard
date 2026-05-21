@@ -7,7 +7,7 @@ aliases:
   - 부대 시각화 MOC
 description: 월드맵 부대 오브젝트(TroopLOD) 전체 함수 분석 인덱스 — 라이프사이클, LOD, 애니메이션, 전투 위치, 버그 픽스
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-05-21
 ---
 	
 # TroopLOD — 월드맵 시각 표현 레이어 MOC
@@ -87,6 +87,14 @@ updated: 2026-05-20
 | [[TroopLOD_IS_ANNIHILATION_Grey_BugInvestigation]] | IS_ANNIHILATION 오판정 Grey 렌더링 — PopAsync 콜백 로컬 캡처 방어 코드 | done |
 | [[TroopLOD_NPC_JoinBattle_Hide_BugAnalysis]] | 새 블록 join 시 NPC 전투 난입 군단 HIDE 미적용 | wip |
 | [[TroopLOD_NPC_JoinBattle_Hide_BugAnalysis2]] | NPC 난입 HIDE 2차 분석 — fleet_battle_msg sq 배열, 연속 SetTroopSlotData 덮어쓰기 | wip |
+
+---
+
+## 9. NPC 전용 서브클래스
+
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[NPCTroopLOD_Function_Analysis]] | NPC UseType 분류 체계, AutoMove 코루틴(2~4초 랜덤 9방향), LOD 단계별 아이콘 전략, Challenge_effect 라이프사이클 | done |
 
 ---
 

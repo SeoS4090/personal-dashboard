@@ -43,18 +43,18 @@ Analysis_Index (마스터 MOC)
 
 | 시스템 MOC | 문서 수 | 핵심 |
 |-----------|---------|------|
-| [[Troop_MOC]] | 10 | TroopManager, NetworkTroop, AWPL |
-| [[TroopLOD_Function_Analysis_Index]] | 16 | 시각화, LOD, 전투 위치, 버그 |
+| [[Troop_MOC]] | 11 | TroopManager, NetworkTroop, AWPL, 레거시 |
+| [[TroopLOD_Function_Analysis_Index]] | 17 | 시각화, LOD, NPC, 전투 위치, 버그 |
 | [[MarchLine_MOC]] | 6 | 행군선, PathLine 버그 |
 | [[MKSummonNpcManager_Function_Analysis_Index]] | 32 | NPC 소환 상태 머신 전체 |
 | [[Battle_MOC]] | 5 | 함대 전투 메시지, 집결 |
-| [[UI_MOC]] | 12 | 스크롤, 팝업, 이벤트 UI |
+| [[UI_MOC]] | 14 | 스크롤, 팝업, 이벤트 UI, 부대 패널 |
 | [[Network_MOC]] | 4 | 서버 동기화, 캐시 |
 | [[World_MOC]] | 5 | 월드맵, Firebase |
 
 ---
 
-## 1. Troop (부대 이동/추적/경로) — 23건
+## 1. Troop (부대 이동/추적/경로) — 25건
 
 부대 이동, 추적, 경로 계산, LOD 시각화, 전투 배치 관련 분석.
 
@@ -85,6 +85,7 @@ Analysis_Index (마스터 MOC)
 | [[TroopLOD_BattlePosition_3rd_Refinement_Analysis]]    | 전투 위치 3·4차 고도화 — origin_no 필터, path[0] 변조 분리, dir=zero 폴백, LINQ 제거, USER_CITY 2x 오프셋 통일 | `#system/troop` `#system/battle` `#concern/bug` `#concern/performance` `#status/done` |
 | [[TroopLOD_CombatEffect_Analysis]]                     | 전투 이펙트 코루틴 파이프라인, GC 이슈                                                                 | `#system/troop` `#system/battle` `#concern/performance`                               |
 | [[TroopLOD_simple_hero_icon_Lifecycle_Analysis]]       | SpriteRenderer 영웅 아이콘 라이프사이클                                                            | `#system/troop` `#concern/bug`                                                        |
+| [[NPCTroopLOD_Function_Analysis]]                      | NPC UseType 분류 체계, AutoMove 코루틴(9방향 랜덤·2~4초), LOD 단계별 아이콘 전략, Challenge_effect 라이프사이클 | `#system/troop` `#npc` `#concern/performance`                                         |
 
 ### 1-3. NetworkTroop / UpdateAttacker (서버 동기화 + 버그 수정)
 
@@ -99,6 +100,7 @@ Analysis_Index (마스터 MOC)
 
 ### 1-4. MarchLine (행군선)
 
+
 | 문서 | 핵심 주제 | 주요 태그 |
 |------|-----------|----------|
 | [[marchline_system_analysis]] | MarchLine 전체 아키텍처: 데이터/Corps/Div/UI/LOD | `#system/troop` `#concern/readability` |
@@ -107,6 +109,12 @@ Analysis_Index (마스터 MOC)
 | [[AWQA-6326_RallyJoin_CancelNRE_BugFix]] | AWQA-6326 — 요새전 집결 2회 참여 시 퇴각 버튼 무반응 NRE: `war_memberSlotList` 취소 후 미삭제로 키 누적, `.Select(Find).First()` LINQ가 null 반환 → `SelectMany.FirstOrDefault` 수정 + `Request_GetRallyMemberData` 폴백 추가 | `#system/troop` `#system/network` `#concern/bug` `#status/done` |
 | [[AWQA-6371_FortWar_TroopFlicker_BugAnalysis]] | AWQA-6371 — 요새전 귀환 중 부대가 적 공격 받을 때 깜빡이는 버그: `fleet_battle`이 `origin_no`를 `battle.target_no`로 덮어쓰고, `fleet_sally`가 서버 원본값으로 복원할 때 두 번의 순간 이동 발생. `IS_RETURN` 상태 방어 예외 처리 필요 | `#system/troop` `#system/battle` `#system/network` `#concern/bug` `#status/wip` |
 | [[AWQA-6379_PathLine_PreCorrection_FlickerFix_Analysis]] | AWQA-6379 — 출병 즉시 선처리 시 `sally_type` 누락으로 `IsBattleApproachTroop()` 오판정 → 끝점 보정 생략 → 보정 전 pathline 그림 → 소켓 후 재보정으로 flicker. `NetworkTroop.cs` 선처리 누락 필드 보완 + `WorldManager.cs` 시작점 보정 범위 확장(수정 완료) | `#system/troop` `#system/network` `#concern/bug` `#status/done` |
+
+### 1-5. 레거시 시각화
+
+| 문서 | 핵심 주제 | 주요 태그 |
+|------|-----------|----------|
+| [[TroopSprite_Function_Analysis]] | SpritedowAnimator 기반 2D 스프라이트 부대 (레거시) — 4병종·8방향 애니·NavMesh, WorldManager 참조 존재 | `#system/troop` `#concern/readability` |
 
 ---
 
@@ -157,7 +165,7 @@ Analysis_Index (마스터 MOC)
 
 ---
 
-## 3. UI (사용자 인터페이스) — 8건
+## 3. UI (사용자 인터페이스) — 10건
 
 무한 스크롤, 팝업, 이벤트 관리, DOTween UI 애니메이션 관련 분석.
 
@@ -177,6 +185,8 @@ Analysis_Index (마스터 MOC)
 | [[TroopManagement_WarAlert_Stale_BugFix]] | RefreshTroop 호출 시 Request_WarAlert 누락으로 Troop_Management 팝업에서 공격자 프로필 미표시 — BATTLE 군단 유무 조건부 cc3071 호출 + 콜백 null 가드 추가 (수정 완료) | `#system/ui` `#system/troop` `#system/network` `#concern/bug` `#status/done` |
 | [[Troop_Management_Analysis]] | 행군·정찰 슬롯 목록 팝업 분석 — CreateMarchLineItem ~350줄 모놀리식, CreateScoutLineItem TYPE_TOWN else 분기 KeyNotFoundException crash 위험, btn_return/retreat/dismissal 동일 콜백, LINQ 전투력 계산 성능 | `#system/ui` `#system/troop` `#concern/bug` `#concern/performance` `#status/done` |
 | [[WorldSearchPopup_Analysis]] | 오브젝트 찾기 팝업 전체 분석 — searchBlockDict 구독 관리, NPC 소환 위치 계산, OnDisable 누수, 소환 로직 중복, searchBlockDict 소실 버그(수정완료) | `#system/ui` `#system/world` `#system/battle` `#concern/bug` `#status/done` |
+| [[WorldTroopPanel_Function_Analysis]] | 부대 클릭 정보 패널 — 진입방향 기반 9그리드 POS, DOTween Fade(alpha+pivot), HP 슬라이더, 오브젝트 클릭 디스패치, LateUpdate 카메라 추종 | `#system/ui` `#system/troop` `#concern/performance` |
+| [[WorldTroopButton_Function_Analysis]] | 부대 액션 버튼 메뉴 13개 — 내/아군/적 × 상태별 가시성 매트릭스, 집결 리더 비동기 처리, 요새전 긴급탈출 조건 | `#system/ui` `#system/troop` |
 
 ---
 
@@ -292,6 +302,8 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 - [[WorldCameraManager_DragMove_RaidPointBlock_Analysis]]
 - [[FirebaseManager_Analysis]]
 - [[UpdateAttacker_3057_RaceCondition_BugFix]]
+- [[NPCTroopLOD_Function_Analysis]]
+- [[WorldTroopPanel_Function_Analysis]]
 
 ### #concern/memory (메모리 관련 — 5건)
 - [[TroopLOD_MakeUnits_Duplicate_Analysis]]
@@ -307,15 +319,15 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 
 | 분류 | 문서 수 |
 |------|---------|
-| Troop (부대) | 29 |
+| Troop (부대) | 31 |
 | Battle (전투) | 38 |
-| UI (인터페이스) | 14 (AWQA-6161 WIP) |
+| UI (인터페이스) | 16 (AWQA-6161 WIP) |
 | Network (네트워크) | 4 |
 | World (월드맵) | 4 |
 | Infrastructure (인프라) | 1 |
 | Improvements (개선) | 2 |
-| **합계** | **89** |
+| **합계** | **93** |
 
 ---
 
-*마지막 업데이트: 2026-05-21 (Troop_Management 팝업 전체 분석 신규 추가 — CreateMarchLineItem 모놀리식 구조, CreateScoutLineItem TYPE_TOWN else 분기 crash 위험, btn 동일 콜백, LINQ 성능)*
+*마지막 업데이트: 2026-05-21 (신규 4건 추가 — NPCTroopLOD(NPC 분류·AutoMove), WorldTroopPanel(9그리드 POS·DOTween), WorldTroopButton(13개 버튼 매트릭스), TroopSprite(레거시 2D 스프라이트))*

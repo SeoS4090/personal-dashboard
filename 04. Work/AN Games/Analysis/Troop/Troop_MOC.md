@@ -7,7 +7,7 @@ aliases:
   - 부대 시스템 MOC
 description: 부대 이동 코어(TroopManager), 서버 동기화(NetworkTroop), 시각화(TroopLOD), 데이터(MarchLine) 전체 Troop 시스템 MOC
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-05-21
 ---
 
 # Troop — 부대 시스템 MOC
@@ -58,6 +58,14 @@ updated: 2026-05-20
 |------|-----------|------|
 | [[AWPL-7423_PVP_NavMesh_Outside_Move_Analysis]] | NavMesh 밖 전투 방지 — NRE/IOE 크래시, 이진탐색 fallback | done |
 | [[AWPL-7595_RallyLeader_Succession_RetreatPath_Analysis]] | 집결장 전멸 후 승계 시 퇴각 경로 추종 버그 | done |
+
+---
+
+## 레거시 시각화
+
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[TroopSprite_Function_Analysis]] | SpritedowAnimator 기반 2D 스프라이트 부대 (레거시) — 4병종·8방향 애니·NavMesh 경로, WorldManager 참조 존재 | done |
 
 ---
 
