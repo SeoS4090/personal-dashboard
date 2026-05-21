@@ -1,0 +1,12 @@
+# Crashlytics - Stack trace
+# Application: com.angames.android.google.avatarbendingtheworld
+# Platform: android
+# Version: 1.4.857 (857)
+# Issue: 114faf8455a35fcf6b874ffe821c661d
+# Session: 69E85C8A02AC00014D78BB43FDA9925C_DNE_4_v2
+# Date: Wed Apr 22 2026 15:10:29 GMT+0900 (한국 표준시)
+
+Non-fatal Exception: java.lang.Exception: NullReferenceException : Object reference not set to an instance of an object.
+       at MainHudUi.GetWorldMapCenter(MainHudUi)
+       at MKSoundManager.SetBgm_WorldSector(MKSoundManager)
+       at WorldManager.Update(WorldManager)

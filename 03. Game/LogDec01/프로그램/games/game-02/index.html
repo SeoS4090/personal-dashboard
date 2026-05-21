@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" data-depth="2">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game 02 | Games</title>
+    <script src="../../js/settings.js"></script>
+    <script src="../../js/site-config.js"></script>
+    <script src="../../js/paths.js"></script>
+    <script src="../../js/main.js"></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header id="site-header"></header>
+      <main class="site-main">
+        <nav class="breadcrumb" aria-label="breadcrumb">
+          <a href="../../index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="../index.html">Games</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Game 02</span>
+        </nav>
+        <article class="project-body">
+          <h1>Game 02 <span class="badge badge--planned">예정</span></h1>
+          <p class="hero-lead">프로젝트 슬롯입니다. <code>js/site-config.js</code> 에 항목을 추가하고 이 페이지를 채우세요.</p>
+          <a class="btn btn-ghost" href="../index.html">← Games</a>
+        </article>
+      </main>
+      <div id="site-footer"></div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".breadcrumb a, .btn-ghost").forEach(function (a) {
+          var h = a.getAttribute("href");
+          if (h === "../../index.html") a.href = SitePaths.page("index.html");
+          if (h === "../index.html") a.href = SitePaths.page("games/index.html");
+        });
+        SiteUI.init({ activeNav: "games" });
+      });
+    </script>
+  </body>
+</html>

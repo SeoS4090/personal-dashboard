@@ -2,5 +2,7 @@
   "obsidian-tasks-plugin",
   "calendar",
   "obsidian-git",
-  "templater-obsidian"
+  "templater-obsidian",
+  "tray",
+  "obsidian-linter"
 ]

@@ -1,0 +1,1583 @@
+{
+  "title": "Crashlytics - Custom logs",
+  "bundle_identifier": "com.angames.android.google.avatarbendingtheworld",
+  "platform": "android",
+  "display_version": "1.4.842",
+  "build_version": "842",
+  "issue_id": "114faf8455a35fcf6b874ffe821c661d",
+  "session_id": "69E5289101CD00015E9D0EFB2C3FD5DD_DNE_7_v2",
+  "event_timestamp": "Mon Apr 20 2026 05:02:09 GMT+0900 (한국 표준시)",
+  "logs_and_breadcrumbs": [
+    {
+      "timestamp": "Mon Apr 20 2026 04:10:09 GMT+0900 (한국 표준시)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "UnityPlayerActivity"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:10:57 GMT+0900 (한국 표준시)",
+      "message": "[SafeHandler] ArgumentNullException: Value cannot be null. Parameter name: e",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:11:22 GMT+0900 (한국 표준시)",
+      "name": "unit_heal",
+      "source": "analytics",
+      "params": {
+        "cc": "5007",
+        "payment_market_cumsum": "358.489990234375",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "unit_t4": "0",
+        "unit_t3": "27",
+        "buff_50": "0",
+        "unit_t2": "0",
+        "unit_t1": "8",
+        "unit_arr": "{\"103\":10,\"303\":17,\"301\":8}",
+        "unit_t6": "0",
+        "unit_t5": "0",
+        "ally_no": "109459",
+        "status_time": "1776625908",
+        "power": "4430497",
+        "buff_51": "0",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:11:23 GMT+0900 (한국 표준시)",
+      "name": "unit_train",
+      "source": "analytics",
+      "params": {
+        "cc": "5402",
+        "payment_market_cumsum": "358.489990234375",
+        "buff_train_cost": "0",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "immediately": "0",
+        "buff_train_speed": "1100",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "unit_id_base": "403",
+        "ally_no": "109459",
+        "status_time": "1776625883",
+        "power": "4434997",
+        "unit_id": "403",
+        "unit_count": "1500",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:11:29 GMT+0900 (한국 표준시)",
+      "name": "unit_train",
+      "source": "analytics",
+      "params": {
+        "cc": "5401",
+        "payment_market_cumsum": "358.489990234375",
+        "buff_train_cost": "0",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "immediately": "0",
+        "buff_train_speed": "1100",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "unit_id_base": "403",
+        "ally_no": "109459",
+        "status_time": "1776666429",
+        "power": "4434997",
+        "unit_id": "403",
+        "unit_count": "1500",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:14:52 GMT+0900 (한국 표준시)",
+      "name": "building",
+      "source": "analytics",
+      "params": {
+        "cc": "2004",
+        "building_idx": "203000",
+        "payment_market_cumsum": "358.489990234375",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "ally_no": "109459",
+        "status_time": "1776626092",
+        "power": "4442925",
+        "buff_3": "0",
+        "buff_2": "0",
+        "building_level": "21",
+        "buff_1": "2500",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:14:57 GMT+0900 (한국 표준시)",
+      "name": "unit_heal",
+      "source": "analytics",
+      "params": {
+        "cc": "5008",
+        "payment_market_cumsum": "358.489990234375",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "unit_t4": "0",
+        "unit_t3": "27",
+        "buff_50": "0",
+        "unit_t2": "0",
+        "unit_t1": "8",
+        "unit_arr": "{\"103\":10,\"301\":8,\"303\":17}",
+        "unit_t6": "0",
+        "unit_t5": "0",
+        "ally_no": "109459",
+        "status_time": "1776626097",
+        "power": "4443014",
+        "buff_51": "0",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpc | Accepted summon request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpc | Route: WORLD",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_World | Enter world flow and open wait popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] OpenSearchWaitPopup | Show summon npc search popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_DownloadDataStart | Start download block data coroutine",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | Wait for existing block requests to finish",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:31 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | StartSearchBlock request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:33 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | SetBlockObjectPosition applied",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:33 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | Download finished callback success",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:33 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadDataCallBack | Download callback arrived",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:33 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_DownloadDataSuccess | Download success, branch by ItemID",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosStart | Start empty regen search (item summon)",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosStart | RegenDataList prepared",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosSuccess | Search pos success -> summon start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SummonNpcStart | Send summon request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpcCallbackSucc | Network success callback",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SummonNpcSuccess | Summon success",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_End | Cleanup and return to NONE",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:15:34 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] CloseSearchWaitPopup | Hide summon npc search popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:18:06 GMT+0900 (한국 표준시)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "ProxyBillingActivity"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:18:29 GMT+0900 (한국 표준시)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "UnityPlayerActivity"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:18:50 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "363.4800109863281",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "3",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "9",
+        "ticket_item_count": "6",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:18:52 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "363.4800109863281",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "5",
+        "ticket_item_count": "8",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:18:55 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "363.4800109863281",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "7",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "6",
+        "ticket_item_count": "12",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:18:58 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "363.4800109863281",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "8",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "3",
+        "ticket_item_count": "15",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:19:52 GMT+0900 (한국 표준시)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "ProxyBillingActivity"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:05 GMT+0900 (한국 표준시)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "UnityPlayerActivity"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:21 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "5",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "151003",
+        "server_no": "81",
+        "multiplier": "2",
+        "cr_dt": "1775699867",
+        "open_count": "9",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "10",
+        "ticket_item_count": "20",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:31 GMT+0900 (한국 표준시)",
+      "name": "wish_reset",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16601",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "open_count": "9",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "ticket_item_count": "0",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:43 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "1",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "5",
+        "ticket_item_count": "1",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:45 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "2",
+        "cr_dt": "1775699867",
+        "open_count": "2",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "7",
+        "ticket_item_count": "2",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:47 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "5",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "3",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "1",
+        "ticket_item_count": "3",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:50 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "50",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "10100001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "8",
+        "ticket_item_count": "4",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:54 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "4",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "2",
+        "ticket_item_count": "6",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:20:57 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "multiplier": "4",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "3",
+        "ticket_item_count": "8",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:02 GMT+0900 (한국 표준시)",
+      "name": "wish_reset",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16601",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "ticket_item_count": "0",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:13 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "1",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "4",
+        "ticket_item_count": "1",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:15 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "50",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "11005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "2",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "7",
+        "ticket_item_count": "2",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:17 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "20",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "131004",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "3",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "1",
+        "ticket_item_count": "3",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:20 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "6",
+        "ticket_item_count": "4",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:22 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "4",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "5",
+        "ticket_item_count": "6",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:25 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "3",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "8",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "10",
+        "ticket_item_count": "8",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:28 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "7",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "9",
+        "ticket_item_count": "12",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:45 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "30",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "131004",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "8",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "2",
+        "ticket_item_count": "15",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:47 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "9",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "3",
+        "ticket_item_count": "20",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:21:52 GMT+0900 (한국 표준시)",
+      "name": "wish_reset",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16601",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "open_count": "9",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "ticket_item_count": "0",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:00 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "1",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "4",
+        "ticket_item_count": "1",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:02 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "112001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "2",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "8",
+        "ticket_item_count": "2",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:04 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "3",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "5",
+        "ticket_item_count": "3",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:08 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "5",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "2",
+        "cr_dt": "1775699867",
+        "open_count": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "10",
+        "ticket_item_count": "4",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:11 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "3",
+        "ticket_item_count": "6",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:13 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "2",
+        "ticket_item_count": "8",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:18 GMT+0900 (한국 표준시)",
+      "name": "wish_reset",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16601",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "ticket_item_count": "0",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:26 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "1",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "10",
+        "ticket_item_count": "1",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:29 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "200",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "10100001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "2",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "4",
+        "ticket_item_count": "2",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:31 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "10",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "131004",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "3",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "8",
+        "ticket_item_count": "3",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:34 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "5",
+        "ticket_item_count": "4",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:37 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "multiplier": "2",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "1",
+        "ticket_item_count": "6",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:42 GMT+0900 (한국 표준시)",
+      "name": "wish_reset",
+      "source": "analytics",
+      "params": {
+        "item_count": "60",
+        "cc": "16601",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "44001",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "ticket_item_count": "0",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:51 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "300",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "11005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "1",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "9",
+        "ticket_item_count": "1",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:53 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "50",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "10100001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "2",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "1",
+        "ticket_item_count": "2",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:55 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "50",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "11005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "3",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "7",
+        "ticket_item_count": "3",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:22:57 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "3",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "31003",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "8",
+        "ticket_item_count": "4",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:23:00 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "5",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "5",
+        "ticket_item_count": "6",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:23:02 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "2",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "0",
+        "server_no": "81",
+        "multiplier": "0",
+        "cr_dt": "1775699867",
+        "open_count": "6",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "4",
+        "ticket_item_count": "8",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:23:05 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "1",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "43005",
+        "server_no": "81",
+        "multiplier": "2",
+        "cr_dt": "1775699867",
+        "open_count": "7",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "2",
+        "ticket_item_count": "12",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:23:08 GMT+0900 (한국 표준시)",
+      "name": "wish_slot",
+      "source": "analytics",
+      "params": {
+        "item_count": "50",
+        "cc": "16602",
+        "payment_market_cumsum": "383.4700012207031",
+        "item_id": "10100001",
+        "server_no": "81",
+        "multiplier": "1",
+        "cr_dt": "1775699867",
+        "open_count": "8",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "event_id": "6000001",
+        "slot_id": "3",
+        "ticket_item_count": "15",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:23:27 GMT+0900 (한국 표준시)",
+      "name": "event_reward",
+      "source": "analytics",
+      "params": {
+        "cc": "16102",
+        "payment_market_cumsum": "383.4700012207031",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "event_category": "6000",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "goal_id": "600000103",
+        "event_id": "6000001",
+        "ally_no": "109459",
+        "power": "4443014",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:33:59 GMT+0900 (한국 표준시)",
+      "name": "hero_skillup",
+      "source": "analytics",
+      "params": {
+        "cc": "9007",
+        "payment_market_cumsum": "383.4700012207031",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "hero_skill_2": "4",
+        "account_no": "3792370",
+        "hero_skill_1": "5",
+        "hq_lv": "21",
+        "user_no": "3863394",
+        "hero_level": "50",
+        "hero_skill_4": "5",
+        "hero_rarity": "4",
+        "hero_skill_3": "2",
+        "ally_no": "109459",
+        "power": "4448214",
+        "hero_id": "402",
+        "hero_a_skill": "0",
+        "hero_grade": "25",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpc | Accepted summon request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpc | Route: WORLD",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_World | Enter world flow and open wait popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] OpenSearchWaitPopup | Show summon npc search popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_DownloadDataStart | Start download block data coroutine",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | Wait for existing block requests to finish",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:02 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | StartSearchBlock request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | SetBlockObjectPosition applied",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | Download finished callback success",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadDataCallBack | Download callback arrived",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_DownloadDataSuccess | Download success, branch by ItemID",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosStart | Start empty regen search (item summon)",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosStart | RegenDataList prepared",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosSuccess | Search pos success -> summon start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SummonNpcStart | Send summon request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpcCallbackSucc | Network success callback",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SummonNpcSuccess | Summon success",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_End | Cleanup and return to NONE",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:36:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] CloseSearchWaitPopup | Hide summon npc search popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 04:53:39 GMT+0900 (한국 표준시)",
+      "name": "fortwar_action",
+      "source": "analytics",
+      "params": {
+        "payment_market_cumsum": "383.4700012207031",
+        "server_no": "81",
+        "cr_dt": "1775699867",
+        "match_no": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "city_move_count": "0",
+        "map_no": "2",
+        "user_no": "3863394",
+        "killpoint": "0",
+        "action_time": "1776628419,13745",
+        "heal_count": "0",
+        "action": "전장 진입",
+        "ally_no": "109459",
+        "power": "4448214",
+        "server_type": "0",
+        "game_id": "2"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 05:02:03 GMT+0900 (한국 표준시)",
+      "name": "fortwar_action",
+      "source": "analytics",
+      "params": {
+        "payment_market_cumsum": "383.4700012207031",
+        "server_no": "81",
+        "cr_dt": "1776628418",
+        "match_no": "4",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3792370",
+        "hq_lv": "21",
+        "city_move_count": "2",
+        "map_no": "2",
+        "user_no": "3863394",
+        "killpoint": "57483",
+        "action_time": "1776628923,10947",
+        "heal_count": "23616",
+        "action": "전장 종료",
+        "ally_no": "109459",
+        "power": "4448169",
+        "server_type": "0",
+        "game_id": "2"
+      }
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 05:02:07 GMT+0900 (한국 표준시)",
+      "message": "[SafeHandler] NullReferenceException: Object reference not set to an instance of an object.",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 05:02:07 GMT+0900 (한국 표준시)",
+      "message": "[SafeHandler] NullReferenceException: Object reference not set to an instance of an object.",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Mon Apr 20 2026 05:02:08 GMT+0900 (한국 표준시)",
+      "message": "[SafeHandler] NullReferenceException: Object reference not set to an instance of an object.",
+      "source": "crashlytics"
+    }
+  ]
+}

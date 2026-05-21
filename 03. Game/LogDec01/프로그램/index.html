@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" data-depth="0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="개인 홈페이지 — 프로젝트 & 게임 포트폴리오" />
+    <title>Personal Home</title>
+    <script src="js/settings.js"></script>
+    <script src="js/site-config.js"></script>
+    <script src="js/paths.js"></script>
+    <script src="js/main.js"></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header id="site-header"></header>
+
+      <main class="site-main">
+        <section class="hero">
+          <h1 id="hero-title">Personal Home</h1>
+          <p class="hero-lead" id="hero-tagline">개인 프로젝트 & 게임 포트폴리오</p>
+          <a class="btn btn-primary" href="games/index.html" id="hero-cta">Games 보기</a>
+        </section>
+
+        <section class="section" aria-labelledby="games-section-title">
+          <h2 class="section-title" id="games-section-title">Games</h2>
+          <p class="muted">메인 → Games → 개별 프로젝트 순으로 탐색합니다.</p>
+          <div class="grid" id="project-grid"></div>
+        </section>
+      </main>
+
+      <div id="site-footer"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var c = window.SITE_CONFIG || {};
+        document.title = c.siteName || document.title;
+        var title = document.getElementById("hero-title");
+        var tagline = document.getElementById("hero-tagline");
+        var cta = document.getElementById("hero-cta");
+        if (title) title.textContent = c.siteName || title.textContent;
+        if (tagline) tagline.textContent = c.tagline || tagline.textContent;
+        if (cta) cta.href = SitePaths.page("games/index.html");
+        SiteUI.init({ activeNav: "home", renderProjects: true });
+      });
+    </script>
+  </body>
+</html>

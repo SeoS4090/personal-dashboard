@@ -29,7 +29,13 @@
 		{"id":"e0f1a2b3c4d5e6f7","type":"file","file":"04. Work/AN Games/Analysis/TroopLOD_Movement_Rotation_Path_Analysis.md","x":1980,"y":1060,"width":560,"height":360},
 		{"id":"0a1b2c3d4e5f6071","type":"file","file":"04. Work/AN Games/Analysis/TroopLOD_CombatEffect_Analysis.md","x":1340,"y":1500,"width":560,"height":360},
 		{"id":"1b2c3d4e5f607182","type":"file","file":"04. Work/AN Games/Analysis/TroopLOD_DTO_SyncPipeline_Analysis.md","x":1980,"y":1500,"width":560,"height":360},
-		{"id":"c8d9e0f1a2b3c4d5","type":"file","file":"04. Work/AN Games/Analysis/TroopLOD_BattleImminent_PassThrough_Implementation.md","x":2620,"y":1060,"width":560,"height":380,"color":"3"}
+		{"id":"c8d9e0f1a2b3c4d5","type":"file","file":"04. Work/AN Games/Analysis/TroopLOD_BattleImminent_PassThrough_Implementation.md","x":2620,"y":1060,"width":560,"height":380,"color":"3"},
+		{"id":"awpl7595f6a8b1c2","type":"file","file":"04. Work/AN Games/Analysis/AWPL-7595_RallyLeader_Succession_RetreatPath_Analysis.md","x":3260,"y":1060,"width":560,"height":380,"color":"6"},
+		{"id":"awqa6260a2b3c4d5","type":"file","file":"04. Work/AN Games/Analysis/AWQA-6260_RallyParticipant_PathLine_DuplicateLine_BugFix_Analysis.md","x":3900,"y":1060,"width":560,"height":380,"color":"6"},
+		{"id":"b9e2f3a145c687d0","type":"file","file":"04. Work/AN Games/Analysis/TroopLOD_NPC_JoinBattle_Hide_BugAnalysis.md","x":2620,"y":1500,"width":560,"height":360,"color":"1"},
+		{"id":"awqa6325e7f8a9b0","type":"file","file":"04. Work/AN Games/Analysis/AWQA-6325_DefenseSupport_Annihilated_Defeat_Effect_BugFix.md","x":4540,"y":1060,"width":560,"height":380,"color":"6"},
+		{"id":"awqa6371f0a1b2c3","type":"file","file":"04. Work/AN Games/Analysis/AWQA-6371_FortWar_TroopFlicker_BugAnalysis.md","x":3260,"y":1500,"width":560,"height":380,"color":"1"},
+		{"id":"awqa6334c5d6e7f8","type":"file","file":"04. Work/AN Games/Analysis/AWQA-6334_UserCity_PvP_JoinBattle_EffectPosition_BugFix_Analysis.md","x":3900,"y":1500,"width":560,"height":380,"color":"6"}
 	],
 	"edges":[
 		{"id":"e1d0a9c4f7b38261","fromNode":"f18a90ce22b4d671","fromSide":"right","toNode":"6c2e1b4890fa7d35","toSide":"left","label":"유저 입력"},
@@ -59,6 +65,16 @@
 		{"id":"e9f0122334455667","fromNode":"e0f1a2b3c4d5e6f7","fromSide":"right","toNode":"c8d9e0f1a2b3c4d5","toSide":"left","label":"전투임박 클램프·스폰"},
 		{"id":"a7c3e9f1d5b20846","fromNode":"d3bf94a1207c6e58","fromSide":"left","toNode":"f4a8c7d1b3e29065","toSide":"right","label":"심층 분석"},
 		{"id":"c3d4e5f607819203","fromNode":"a1b2c3d4e5f60781","fromSide":"right","toNode":"b2c3d4e5f6078192","toSide":"left","label":"상세 분석"},
-		{"id":"d4e5f60781920314","fromNode":"f4a8c7d1b3e29065","fromSide":"bottom","toNode":"a1b2c3d4e5f60781","toSide":"top","label":"이슈 4 상세"}
+		{"id":"d4e5f60781920314","fromNode":"f4a8c7d1b3e29065","fromSide":"bottom","toNode":"a1b2c3d4e5f60781","toSide":"top","label":"이슈 4 상세"},
+		{"id":"awpl7595edge5d6e","fromNode":"1b2c3d4e5f607182","fromSide":"right","toNode":"awpl7595f6a8b1c2","toSide":"left","label":"집결 리더 승계 버그"},
+		{"id":"awqa6260edge6e7f","fromNode":"awpl7595f6a8b1c2","fromSide":"right","toNode":"awqa6260a2b3c4d5","toSide":"left","label":"참여자 승계 후 PathLine 오표시"},
+		{"id":"fa1b2c3d4e5f6789","fromNode":"1b2c3d4e5f607182","fromSide":"right","toNode":"b9e2f3a145c687d0","toSide":"left","label":"ApplyTroopInfoAndVisibility HIDE 버그"},
+		{"id":"e8f9012345678901","fromNode":"c8d9e0f1a2b3c4d5","fromSide":"bottom","toNode":"b9e2f3a145c687d0","toSide":"top","label":"전투 중 가시성 연관"},
+		{"id":"awqa6325edge8f9a","fromNode":"awqa6260a2b3c4d5","fromSide":"right","toNode":"awqa6325e7f8a9b0","toSide":"left","label":"전멸 복귀 중 Defeat 오재생"},
+		{"id":"awqa6371edge9a0b","fromNode":"awpl7595f6a8b1c2","fromSide":"bottom","toNode":"awqa6371f0a1b2c3","toSide":"top","label":"IS_RETURN + origin_no 불일치 패턴"},
+		{"id":"awqa6371edge0b1c","fromNode":"awqa6371f0a1b2c3","fromSide":"left","toNode":"b9e2f3a145c687d0","toSide":"right","label":"fleet_battle origin_no 덮어쓰기"},
+		{"id":"awqa6334edge1a2b","fromNode":"awqa6371f0a1b2c3","fromSide":"right","toNode":"awqa6334c5d6e7f8","toSide":"left","label":"counterTroop HIDE 오참조"},
+		{"id":"awqa6334edge2b3c","fromNode":"b9e2f3a145c687d0","fromSide":"right","toNode":"awqa6334c5d6e7f8","toSide":"left","label":"난입 HIDE 유사 패턴"},
+		{"id":"awqa6334edge3c4d","fromNode":"0a1b2c3d4e5f6071","fromSide":"right","toNode":"awqa6334c5d6e7f8","toSide":"bottom","label":"AddCombatEff·effectObject 연관"}
 	]
 }

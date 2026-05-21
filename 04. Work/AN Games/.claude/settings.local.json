@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\admin\\\\Desktop\\\\Personal\\\\Obsidian_Memo\\\\04. Work\\\\AN Games\\\\Analysis\" -File | Select-Object Name | ForEach-Object { $_.Name } | Sort-Object)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\admin\\\\Desktop\\\\Personal\\\\Obsidian_Memo\\\\04. Work\\\\AN Games\\\\Analysis\" -Directory | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\admin\\\\Desktop\\\\Personal\\\\Obsidian_Memo\\\\04. Work\\\\AN Games\\\\Analysis\\\\Troop\" -Directory | ForEach-Object { $_.Name })"
+    ]
+  }
+}

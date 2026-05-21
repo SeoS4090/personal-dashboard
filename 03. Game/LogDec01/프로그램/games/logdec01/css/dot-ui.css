@@ -1,0 +1,303 @@
+/**
+ * LogDec01 — 도트(픽셀) UI 레이어
+ * 기획: [[게임-비전]] — 팔레트·픽셀 폰트·전투 좌/우 배치
+ * article.logdec01-dot 로 스코프
+ */
+
+@font-face {
+  font-family: "NeoDunggeunmo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff")
+    format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+
+.logdec01-dot {
+  --dot-bg: #12081c;
+  --dot-panel: #1c1028;
+  --dot-panel-2: #261436;
+  --dot-border: #5c4a78;
+  --dot-border-light: #8b7aad;
+  --dot-text: #e8dcc8;
+  --dot-text-dim: #a898b8;
+  --dot-accent: #ffd85c;
+  --dot-danger: #ff6b6b;
+  --dot-safe: #5cdb95;
+  --dot-shadow: #0a0510;
+
+  position: relative;
+  color: var(--dot-text);
+  font-family: "NeoDunggeunmo", "Courier New", monospace;
+  font-size: 15px;
+  line-height: 1.45;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* 미세 스캔라인 (CRT 느낌, 가독성 유지) */
+.logdec01-dot::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  opacity: 0.04;
+  background: repeating-linear-gradient(
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.35) 2px,
+    rgba(0, 0, 0, 0.35) 4px
+  );
+}
+
+.logdec01-dot h1 {
+  color: var(--dot-accent);
+  text-shadow: 2px 2px 0 var(--dot-shadow);
+  letter-spacing: 0.02em;
+}
+
+.logdec01-dot .hero-lead,
+.logdec01-dot .hero-lead code {
+  color: var(--dot-text-dim);
+}
+
+.logdec01-dot .badge {
+  border-radius: 0;
+  border: 2px solid var(--dot-border-light);
+  background: var(--dot-panel-2);
+  color: var(--dot-accent);
+}
+
+.logdec01-dot .game-panel {
+  background: var(--dot-panel);
+  border: 3px solid var(--dot-border);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--dot-shadow);
+  padding: 1rem 1.1rem;
+}
+
+.logdec01-dot .game-panel h2 {
+  color: var(--dot-accent);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  border-bottom: 2px dashed var(--dot-border);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.logdec01-dot .game-stats {
+  font-size: 0.88rem;
+  color: var(--dot-text-dim);
+}
+
+.logdec01-dot .game-stats strong {
+  color: var(--dot-text);
+}
+
+/* 버튼: 네모·하드 섀도 */
+.logdec01-dot .btn {
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: 0.85rem !important;
+  border: 3px solid var(--dot-border) !important;
+  box-shadow: 3px 3px 0 var(--dot-shadow) !important;
+  transition: none !important;
+}
+
+.logdec01-dot .btn-primary {
+  background: #4a3a6e !important;
+  color: var(--dot-accent) !important;
+  border-color: var(--dot-border-light) !important;
+}
+
+.logdec01-dot .btn-secondary {
+  background: var(--dot-panel-2) !important;
+  color: var(--dot-text) !important;
+}
+
+.logdec01-dot .btn-ghost {
+  background: transparent !important;
+  color: var(--dot-text-dim) !important;
+  box-shadow: 2px 2px 0 var(--dot-shadow) !important;
+}
+
+.logdec01-dot .btn:hover {
+  filter: brightness(1.12);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--dot-shadow) !important;
+}
+
+.logdec01-dot .btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--dot-shadow) !important;
+}
+
+/* HP 바: 스텝 느낌, 라운드 제거 */
+.logdec01-dot .hp-bar__track {
+  height: 10px;
+  border-radius: 0;
+  border: 2px solid var(--dot-border);
+  background: var(--dot-shadow);
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.logdec01-dot .hp-bar__fill {
+  border-radius: 0;
+  transition: none;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--dot-safe) 0,
+    var(--dot-safe) 4px,
+    #4ade80 4px,
+    #4ade80 8px
+  );
+}
+
+.logdec01-dot .hp-bar__fill--enemy {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--dot-danger) 0,
+    var(--dot-danger) 4px,
+    #f87171 4px,
+    #f87171 8px
+  );
+}
+
+.logdec01-dot .hp-bar__label {
+  font-size: 0.82rem;
+  color: var(--dot-text-dim);
+}
+
+.logdec01-dot .hp-bar__block {
+  color: #7dd3fc;
+  font-size: 0.78rem;
+}
+
+/* 슬롯: 8비트 카드 칩 */
+.logdec01-dot .slot-grid {
+  gap: 6px;
+}
+
+.logdec01-dot .slot-card {
+  border-radius: 0;
+  border: 2px solid var(--dot-border);
+  background: var(--dot-panel-2);
+  box-shadow: 2px 2px 0 var(--dot-shadow);
+  font-size: 0.72rem;
+  min-height: 3.75rem;
+}
+
+.logdec01-dot .slot-card--empty {
+  opacity: 0.45;
+  border-style: dashed;
+}
+
+.logdec01-dot .slot-card__cd {
+  color: var(--dot-accent);
+  text-shadow: 1px 1px 0 var(--dot-shadow);
+}
+
+/* 전투 로그: 터미널 블록 */
+.logdec01-dot .battle-log {
+  border-radius: 0;
+  border: 2px solid var(--dot-border);
+  background: var(--dot-shadow);
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: #c4b5fd;
+  max-height: 11rem;
+}
+
+/* 직업 그리드 */
+.logdec01-dot .class-btn {
+  border-radius: 0;
+  border: 3px solid var(--dot-border);
+  background: var(--dot-panel-2);
+  box-shadow: 3px 3px 0 var(--dot-shadow);
+  color: var(--dot-text);
+}
+
+.logdec01-dot .class-btn:hover {
+  border-color: var(--dot-accent);
+  background: #352848;
+}
+
+/* 상점 */
+.logdec01-dot .shop-slot {
+  border-radius: 0;
+  border: 2px solid var(--dot-border);
+  background: var(--dot-panel-2);
+  box-shadow: 2px 2px 0 var(--dot-shadow);
+}
+
+.logdec01-dot .deck-chip {
+  border-radius: 0;
+  border: 2px solid var(--dot-border);
+  background: var(--dot-shadow);
+  color: var(--dot-text-dim);
+}
+
+/* —— 전투 아레나 (좌 플레이어 / 우 적) —— */
+.dot-arena {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  background: var(--dot-shadow);
+  border: 3px solid var(--dot-border);
+  box-shadow: inset 0 0 0 2px rgba(139, 122, 173, 0.25);
+}
+
+.dot-arena__side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.dot-arena__side--enemy {
+  align-items: center;
+}
+
+.dot-arena__label {
+  font-size: 0.72rem;
+  color: var(--dot-text-dim);
+  letter-spacing: 0.08em;
+}
+
+.dot-sprite {
+  display: block;
+  width: 64px;
+  height: 96px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.dot-arena__vs {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--dot-accent);
+  border: 2px solid var(--dot-border);
+  background: var(--dot-panel);
+  box-shadow: 2px 2px 0 var(--dot-shadow);
+}
+
+/* 전투 패널 안 HP를 아레나 아래로 두되, 좌우 정렬 힌트 */
+.logdec01-dot #screen-battle .game-panel:first-child #enemies-hp {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 28rem) {
+  .dot-sprite {
+    width: 48px;
+    height: 72px;
+  }
+}

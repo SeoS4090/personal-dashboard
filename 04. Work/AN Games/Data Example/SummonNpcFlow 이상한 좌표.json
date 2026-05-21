@@ -1,0 +1,303 @@
+{
+  "title": "Crashlytics - Custom logs",
+  "bundle_identifier": "com.angames.android.google.avatarbendingtheworld",
+  "platform": "android",
+  "display_version": "1.4.842",
+  "build_version": "842",
+  "issue_id": "75ba5445e42df9465afcf7dfead64659",
+  "session_id": "69F11A4602B5000127A46D4519D99D8F_DNE_2_v2",
+  "event_timestamp": "Wed Apr 29 2026 05:43:06 GMT+0900 (한국 표준시)",
+  "logs_and_breadcrumbs": [
+    {
+      "timestamp": "Wed Apr 29 2026 05:36:22 GMT+0900 (한국 표준시)",
+      "name": "session_start",
+      "source": "analytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:36:22 GMT+0900 (한국 표준시)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "UnityPlayerActivity"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:36:55 GMT+0900 (한국 표준시)",
+      "message": "[SafeHandler] ArgumentNullException: Value cannot be null. Parameter name: e",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:37:00 GMT+0900 (한국 표준시)",
+      "name": "building",
+      "source": "analytics",
+      "params": {
+        "cc": "2004",
+        "building_idx": "206000",
+        "payment_market_cumsum": "0",
+        "server_no": "81",
+        "cr_dt": "1775244904",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3768994",
+        "hq_lv": "22",
+        "user_no": "3839277",
+        "ally_no": "108220",
+        "status_time": "1777408620",
+        "power": "3312339",
+        "buff_3": "0",
+        "buff_2": "0",
+        "building_level": "16",
+        "buff_1": "3300",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:37:11 GMT+0900 (한국 표준시)",
+      "message": "[LINKSYSTEM MISSION DATA] CATEGORY : BUILDING TYPE : 1 TYPE1: 0 VAL1 : 0 TYPE2: 0 VAL1 : 0 GOAL : 1",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:37:20 GMT+0900 (한국 표준시)",
+      "message": "[LINKSYSTEM MISSION DATA] CATEGORY : BUILDING TYPE : 2 TYPE1: 1 VAL1 : 206 TYPE2: 11 VAL1 : 22 GOAL : 1",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:37:22 GMT+0900 (한국 표준시)",
+      "message": "[LINKSYSTEM MISSION DATA] CATEGORY : BUILDING TYPE : 2 TYPE1: 1 VAL1 : 201 TYPE2: 11 VAL1 : 17 GOAL : 1",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:37:25 GMT+0900 (한국 표준시)",
+      "name": "building",
+      "source": "analytics",
+      "params": {
+        "cc": "2003",
+        "building_idx": "201000",
+        "payment_market_cumsum": "0",
+        "server_no": "81",
+        "cr_dt": "1775244904",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3768994",
+        "hq_lv": "22",
+        "user_no": "3839277",
+        "ally_no": "108220",
+        "status_time": "1777449886",
+        "power": "3312339",
+        "buff_3": "0",
+        "buff_2": "0",
+        "building_level": "16",
+        "buff_1": "3300",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:38:55 GMT+0900 (한국 표준시)",
+      "name": "mail_reward",
+      "source": "analytics",
+      "params": {
+        "item1_id": "10100002",
+        "mail_id": "30201",
+        "payment_market_cumsum": "0",
+        "item2_id": "10100001",
+        "server_no": "81",
+        "cr_dt": "1775244904",
+        "item1_num": "18",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "item3_num": "2700",
+        "account_no": "3768994",
+        "hq_lv": "22",
+        "item5_num": "2",
+        "user_no": "3839277",
+        "item4_num": "120000",
+        "item6_id": "21004",
+        "item4_id": "11004",
+        "item5_id": "31003",
+        "ally_no": "108220",
+        "item3_id": "11012",
+        "item2_num": "1810",
+        "power": "3312339",
+        "server_type": "0",
+        "item6_num": "5"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:42:27 GMT+0900 (한국 표준시)",
+      "name": "unit_heal",
+      "source": "analytics",
+      "params": {
+        "cc": "5007",
+        "payment_market_cumsum": "0",
+        "server_no": "81",
+        "cr_dt": "1775244904",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3768994",
+        "hq_lv": "22",
+        "user_no": "3839277",
+        "unit_t4": "0",
+        "unit_t3": "0",
+        "buff_50": "0",
+        "unit_t2": "8",
+        "unit_t1": "45",
+        "unit_arr": "{\"402\":8,\"301\":35,\"401\":10}",
+        "unit_t6": "0",
+        "unit_t5": "0",
+        "ally_no": "108220",
+        "status_time": "1777408951",
+        "power": "3312278",
+        "buff_51": "0",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:42:41 GMT+0900 (한국 표준시)",
+      "name": "unit_heal",
+      "source": "analytics",
+      "params": {
+        "cc": "5008",
+        "payment_market_cumsum": "0",
+        "server_no": "81",
+        "cr_dt": "1775244904",
+        "immediately": "0",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3768994",
+        "hq_lv": "22",
+        "user_no": "3839277",
+        "unit_t4": "0",
+        "unit_t3": "0",
+        "buff_50": "0",
+        "unit_t2": "8",
+        "unit_t1": "45",
+        "unit_arr": "{\"301\":35,\"401\":10,\"402\":8}",
+        "unit_t6": "0",
+        "unit_t5": "0",
+        "ally_no": "108220",
+        "status_time": "1777408961",
+        "power": "3312339",
+        "buff_51": "0",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:42:46 GMT+0900 (한국 표준시)",
+      "name": "investigation",
+      "source": "analytics",
+      "params": {
+        "cc": "23002",
+        "payment_market_cumsum": "0",
+        "inv_group_id": "0",
+        "server_no": "81",
+        "param_val1": "0",
+        "inv_grade": "0",
+        "cr_dt": "1775244904",
+        "firebase_screen_class": "UnityPlayerActivity",
+        "account_no": "3768994",
+        "hq_lv": "22",
+        "user_no": "3839277",
+        "investigation_count": "282",
+        "inv_num": "6",
+        "investigation_level": "10",
+        "ally_no": "108220",
+        "power": "3312339",
+        "inv_type": "0",
+        "server_type": "0"
+      }
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:01 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][ChallengeNpcSearchClick] Challenge page requested SummonNpc",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:01 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpc | Accepted summon request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:01 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] SummonNpc | Route: VILLAGE_TO_WORLD",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:01 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_VillageToWorld | Transition to WAIT_WORLD",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:01 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] VillageToWorld | Set fog-end callback and toggle scene",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] WorldMapLoadComplete | World load complete callback",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_World | Enter world flow and open wait popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] OpenSearchWaitPopup | Show summon npc search popup",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_DownloadDataStart | Start download block data coroutine",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | Wait for existing block requests to finish",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:04 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | StartSearchBlock request",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | SetBlockObjectPosition applied",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadBlockData | Download finished callback success",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] DownloadDataCallBack | Download callback arrived",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_DownloadDataSuccess | Download success, branch by ItemID",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_WorldObjSearchPosStart | Start non-item world object search",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_WorldObjSearchPosStart | SearchInSearchBlock result",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_WorldObjSearchPosStart | Regen candidates selected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Wed Apr 29 2026 05:43:05 GMT+0900 (한국 표준시)",
+      "message": "[NonFatalBug][SummonNpcFlow] Updata_SearchPosSuccess | Search pos success -> summon start",
+      "source": "crashlytics"
+    }
+  ]
+}

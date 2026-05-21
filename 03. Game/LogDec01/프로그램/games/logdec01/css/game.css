@@ -1,0 +1,179 @@
+/* LogDec01 게임 UI — 사이트 토큰 위에 레이어 */
+.game-wrap {
+  max-width: 52rem;
+}
+
+.game-panel {
+  background: var(--color-surface, #1a1d24);
+  border: 1px solid var(--color-border, #2e3440);
+  border-radius: var(--radius-md, 8px);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.game-panel h2 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+  color: var(--color-text-muted, #a0aec0);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.game-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+.hp-bar {
+  flex: 1 1 12rem;
+  min-width: 10rem;
+}
+
+.hp-bar__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.hp-bar__track {
+  height: 0.5rem;
+  background: var(--color-bg, #0f1115);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hp-bar__fill {
+  height: 100%;
+  background: #48bb78;
+  transition: width 0.2s ease;
+}
+
+.hp-bar__fill--enemy {
+  background: #fc8181;
+}
+
+.hp-bar__block {
+  font-size: 0.75rem;
+  color: #63b3ed;
+  margin-top: 0.15rem;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 40rem) {
+  .slot-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+.slot-card {
+  background: var(--color-bg, #0f1115);
+  border: 1px solid var(--color-border, #2e3440);
+  border-radius: 6px;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.7rem;
+  text-align: center;
+  min-height: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slot-card--empty {
+  opacity: 0.35;
+}
+
+.slot-card__cd {
+  color: #f6ad55;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.battle-log {
+  max-height: 10rem;
+  overflow-y: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  background: var(--color-bg, #0f1115);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.battle-log p {
+  margin: 0.15rem 0;
+}
+
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.5rem;
+}
+
+.class-btn {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border, #2e3440);
+  border-radius: 8px;
+  background: var(--color-bg, #0f1115);
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.class-btn:hover {
+  border-color: var(--color-accent, #7c9cff);
+  background: var(--color-surface-raised, #22262e);
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.5rem;
+}
+
+.shop-slot {
+  border: 1px solid var(--color-border, #2e3440);
+  border-radius: 8px;
+  padding: 0.6rem;
+  background: var(--color-bg, #0f1115);
+}
+
+.shop-slot button {
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+.deck-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.deck-chip {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  background: var(--color-bg, #0f1115);
+  border: 1px solid var(--color-border, #2e3440);
+}
+
+.game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.game-screen[hidden] {
+  display: none !important;
+}

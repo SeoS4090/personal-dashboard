@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" data-depth="1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="사이트 설정 — 테마, 글자 크기" />
+    <title>Settings | Personal Home</title>
+    <script src="../js/settings.js"></script>
+    <script src="../js/site-config.js"></script>
+    <script src="../js/paths.js"></script>
+    <script src="../js/main.js"></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header id="site-header"></header>
+
+      <main class="site-main">
+        <nav class="breadcrumb" aria-label="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Settings</span>
+        </nav>
+
+        <section class="hero">
+          <h1>Settings</h1>
+          <p class="hero-lead">테마와 글자 크기 등 홈페이지 표시 설정을 변경합니다. 선택 내용은 이 브라우저에 저장됩니다.</p>
+        </section>
+
+        <form class="settings-form" id="site-settings-form" aria-label="사이트 설정">
+          <fieldset class="settings-group">
+            <legend class="settings-group-title">테마</legend>
+            <p class="settings-hint muted">페이지 색상 스타일을 선택합니다. 시스템 설정은 OS의 다크/라이트 모드를 따릅니다.</p>
+            <div class="settings-options" role="radiogroup" aria-label="테마">
+              <label class="settings-option">
+                <input type="radio" name="theme" value="dark" />
+                <span class="settings-option-label">다크</span>
+              </label>
+              <label class="settings-option">
+                <input type="radio" name="theme" value="light" />
+                <span class="settings-option-label">라이트</span>
+              </label>
+              <label class="settings-option">
+                <input type="radio" name="theme" value="system" />
+                <span class="settings-option-label">시스템 설정</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group">
+            <legend class="settings-group-title">글자 크기</legend>
+            <p class="settings-hint muted">본문과 UI의 기본 글자 크기를 조절합니다.</p>
+            <div class="settings-options" role="radiogroup" aria-label="글자 크기">
+              <label class="settings-option">
+                <input type="radio" name="fontSize" value="small" />
+                <span class="settings-option-label">작게</span>
+                <span class="settings-option-sample" aria-hidden="true">Aa</span>
+              </label>
+              <label class="settings-option">
+                <input type="radio" name="fontSize" value="medium" />
+                <span class="settings-option-label">보통</span>
+                <span class="settings-option-sample settings-option-sample--md" aria-hidden="true">Aa</span>
+              </label>
+              <label class="settings-option">
+                <input type="radio" name="fontSize" value="large" />
+                <span class="settings-option-label">크게</span>
+                <span class="settings-option-sample settings-option-sample--lg" aria-hidden="true">Aa</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="settings-actions">
+            <button type="button" class="btn btn-ghost" data-settings-reset>기본값으로 초기화</button>
+          </div>
+        </form>
+
+        <p class="settings-note muted">
+          설정은 <code>localStorage</code>에 저장되며, 메인·Games·프로젝트 페이지에 공통 적용됩니다.
+        </p>
+      </main>
+
+      <div id="site-footer"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var c = window.SITE_CONFIG || {};
+        document.title = "Settings | " + (c.siteName || "Personal Home");
+        var crumbs = document.querySelectorAll(".breadcrumb a");
+        if (crumbs[0]) crumbs[0].href = SitePaths.page("index.html");
+        SiteUI.init({ activeNav: "settings" });
+        if (window.SiteSettings) {
+          SiteSettings.bindSettingsForm(document.getElementById("site-settings-form"));
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" data-depth="1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Games — 개인 게임 프로젝트 목록" />
+    <title>Games | Personal Home</title>
+    <script src="../js/settings.js"></script>
+    <script src="../js/site-config.js"></script>
+    <script src="../js/paths.js"></script>
+    <script src="../js/main.js"></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header id="site-header"></header>
+
+      <main class="site-main">
+        <nav class="breadcrumb" aria-label="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Games</span>
+        </nav>
+
+        <section class="hero">
+          <h1>Games</h1>
+          <p class="hero-lead">개인 게임 프로젝트 허브입니다. 카드를 눌러 각 프로젝트 페이지로 이동합니다.</p>
+        </section>
+
+        <section class="section">
+          <div class="grid" id="project-grid"></div>
+        </section>
+      </main>
+
+      <div id="site-footer"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var c = window.SITE_CONFIG || {};
+        document.title = "Games | " + (c.siteName || "Personal Home");
+        var crumbs = document.querySelectorAll(".breadcrumb a");
+        if (crumbs[0]) crumbs[0].href = SitePaths.page("index.html");
+        SiteUI.init({ activeNav: "games", renderProjects: true });
+      });
+    </script>
+  </body>
+</html>
