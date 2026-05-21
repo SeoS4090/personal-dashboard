@@ -20,7 +20,7 @@ window.SITE_CONFIG = {
           id: "logdec01",
           title: "LogDec01",
           description: "Obsidian 기획 + 웹 프로토타입. 현재 저장소 프로젝트.",
-          path: "games/logdec01/index.html",
+          path: "games/logdec01/play.html",
           status: "dev",
         },
         {

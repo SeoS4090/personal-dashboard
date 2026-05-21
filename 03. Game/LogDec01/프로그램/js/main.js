@@ -98,7 +98,11 @@
       var card = el("article", { className: "card" }, [
         head,
         el("p", { className: "card-desc", text: project.description || "" }),
-        el("a", { className: "btn btn-primary", href: SitePaths.page(project.path), text: "보기" }),
+        el("a", {
+          className: "btn btn-primary",
+          href: SitePaths.page(project.playPath || project.path),
+          text: "보기",
+        }),
       ]);
       container.appendChild(card);
     });

@@ -8,7 +8,7 @@ HTML · CSS · JavaScript 로 구성된 개인 홈페이지입니다. GitHub Pag
 메인 (index.html)
  ├── Settings (settings/index.html)
  └── Games (games/index.html)
-      ├── logdec01/     ← 자동 전투 프로토타입 (js 모듈, README 참고)
+      ├── logdec01/     ← index(소개) · play.html(플레이)
       ├── game-02/
       └── game-03/
 ```

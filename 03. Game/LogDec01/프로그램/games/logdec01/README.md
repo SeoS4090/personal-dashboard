@@ -45,7 +45,7 @@ cd "프로그램"
 npx --yes serve -l 3000
 ```
 
-브라우저: http://localhost:3000/games/logdec01/
+브라우저: http://localhost:3000/games/logdec01/play.html (카드 **보기** → 플레이 화면)
 
 ## data 갱신
 

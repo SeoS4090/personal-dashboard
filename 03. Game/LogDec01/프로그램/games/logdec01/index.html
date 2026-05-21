@@ -9,8 +9,6 @@
     <script src="../../js/site-config.js"></script>
     <script src="../../js/paths.js"></script>
     <script src="../../js/main.js"></script>
-    <link rel="stylesheet" href="css/game.css" />
-    <link rel="stylesheet" href="css/dot-ui.css" />
   </head>
   <body>
     <div class="site-shell">
@@ -25,154 +23,26 @@
           <span aria-current="page">LogDec01</span>
         </nav>
 
-        <article class="project-body game-wrap logdec01-dot">
+        <article class="project-body">
           <h1>LogDec01 <span class="badge badge--dev">프로토타입</span></h1>
           <p class="hero-lead">
             자동 전투·덱 빌딩·상점 루프 1차 플레이어블. 기획은 <code>기획/</code>, 코드는
             <code>games/logdec01/</code>.
           </p>
-
-          <!-- 직업 선택 -->
-          <section id="screen-class" class="game-screen game-panel">
-            <h2>직업 선택</h2>
-            <p>5직업 중 하나로 런을 시작합니다.</p>
-            <div id="class-grid" class="class-grid"></div>
-          </section>
-
-          <!-- 런 허브 -->
-          <section id="screen-hub" class="game-screen game-panel" hidden>
-            <h2>런 진행</h2>
-            <div class="game-stats">
-              <span>직업: <strong id="hub-class">—</strong></span>
-              <span>층: <strong id="hub-floor">0</strong></span>
-              <span>골드: <strong id="hub-gold">0</strong>G</span>
-              <span>HP: <strong id="hub-hp">—</strong></span>
-              <span>덱: <strong id="hub-deck-count">0</strong>장</span>
-              <span>승리: <strong id="hub-wins">0</strong></span>
-            </div>
-            <div class="game-actions">
-              <button type="button" class="btn btn-primary" id="btn-fight">일반 전투</button>
-              <button type="button" class="btn btn-secondary" id="btn-elite">엘리트 전투</button>
-              <button type="button" class="btn btn-secondary" id="btn-boss">Act1 보스</button>
-              <button type="button" class="btn btn-ghost" id="btn-deck">덱 편집</button>
-            </div>
-          </section>
-
-          <!-- 덱 편집 -->
-          <section id="screen-deck" class="game-screen game-panel" hidden>
-            <h2>덱 편집</h2>
-            <p>카드를 클릭하면 75G로 1장 제거합니다.</p>
-            <div id="deck-edit-list" class="deck-list"></div>
-            <div class="game-actions">
-              <button type="button" class="btn btn-ghost" id="btn-deck-back">← 허브</button>
-            </div>
-          </section>
-
-          <!-- 전투 -->
-          <section id="screen-battle" class="game-screen" hidden>
-            <div class="game-panel">
-              <h2>전투</h2>
-              <div class="dot-arena" id="dot-arena" aria-hidden="true">
-                <div class="dot-arena__side dot-arena__side--player">
-                  <span class="dot-arena__label">PLAYER</span>
-                  <svg
-                    class="dot-sprite"
-                    viewBox="0 0 8 12"
-                    width="64"
-                    height="96"
-                    shape-rendering="crispEdges"
-                    focusable="false"
-                  >
-                    <rect x="3" y="1" width="2" height="1" fill="#ffd85c" />
-                    <rect x="2" y="2" width="4" height="2" fill="#c4a574" />
-                    <rect x="3" y="4" width="2" height="3" fill="#6b8cae" />
-                    <rect x="1" y="5" width="1" height="2" fill="#6b8cae" />
-                    <rect x="6" y="5" width="1" height="2" fill="#6b8cae" />
-                    <rect x="2" y="7" width="2" height="3" fill="#4a6a8a" />
-                    <rect x="4" y="7" width="2" height="3" fill="#4a6a8a" />
-                    <rect x="2" y="10" width="1" height="2" fill="#3d2914" />
-                    <rect x="5" y="10" width="1" height="2" fill="#3d2914" />
-                    <rect x="7" y="4" width="1" height="3" fill="#e8dcc8" />
-                  </svg>
-                </div>
-                <div class="dot-arena__vs">VS</div>
-                <div class="dot-arena__side dot-arena__side--enemy">
-                  <span class="dot-arena__label" id="dot-enemy-label">FOE</span>
-                  <svg
-                    class="dot-sprite dot-sprite--enemy"
-                    id="dot-enemy-sprite"
-                    viewBox="0 0 8 12"
-                    width="64"
-                    height="96"
-                    shape-rendering="crispEdges"
-                    focusable="false"
-                  >
-                    <rect x="2" y="3" width="4" height="1" fill="#9b7ed9" />
-                    <rect x="1" y="4" width="6" height="4" fill="#7c5cff" />
-                    <rect x="2" y="5" width="1" height="1" fill="#1a1025" />
-                    <rect x="5" y="5" width="1" height="1" fill="#1a1025" />
-                    <rect x="2" y="8" width="2" height="2" fill="#5c4a78" />
-                    <rect x="4" y="8" width="2" height="2" fill="#5c4a78" />
-                    <rect x="1" y="6" width="1" height="2" fill="#b8a0e8" />
-                    <rect x="6" y="6" width="1" height="2" fill="#b8a0e8" />
-                  </svg>
-                </div>
-              </div>
-              <div class="game-stats">
-                <span>라운드 <strong id="battle-round">1</strong></span>
-                <span>틱 <strong id="battle-tick">0 / 10</strong></span>
-              </div>
-              <div id="player-hp" class="hp-bar"></div>
-              <div id="enemies-hp"></div>
-            </div>
-            <div class="game-panel">
-              <h2>슬롯 (8)</h2>
-              <div id="slot-grid" class="slot-grid"></div>
-              <div class="game-actions">
-                <button type="button" class="btn btn-primary" id="btn-tick">다음 틱</button>
-                <button type="button" class="btn btn-secondary" id="btn-auto">자동 진행</button>
-                <button type="button" class="btn btn-ghost" id="btn-auto-stop">정지</button>
-                <span class="deck-chip">속도</span>
-                <button type="button" class="btn btn-ghost" data-speed="1">×1</button>
-                <button type="button" class="btn btn-ghost" data-speed="2">×2</button>
-                <button type="button" class="btn btn-ghost" data-speed="4">×4</button>
-              </div>
-            </div>
-            <div class="game-panel">
-              <h2>전투 로그</h2>
-              <div id="battle-log" class="battle-log"></div>
-            </div>
-          </section>
-
-          <!-- 상점 -->
-          <section id="screen-shop" class="game-screen game-panel" hidden>
-            <h2>상점</h2>
-            <p>전투 승리 보상 +25G. 리롤 50G (방문당 1회).</p>
-            <p>보유 골드: <strong id="shop-gold">0</strong>G</p>
-            <div id="shop-grid" class="shop-grid"></div>
-            <div class="game-actions">
-              <button type="button" class="btn btn-ghost" id="btn-reroll">리롤 (50G)</button>
-              <button type="button" class="btn btn-primary" id="btn-shop-leave">나가기</button>
-            </div>
-          </section>
-
-          <!-- 게임 오버 -->
-          <section id="screen-over" class="game-screen game-panel" hidden>
-            <h2>런 종료</h2>
-            <p id="over-msg">패배</p>
-            <button type="button" class="btn btn-primary" id="btn-restart">다시 시작</button>
-          </section>
-
-          <p class="hero-lead" style="margin-top: 1.5rem">
-            <a href="../index.html">← Games 목록</a>
+          <p>
+            자동 전투·HP/방어·상점·덱 구성 규칙 기반 웹 프로토타입입니다. 5직업 선택 후
+            전투·상점·덱 편집 루프를 플레이할 수 있습니다.
           </p>
+          <div class="game-actions" style="margin-top: 1.5rem">
+            <a class="btn btn-primary" href="play.html" id="btn-play">게임 플레이</a>
+            <a class="btn btn-ghost" href="../index.html" id="btn-games-back">← Games 목록</a>
+          </div>
         </article>
       </main>
 
       <div id="site-footer"></div>
     </div>
 
-    <script type="module" src="js/main.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".breadcrumb a").forEach(function (a) {
@@ -180,8 +50,10 @@
           if (href === "../../index.html") a.href = SitePaths.page("index.html");
           if (href === "../index.html") a.href = SitePaths.page("games/index.html");
         });
-        var gamesLink = document.querySelector('.hero-lead a[href="../index.html"]');
-        if (gamesLink) gamesLink.href = SitePaths.page("games/index.html");
+        var playBtn = document.getElementById("btn-play");
+        if (playBtn) playBtn.href = SitePaths.page("games/logdec01/play.html");
+        var backBtn = document.getElementById("btn-games-back");
+        if (backBtn) backBtn.href = SitePaths.page("games/index.html");
         SiteUI.init({ activeNav: "games" });
       });
     </script>

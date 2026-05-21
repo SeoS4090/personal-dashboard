@@ -1,4 +1,14 @@
 /* LogDec01 게임 UI — 사이트 토큰 위에 레이어 */
+.game-play-title {
+  margin-bottom: var(--space-md);
+  font-size: 1.75rem;
+}
+
+.game-play-footer {
+  margin-top: var(--space-xl);
+  font-size: 0.9rem;
+}
+
 .game-wrap {
   max-width: 52rem;
 }
