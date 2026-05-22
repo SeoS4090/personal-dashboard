@@ -1,4 +1,4 @@
----
+﻿---
 tags:
   - moc
   - system/ui
@@ -7,7 +7,7 @@ aliases:
   - 인터페이스 MOC
 description: 무한 스크롤, 팝업, 이벤트 UI, 연맹전 랠리, 부대 편성·관리 UI 분석 MOC
 created: 2026-05-20
-updated: 2026-05-21
+updated: 2026-05-22
 
 ---
 
@@ -39,10 +39,13 @@ updated: 2026-05-21
 
 ## 연맹전 랠리
 
-| 문서 | 핵심 주제 |
-|------|-----------|
-| [[Ally_war_rally_Tab_Analysis]] | 전체/공격/방어 탭 전환 관리 |
-| [[Ally_war_rally_dotweens]] | 랠리 슬롯 진행 바 DOTween 라이프사이클 |
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[AllyWarRally_Analysis]] | 공격 집결+방어 지원 통합 목록 팝업 전체 분석, InfiniteScroll·DOTween Key 관리 | done |
+| [[AllyWarRallyDetail_Analysis]] | 집결 상세 팝업, 멤버 목록·영웅·병사 표시, 메모리 관리 | done |
+| [[AllyReinforcement_Analysis]] | 방어 지원 팝업, 거점/마을 분기, 지원 취소 MarchLine 흐름 | done |
+| [[Ally_war_rally_Tab_Analysis]] | 전체/공격/방어 탭 전환 관리 | - |
+| [[Ally_war_rally_dotweens]] | 랠리 슬롯 진행 바 DOTween 라이프사이클 | - |
 
 ---
 
@@ -55,10 +58,19 @@ updated: 2026-05-21
 
 ---
 
+## 부대 파견 선택
+
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[Troop_Send_Analysis]] | 행군 대열 파견 패널 — TroopSendCallbackManager, 슬롯 렌더링, SetPanel 위치 계산 | done |
+
+---
+
 ## 부대 편성
 
 | 문서 | 핵심 주제 | 상태 |
 |------|-----------|------|
+| [[TroopFormation_Overview_Analysis]] | 부대 편성 전체 구조 — 자동 편성, 프리셋, 탭 애니메이션, Dead Code | done |
 | [[TroopFormation_WorldTroopPanel_Overlap_Fix_Analysis]] | 부대 편성 팝업 열림 시 WorldTroopPanel 겹침 수정 (AWQA-5822) | done |
 | [[TroopFormation_SelectIndex_Static_BugFix_AWQA6161]] | OnEnable ArgumentOutOfRangeException 방어 가드 (AWQA-6161) | wip |
 
@@ -88,3 +100,6 @@ updated: 2026-05-21
 - [[EventUi_Achievement_System_Analysis]] ↔ [[SVS_Eve_RankingRewardPopup_Analysis]] (SVS_Event_Eve 상속 구조 공유)
 - [[InfiniteScrollManager_Analysis]] ↔ [[MKCommon_ReplaceAllDataKeepingVisualElements_Analysis]] (가상 스크롤 데이터 교체 쌍)
 - [[WarAlert_ReconnectIcon_BugAnalysis_AWQA5814]] ↔ [[TroopManagement_WarAlert_Stale_BugFix]] (비동기 콜백 시점에 UI 참조 무효화 가능성 — 동일 null 가드 패턴 공유)
+- [[Troop_Send_Analysis]] ↔ [[WarCallbackManager_Analysis]] (VisualElement 이벤트 딕셔너리 관리 패턴 공유)
+- [[TroopFormation_Overview_Analysis]] ↔ [[TroopFormation_SelectIndex_Static_BugFix_AWQA6161]] (static SelectIndex 오염 원인·수정 공유)
+
