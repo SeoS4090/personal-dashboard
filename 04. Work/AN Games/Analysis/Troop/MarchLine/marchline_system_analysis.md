@@ -10,13 +10,37 @@ aliases:
   - MarchLine 시스템 분석
 description: 이 문서는 Unity 6 프로젝트의 군단(행군) 시스템에 대한 상세 분석 내용을 정리한 것입니다. `MarchLine`, `Corps`, `Div` 클래스와 관련 UI, 네트워크, 시각화 시스템을 포함합니다.
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-05-21
 ---
 
 ← [[MarchLine_MOC]]
 
 
 # MarchLine 시스템 분석 및 학습 내용
+
+## 요약
+
+### 무슨 문제였나?
+기존 문서가 실제 코드(NetworkTroop.cs)와 여러 지점에서 불일치했다. 26.04 빌드 이후 추가된 RAID 집결 타입(레이드 집결 난입/참여)이 문서에 없었고, 채집 계산 방식이 구형 `per_amount` 필드 기준으로만 기록되어 있었다. 집결 중인 군단의 위치 표시·아이콘 분기 로직도 누락 상태였다.
+
+### 어떻게 고쳤나?
+
+| 항목 | 이전 | 이후 |
+|------|------|------|
+| MARCH_SALLY_TYPE | 집결 타입 일부 누락 | RAID 집결·난입·복귀(=100) 타입 포함 |
+| Troop_Resources | `per_amount`만 | `mining_power` 신규 필드 우선 사용 |
+| isRallyJoin() | PVP/NPC 집결만 | RAID_RALLY, RALLY_JOIN_RAID 타입 추가 |
+| isJoin() | PVP/NPC 참여만 | RALLY_JOIN_RAID 타입 추가 |
+| CalcCurrentMining() | per_amount 기반 | mining_power 우선, 없으면 per_amount 폴백 |
+| GetCurrentPos() | 경로 기반 위치만 | 집결 대기(war_rally_status<3) 시 town_no 반환 |
+| GetStatusIconName() | 집결 아이콘 없음 | war_status==3→이동, ==4→전투 아이콘 분기 |
+
+### 현재 상태는?
+문서 업데이트 완료. NetworkTroop.cs 코드와 문서 동기화됨.
+
+> **한 줄 요약**: "26.04 빌드 이후 추가된 RAID 집결 타입 및 신규 채집 필드(mining_power)를 문서에 반영하고, 집결 위치·아이콘 분기 로직을 보강했다."
+
+---
 
 ## 개요
 
@@ -78,21 +102,22 @@ updated: 2026-05-20
 - `IS_RETREAT`: 퇴각 상태 여부
 - `IS_ANNIHILATION`: 전멸 여부
 - `Get_Client_Status()`: 클라이언트 표시용 상태 반환
+- `GetStatusIconName()`: 월드맵 아이콘 이름 반환. STOP/STAY 상태에서 `isRallyJoin()==true`이면 `war_rally_status`에 따라 분기 (3→`wi_troop_move`, 4→`wi_troop_battle`, 나머지→`wi_troop_rally`)
 
 **위치 관련**:
-- `GetCurrentPos()`: 현재 위치 좌표 반환
+- `GetCurrentPos()`: 현재 위치 좌표 반환. `isRallyJoin()==true`이고 내 연맹 집결(`ally_no` 일치)이며 `war_rally_status < 3`(대기 중)이면 경로 계산 없이 `rally.town_no` 반환
 - `GetCurrentDetailPos()`: 현재 상세 위치 반환 (Unity Vector3)
 - `RemainDistance()`: 남은 거리 계산
 
 **집결 관련**:
-- `isRallyJoin()`: 집결 참여 여부 확인
+- `isRallyJoin()`: 집결 참여 여부 확인. PVP/NPC 집결 외 **`FLEET_SALLY_RAID_RALLY(18)`**, **`FLEET_SALLY_RALLY_JOIN_RAID(19)`** 타입도 true 반환 (L1468-1481)
 - `isRallyLeader()`: 집결 리더 여부 확인
-- `isJoin()`: 집결 참여자 여부 확인
+- `isJoin()`: 집결 참여자 여부 확인. PVP/NPC 참여 외 **`FLEET_SALLY_RALLY_JOIN_RAID(19)`** 타입도 true 반환 (L1496-1507)
 - `GetWarSlot()`: 집결 참여 시 연맹 전투 슬롯 정보 반환
 
 **자원 채집**:
 - `GetCurrentTotalMining()`: 현재 총 채집량 반환
-- `CalcCurrentMining()`: 현재 채집 중인 자원량 계산
+- `CalcCurrentMining()`: 현재 채집 중인 자원량 계산. **`mining_power > 0`이면 `elapsed_time * mining_power / 36000000` 사용, 아니면 구형 `per_amount` 폴백** (L1519-1546)
 
 **초기화 및 설정**:
 - `Init()`: 경로 초기화
@@ -125,10 +150,15 @@ public class BlockPath
 }
 ```
 
-**MARCH_SALLY_TYPE 열거형** (1262-1291줄):
-- 일반 이동/전투: `FLEET_SALLY_NONE`, `FLEET_SALLY_PVP`, `FLEET_SALLY_RESOURCE`, `FLEET_SALLY_NPC` 등
-- 집결 관련: `FLEET_SALLY_RALLY_JOIN_NPC`, `FLEET_SALLY_RALLY_JOIN_PVP` 등
-- 복귀 타입: `FLEET_SALLY_MOVE_RETURN`, `FLEET_SALLY_FAIL_RETURN` 등
+**MARCH_SALLY_TYPE 열거형** (L1340-1370):
+- 일반 이동/전투: `FLEET_SALLY_NONE(0)`, `FLEET_SALLY_PVP(1)`, `FLEET_SALLY_RESOURCE(2)`, `FLEET_SALLY_NPC(3)` 등
+- 집결 관련:
+  - `FLEET_SALLY_RALLY_JOIN_NPC(15)` — NPC 집결 참여
+  - `FLEET_SALLY_RALLY_JOIN_PVP(16)` — PVP 집결 참여
+  - `FLEET_SALLY_ADD_RALLY(17)` — 집결 전투 난입 (**26.04 추가**)
+  - `FLEET_SALLY_RAID_RALLY(18)` — 레이드 집결 이동 (**26.04 추가**)
+  - `FLEET_SALLY_RALLY_JOIN_RAID(19)` — 레이드 집결 참여 (**26.04 추가**)
+- 복귀 타입: `FLEET_SALLY_MOVE_RETURN`, `FLEET_SALLY_FAIL_RETURN`, `FLEET_SALLY_MOVE_INTERVER_RETURN(100)` — 목적지 찍고 복귀 (**26.04 추가**)
 
 ---
 
@@ -192,6 +222,28 @@ var UnitPowerQuery = from MarchUnits in data.corps.SelectMany(x => x.div)
 **병력 상태 관계**:
 ```
 초기 병력 (i) = 현재 생존 (num) + 경상 (j) + 중상 (w) + 사망 (d)
+```
+
+---
+
+### 1.4 Troop_Resources 클래스
+
+**위치**: `Assets/Network/Scripts/NetworkTroop.cs:1261`
+
+**목적**: 군단이 채집 중인 자원지의 정보 및 채집 속도를 담는 데이터 클래스
+
+**주요 필드**:
+- `resource_no`: 자원지 고유 번호
+- `resource_type`: 자원 종류 (나무/식량/철/금 등)
+- `mining_power`: **채집 속도 (26.04 빌드 이후 신규 필드)**. `CalcCurrentMining()` 에서 우선 사용
+- ~~`per_amount`~~: 구형 채집 속도 필드. **[Obsolete]** — "구형 : 26.04 빌드 이 후 업데이트 => mining_power 사용"
+
+**채집 계산 로직** (`CalcCurrentMining()` L1519-1546):
+```csharp
+if (lastResource.mining_power > 0)
+    return (long)elapsed_time * lastResource.mining_power / 36000000; // 신형
+else
+    return (long)elapsed_time * lastResource.per_amount;              // 구형 폴백
 ```
 
 ---

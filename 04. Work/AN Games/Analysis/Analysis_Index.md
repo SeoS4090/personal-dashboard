@@ -1,4 +1,4 @@
----
+﻿---
 tags:
   - moc
   - index
@@ -9,7 +9,7 @@ aliases:
   - 마스터 MOC
 description: AW 프로젝트 코드 분석 문서 최상위 MOC — 시스템별 계층 구조 목차
 created: 2026-04-15
-updated: 2026-05-21
+updated: 2026-05-22 (신규 2건 — Troop_Send 행군대열 파견 패널 + TroopFormation 부대편성 전체 분석)
 ---
 
 # AW Project — 코드 분석 마스터 MOC
@@ -43,18 +43,18 @@ Analysis_Index (마스터 MOC)
 
 | 시스템 MOC | 문서 수 | 핵심 |
 |-----------|---------|------|
-| [[Troop_MOC]] | 11 | TroopManager, NetworkTroop, AWPL, 레거시 |
+| [[Troop_MOC]] | 15 | TroopManager, NetworkTroop, AWPL, 레거시 |
 | [[TroopLOD_Function_Analysis_Index]] | 17 | 시각화, LOD, NPC, 전투 위치, 버그 |
 | [[MarchLine_MOC]] | 6 | 행군선, PathLine 버그 |
 | [[MKSummonNpcManager_Function_Analysis_Index]] | 32 | NPC 소환 상태 머신 전체 |
 | [[Battle_MOC]] | 5 | 함대 전투 메시지, 집결 |
-| [[UI_MOC]] | 14 | 스크롤, 팝업, 이벤트 UI, 부대 패널 |
+| [[UI_MOC]] | 19 | 스크롤, 팝업, 이벤트 UI, 부대 파견·편성 패널 |
 | [[Network_MOC]] | 4 | 서버 동기화, 캐시 |
 | [[World_MOC]] | 5 | 월드맵, Firebase |
 
 ---
 
-## 1. Troop (부대 이동/추적/경로) — 25건
+## 1. Troop (부대 이동/추적/경로) — 26건
 
 부대 이동, 추적, 경로 계산, LOD 시각화, 전투 배치 관련 분석.
 
@@ -65,7 +65,11 @@ Analysis_Index (마스터 MOC)
 | [[Troop_Manager_MakePath_Analysis]] | A* 경로 탐색, NavMesh, 게이트 처리 | `#system/troop` `#concern/readability` |
 | [[Troop_Manager_MakeCrossPosition_Analysis]] | 이진탐색 기반 요격 지점 계산 | `#system/troop` `#concern/performance` |
 | [[Troop_Manager_crossPath_Analysis]] | 요격/추적 기하학, 빈 시퀀스 예외 방어, AWQA-6370 방어 지원 실패 후 target_type 미초기화로 sally_type=100 오부여 수정 | `#system/troop` `#concern/bug` |
+| [[Troop_Manager_StartMove_Full_Analysis]] | StartMove 전체 흐름 — 10+ Guard 체인·절취선 구조·sally_type switch·재귀 패턴·미완성 블록·1150줄 모놀리식 | `#system/troop` `#concern/readability` `#concern/bug` |
 | [[Troop_Manager_StartMove_UpdateAttacker_Analysis]] | 이동 업데이트 return→continue 수정, 콜백 보장 | `#system/troop` `#concern/performance` |
+| [[Troop_Manager_Overview_Analysis]] | 4,428줄 모놀리식 클래스 전체 아키텍처 — 8개 책임 영역, 의존성, 문제점 | `#system/troop` `#concern/readability` |
+| [[Troop_Manager_UIEntryPoints_Analysis]] | ShowTroopMain·ShowTroopSend·ShowScoutSend 사전검증 흐름, Circles PVP 순환참조 감지 | `#system/troop` `#system/ui` `#concern/readability` |
+| [[Troop_Manager_BuffSystem_Analysis]] | 버프 계산 6개 메서드 — 스킬·특성·장비·마을·컴패니언 LINQ 다중조인, 교차버프, 성능 이슈 | `#system/troop` `#concern/performance` |
 
 ### 1-2. TroopLOD (월드맵 부대 시각화)
 
@@ -179,6 +183,8 @@ Analysis_Index (마스터 MOC)
 | [[WorldUseMoveCityItemPopup_CheckCanMove_RefreshAllData_Analysis]] | 도시 이동 팝업: CheckCanMove + MOVE_CASE 판정 | `#system/ui` `#system/world` |
 | [[Ally_war_rally_Tab_Analysis]] | 연맹전 랠리 탭(전체/공격/방어) 전환 관리 | `#system/ui` `#concern/readability` |
 | [[Ally_war_rally_dotweens]] | 랠리 슬롯 진행 바 DOTween 라이프사이클 | `#system/ui` `#concern/performance` |
+| [[Troop_Send_Analysis]] | 행군 대열 파견 패널 — TroopSendCallbackManager 딕셔너리 이벤트 관리, TROOP/SCOUT 슬롯 렌더링, SetPanel GeometryChanged 위치 계산 | `#system/ui` `#system/troop` |
+| [[TroopFormation_Overview_Analysis]] | 부대 편성 전체 구조 — AutoArrangeTroopByPower 전투력비중 자동편성, SetHeroInit Dead Code, 프리셋 검증 5종, CalcTempSpeed 버프 | `#system/ui` `#system/troop` `#concern/bug` |
 | [[TroopFormation_WorldTroopPanel_Overlap_Fix_Analysis]] | 부대 편성 팝업 열림 시 WorldTroopPanel 겹침 버그 수정 (AWQA-5822, troopPanelsActive 플래그) | `#system/ui` `#system/troop` `#concern/bug` |
 | [[TroopFormation_SelectIndex_Static_BugFix_AWQA6161]] | AWQA-6161 — OnEnable b__12 ArgumentOutOfRangeException, 방어 가드 3개 추가 완료, 근본 원인(sort Query OOB 가설 등) 추가 조사 필요 **[WIP]** | `#system/ui` `#system/troop` `#concern/bug` `#status/wip` |
 | [[WarAlert_ReconnectIcon_BugAnalysis_AWQA5814]] | AWQA-5814 — CrossEnterBattleField PushFortWar 콜백 Request_WarAlert 누락으로 요새전 진입 시 경고 아이콘 미노출 수정 완료 | `#system/ui` `#system/network` `#concern/bug` `#status/done` |
@@ -279,6 +285,7 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 - [[AWQA-6371_FortWar_TroopFlicker_BugAnalysis]]
 - [[AWQA-6379_PathLine_PreCorrection_FlickerFix_Analysis]]
 - [[AWQA-6334_UserCity_PvP_JoinBattle_EffectPosition_BugFix_Analysis]]
+- [[TroopFormation_Overview_Analysis]]
 
 ### #concern/performance (성능 관련 — 20건)
 - [[Troop_Manager_MakeCrossPosition_Analysis]]
@@ -319,15 +326,16 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 
 | 분류 | 문서 수 |
 |------|---------|
-| Troop (부대) | 31 |
+| Troop (부대) | 35 |
 | Battle (전투) | 38 |
-| UI (인터페이스) | 16 (AWQA-6161 WIP) |
+| UI (인터페이스) | 18 (AWQA-6161 WIP) |
 | Network (네트워크) | 4 |
 | World (월드맵) | 4 |
 | Infrastructure (인프라) | 1 |
 | Improvements (개선) | 2 |
-| **합계** | **93** |
+| **합계** | **99** |
 
 ---
 
-*마지막 업데이트: 2026-05-21 (신규 4건 추가 — NPCTroopLOD(NPC 분류·AutoMove), WorldTroopPanel(9그리드 POS·DOTween), WorldTroopButton(13개 버튼 매트릭스), TroopSprite(레거시 2D 스프라이트))*
+*마지막 업데이트: 2026-05-22 (신규 2건 추가 — Troop_Send 행군대열 파견 패널·TroopFormation 부대편성 전체 구조 분석)*
+

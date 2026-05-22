@@ -37,6 +37,7 @@ updated: 2026-05-21
 | [[Troop_Manager_MakePath_Analysis]] | A* 경로 탐색, NavMesh, 게이트 처리 | - |
 | [[Troop_Manager_MakeCrossPosition_Analysis]] | 이진탐색 기반 요격 지점 계산 | - |
 | [[Troop_Manager_crossPath_Analysis]] | 요격/추적 기하학, AWQA-6370 target_type 미초기화 수정 | done |
+| [[Troop_Manager_StartMove_Full_Analysis]] | StartMove 전체 흐름 — 10+ Guard 체인·절취선 구조·sally_type switch·재귀 패턴·미완성 블록 | done |
 | [[Troop_Manager_StartMove_UpdateAttacker_Analysis]] | 이동 업데이트 return→continue 수정, 콜백 보장 | done |
 
 ---
@@ -75,3 +76,14 @@ updated: 2026-05-21
 - [[NetworkTroop_UpdateAttacker_Analysis]] ↔ [[UpdateAttacker_3057_RaceCondition_BugFix]] (UpdateAttacker 콜백 레이스 컨디션 근본 원인 공유)
 - [[TroopData_15483_vs_12885_PassThrough_Analysis]] ↔ [[battle_log_analysis]] (동일 전투 키 15483 타임라인 공유)
 - [[AWPL-7595_RallyLeader_Succession_RetreatPath_Analysis]] ↔ [[AWQA-6260_RallyParticipant_PathLine_DuplicateLine_BugFix_Analysis]] (집결 리더 승계 시 경로 처리 공유)
+
+
+---
+
+## TroopManager — UI 진입점 및 버프 시스템
+
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[Troop_Manager_Overview_Analysis]] | 전체 클래스 개요 — 8개 책임 영역, 의존성, 문제점 | done |
+| [[Troop_Manager_UIEntryPoints_Analysis]] | ShowTroopMain·ShowTroopSend·ShowScoutSend 사전검증 흐름, Circles 순환참조 감지 | done |
+| [[Troop_Manager_BuffSystem_Analysis]] | 버프 계산 6개 메서드 — 스킬·특성·장비·마을·컴패니언 LINQ 다중조인, 교차버프 | done |
