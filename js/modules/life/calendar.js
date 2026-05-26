@@ -1,16 +1,47 @@
 /* ── Google Calendar 모듈 (OAuth 2.0 + 다중 캘린더 + 멀티뷰) ── */
 const Calendar = (() => {
-  const CAL_COLORS = ['#64ffda','#ff6b9d','#7c83ff','#ffd166','#ff9f43','#48dbfb'];
+  const CAL_COLORS  = ['#64ffda','#ff6b9d','#7c83ff','#ffd166','#ff9f43','#48dbfb'];
+  const _TOKEN_KEY  = 'gcal_access_token';
+  const _TOKEN_EXP  = 'gcal_token_expiry';
 
   let tokenClient = null;
   let accessToken  = null;
+  let _silentTry   = false;
   let currentView  = localStorage.getItem('gcal_view_mode') || 'month';
   let currentDate  = new Date();
+
+  // ── Token persistence ─────────────────────────────────────────
+
+  function _saveToken(token) {
+    accessToken = token;
+    localStorage.setItem(_TOKEN_KEY, token);
+    localStorage.setItem(_TOKEN_EXP, String(Date.now() + 3500 * 1000)); // 58분
+  }
+
+  function _clearToken() {
+    accessToken = null;
+    localStorage.removeItem(_TOKEN_KEY);
+    localStorage.removeItem(_TOKEN_EXP);
+  }
+
+  function _restoreToken() {
+    const t = localStorage.getItem(_TOKEN_KEY);
+    const e = parseInt(localStorage.getItem(_TOKEN_EXP) || '0');
+    if (t && Date.now() < e) { accessToken = t; return true; }
+    _clearToken();
+    return false;
+  }
 
   // ── Init & Auth ──────────────────────────────────────────────
 
   function init() {
     _tryInitTokenClient();
+    if (_restoreToken()) {
+      _setAuthStatus(true);
+    } else if (tokenClient) {
+      _silentTry = true;
+      tokenClient.requestAccessToken({ prompt: '' });
+    }
     _updateViewButtons();
     _updatePeriodLabel();
     render();
@@ -25,8 +56,15 @@ const Calendar = (() => {
       client_id: clientId,
       scope: 'https://www.googleapis.com/auth/calendar.readonly',
       callback: (resp) => {
-        if (resp.error) { toast('Google 인증 실패: ' + resp.error, 'error'); return; }
-        accessToken = resp.access_token;
+        const wasSilent = _silentTry;
+        _silentTry = false;
+        if (resp.error) {
+          if (!wasSilent) toast('Google 인증 실패: ' + resp.error, 'error');
+          _clearToken();
+          render();
+          return;
+        }
+        _saveToken(resp.access_token);
         _setAuthStatus(true);
         render();
       }
@@ -35,8 +73,10 @@ const Calendar = (() => {
 
   function resetInit() {
     tokenClient = null;
-    accessToken  = null;
+    _clearToken();
   }
+
+  function isConnected() { return !!accessToken; }
 
   function authorize() {
     const inputEl = document.getElementById('setting-gcal-clientid');
@@ -207,7 +247,7 @@ const Calendar = (() => {
       else                              _renderList(container, events);
     } catch (err) {
       if (err.message === 'AUTH_EXPIRED') {
-        accessToken = null;
+        _clearToken();
         container.innerHTML = _emptyHtml('🔒', '인증이 만료되었습니다. 다시 연결해주세요.',
           `<button class="btn btn-primary" onclick="Calendar.authorize()">다시 연결</button>`);
       } else {
@@ -422,5 +462,5 @@ const Calendar = (() => {
     }));
   }
 
-  return { init, render, authorize, setView, prevPeriod, nextPeriod, resetInit, fetchCalendarList };
+  return { init, render, authorize, setView, prevPeriod, nextPeriod, resetInit, fetchCalendarList, isConnected };
 })();

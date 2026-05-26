@@ -269,6 +269,11 @@ const Settings = (() => {
     if (el('setting-news-keywords')) el('setting-news-keywords').value = localStorage.getItem('news_keywords')  || '';
     renderCalendarList();
     updateSettingsUI();
+    // 저장된 토큰으로 복원된 경우 연결 상태 UI 반영
+    if (typeof Calendar !== 'undefined' && Calendar.isConnected()) {
+      const status = el('gcal-auth-status');
+      if (status) { status.textContent = '✅ 연결됨'; status.style.color = 'var(--color-life)'; }
+    }
   }
 
   function renderCalendarList() {
