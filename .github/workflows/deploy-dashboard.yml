@@ -14,6 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Inject build hash for cache busting
+        run: |
+          HASH=$(git rev-parse --short HEAD)
+          sed -i "s/__BUILD_HASH__/$HASH/g" "03. Game/WebProject/index.html"
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

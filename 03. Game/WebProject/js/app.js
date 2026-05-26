@@ -20,7 +20,7 @@ const App = (() => {
 
   async function _ensurePanel(panelId) {
     if (_panelCache.has(panelId)) return;
-    const res = await fetch(`./panels/${panelId}.html`);
+    const res = await fetch(`./panels/${panelId}.html?v=${window.BUILD_VER||''}`);
     if (!res.ok) throw new Error(`패널 로드 실패: ${panelId} (${res.status})`);
     const html = await res.text();
     document.getElementById('content').insertAdjacentHTML('beforeend', html);
