@@ -113,6 +113,20 @@ GitHub Actions로 자동 배포. `main` 브랜치에 push 시, `03. Game/WebProj
 
 > 수동 재배포가 필요하면 GitHub → Actions 탭에서 워크플로우를 직접 실행.
 
+### 캐시 버스팅
+
+배포 시 워크플로우가 `index.html`의 `__BUILD_HASH__` 플레이스홀더를 실제 git 커밋 해시로 치환한다.
+
+```yaml
+HASH=$(git rev-parse --short HEAD)
+sed -i "s/__BUILD_HASH__/$HASH/g" "03. Game/WebProject/index.html"
+```
+
+덕분에 배포마다 CSS·JS·패널 URL이 바뀌어 브라우저 캐시가 자동 무효화된다. **F5만으로 최신 배포가 반영**된다.
+
+- `index.html`의 CSS/JS `<link>`·`<script>`에는 반드시 `?v=__BUILD_HASH__` 를 붙인다
+- 패널 fetch(`panels/*.html`)는 `window.BUILD_VER`로 자동 처리되어 별도 작업 불필요
+
 ---
 
 ## 공통 코딩 규칙
@@ -122,3 +136,4 @@ GitHub Actions로 자동 배포. `main` 브랜치에 push 시, `03. Game/WebProj
 - **API 키**: 모두 `localStorage`에 저장. 키 이름은 `settings-spec.md` 참조
 - **ReadMe 패널**: 새 메뉴 추가 시 `panel-{menu}-readme`도 함께 추가
 - **탭 전환**: `switchReadmeTab(btn, contentId)` — `app.js` 전역 함수 사용
+- **캐시 버스팅**: `index.html`에 CSS/JS 파일 추가 시 반드시 `?v=__BUILD_HASH__` 붙일 것
