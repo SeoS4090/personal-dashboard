@@ -55,13 +55,14 @@ Dashboard (홈)  ← 로고 텍스트 클릭으로 언제든 복귀
 ## Life
 
 ### 일정 (`life-calendar`)
-- Google Calendar API v3 연동
-- 향후 30일 일정 조회
-- 날짜별 그룹핑, 시간/위치 표시
-- "오늘" / "내일" 등 상대 날짜 레이블
-- API 키 미입력 시 설정 페이지로 안내
+- Google Calendar API v3 연동, OAuth 2.0 인증
+- 월별·주별·일정 목록 멀티뷰 전환
 - 캘린더 목록 자동 불러오기 (Google CalendarList API)
 - 토글 스위치로 캘린더별 표시/숨김 설정
+- OAuth 토큰 localStorage 저장 (58분 유효) — 새로고침 후 자동 복원, 팝업 없는 silent 재인증
+- 날짜별 그룹핑, 시간/위치/색상 표시
+- "오늘" / "내일" 등 상대 날짜 레이블
+- 주 시작 요일 설정 (일/월)
 
 ### 뉴스 (`life-news`)
 - NewsAPI.org 연동
