@@ -7,7 +7,7 @@ aliases:
   - 네트워크 MOC
 description: 서버 데이터 동기화, 캐시 라이프사이클, 연맹전 네트워크 처리 분석 MOC
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-05-22
 ---
 
 # Network — 네트워크/동기화 MOC
@@ -35,6 +35,14 @@ updated: 2026-05-20
 
 ---
 
+## 소켓 연결 / 블록 구독
+
+| 문서 | 핵심 주제 | 상태 |
+|------|-----------|------|
+| [[MKSocket_Analysis]] | Socket.IO 연결 생명주기, 블록 구독 시스템, push 이벤트 핸들러 | done |
+
+---
+
 ## 연맹전 네트워크
 
 | 문서 | 핵심 주제 | 상태 |
@@ -48,3 +56,4 @@ updated: 2026-05-20
 
 - [[WorldSocketDataModel_GetCurrentDetailPos_Analysis]] ↔ [[BlockData_BattleFleet_Status2_BugFix_Analysis]] (GetCurrentDetailPos BATTLE 상태 계약 변경 공유)
 - [[Ally_war_rally_DefJoin_corps_Null_Incident_Analysis]] ↔ [[Ally_war_rally_TroopData_Analysis]] (연맹전 부대 데이터 렌더링 쌍)
+- [[MKSocket_Analysis]] ↔ [[WorldSocketDataModel_Analysis]] (소켓 수신 → 데이터 저장 직접 연결 — res_block이 set_block_data 호출)

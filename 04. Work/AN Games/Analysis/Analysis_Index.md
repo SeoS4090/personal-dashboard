@@ -9,7 +9,7 @@ aliases:
   - 마스터 MOC
 description: AW 프로젝트 코드 분석 문서 최상위 MOC — 시스템별 계층 구조 목차
 created: 2026-04-15
-updated: 2026-05-22 (신규 2건 — Troop_Send 행군대열 파견 패널 + TroopFormation 부대편성 전체 분석)
+updated: 2026-05-22 (신규 1건 — SVS_Eve_Event_System 전야제 이벤트 세 클래스 구조 분석)
 ---
 
 # AW Project — 코드 분석 마스터 MOC
@@ -48,9 +48,9 @@ Analysis_Index (마스터 MOC)
 | [[MarchLine_MOC]] | 6 | 행군선, PathLine 버그 |
 | [[MKSummonNpcManager_Function_Analysis_Index]] | 32 | NPC 소환 상태 머신 전체 |
 | [[Battle_MOC]] | 5 | 함대 전투 메시지, 집결 |
-| [[UI_MOC]] | 19 | 스크롤, 팝업, 이벤트 UI, 부대 파견·편성 패널 |
-| [[Network_MOC]] | 4 | 서버 동기화, 캐시 |
-| [[World_MOC]] | 5 | 월드맵, Firebase |
+| [[UI_MOC]] | 20 | 스크롤, 팝업, 이벤트 UI, 부대 파견·편성 패널 |
+| [[Network_MOC]] | 5 | 서버 동기화, 캐시, 소켓 연결 |
+| [[World_MOC]] | 6 | 월드맵, Firebase, 소켓 데이터 모델 |
 
 ---
 
@@ -193,10 +193,11 @@ Analysis_Index (마스터 MOC)
 | [[WorldSearchPopup_Analysis]] | 오브젝트 찾기 팝업 전체 분석 — searchBlockDict 구독 관리, NPC 소환 위치 계산, OnDisable 누수, 소환 로직 중복, searchBlockDict 소실 버그(수정완료) | `#system/ui` `#system/world` `#system/battle` `#concern/bug` `#status/done` |
 | [[WorldTroopPanel_Function_Analysis]] | 부대 클릭 정보 패널 — 진입방향 기반 9그리드 POS, DOTween Fade(alpha+pivot), HP 슬라이더, 오브젝트 클릭 디스패치, LateUpdate 카메라 추종 | `#system/ui` `#system/troop` `#concern/performance` |
 | [[WorldTroopButton_Function_Analysis]] | 부대 액션 버튼 메뉴 13개 — 내/아군/적 × 상태별 가시성 매트릭스, 집결 리더 비동기 처리, 요새전 긴급탈출 조건 | `#system/ui` `#system/troop` |
+| [[SVS_Eve_Event_System_Analysis]] | SVS_Event_viewer 파사드·SVS_Eve_Preview(1003 예고)·SVS_Event_Eve(1004 전야제) 세 클래스 역할 분리, First() 예외 위험 | `#system/ui` `#concern/bug` |
 
 ---
 
-## 4. Network (네트워크/데이터 동기화) — 4건
+## 4. Network (네트워크/데이터 동기화) — 5건
 
 서버 API, 캐시 라이프사이클, 데이터 동기화 관련 분석.
 
@@ -206,10 +207,11 @@ Analysis_Index (마스터 MOC)
 | [[Ally_war_rally_DefJoin_corps_Null_Incident_Analysis]] | DefJoin DTO corps null 참조 인시던트 분석 및 수정 | `#system/network` `#system/troop` `#concern/bug` |
 | [[Ally_war_rally_TroopData_Analysis]] | 6슬롯 부대 구성 UI 렌더링 헬퍼 | `#system/troop` `#system/ui` |
 | [[WorldSocketDataModel_GetCurrentDetailPos_Analysis]] | BATTLE 상태 GetCurrentDetailPos 계약 변경, ComputeLastSlotOffsetPos 추가 | `#system/network` `#system/troop` `#concern/bug` |
+| [[MKSocket_Analysis]] | Socket.IO 연결 생명주기, 블록 구독 시스템, push 이벤트 핸들러 — curentBlock 하드코딩 버그, notify 중복 코드 | `#system/network` `#system/world` `#concern/bug` |
 
 ---
 
-## 5. World (월드맵/카메라) — 4건
+## 5. World (월드맵/카메라) — 5건
 
 월드맵 이동 가시성, 카메라 드래그, 레이드 포인트 관련 분석.
 
@@ -219,6 +221,7 @@ Analysis_Index (마스터 MOC)
 | [[WorldCameraManager_DragMove_RaidPointBlock_Analysis]] | 드래그 이동 시 균열/제단 영역 충돌 차단 | `#system/world` `#concern/performance` |
 | [[Fortwar_EarlyEnd_CloudStuck_AWQA6070]] | AWQA-6070 — 크로스 요새전 조기 종료 후 마을 복귀 시 구름 정지: `MainHudUi.GetWorldMapCenter` NRE 방어 분석 | `#system/world` `#system/ui` `#system/sound` `#concern/bug` `#status/wip` |
 | [[WorldManager_RefreshPushBlockJoinLeave_SearchBlockLeak_BugFix]] | NPC 소환 시 searchBlockDict 블록이 RefreshPushBlockJoinLeave에 의해 leave 처리되어 타인 마을 위 소환 버그 수정 | `#system/world` `#system/battle` `#system/network` `#concern/bug` `#status/done` |
+| [[WorldSocketDataModel_Analysis]] | 월드 소켓 DTO 이중 인덱싱, AddRaid LINQ 예외 위험, raid_dto Clear 누락, Socket_Point_DTO 역직렬화 성능 | `#system/world` `#concern/bug` `#concern/performance` |
 
 ---
 
@@ -286,6 +289,9 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 - [[AWQA-6379_PathLine_PreCorrection_FlickerFix_Analysis]]
 - [[AWQA-6334_UserCity_PvP_JoinBattle_EffectPosition_BugFix_Analysis]]
 - [[TroopFormation_Overview_Analysis]]
+- [[WorldSocketDataModel_Analysis]]
+- [[MKSocket_Analysis]]
+- [[SVS_Eve_Event_System_Analysis]]
 
 ### #concern/performance (성능 관련 — 20건)
 - [[Troop_Manager_MakeCrossPosition_Analysis]]
@@ -311,6 +317,7 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 - [[UpdateAttacker_3057_RaceCondition_BugFix]]
 - [[NPCTroopLOD_Function_Analysis]]
 - [[WorldTroopPanel_Function_Analysis]]
+- [[WorldSocketDataModel_Analysis]]
 
 ### #concern/memory (메모리 관련 — 5건)
 - [[TroopLOD_MakeUnits_Duplicate_Analysis]]
@@ -328,14 +335,14 @@ Firebase, Crashlytics, 분석, 푸시 알림 관련 분석.
 |------|---------|
 | Troop (부대) | 35 |
 | Battle (전투) | 38 |
-| UI (인터페이스) | 18 (AWQA-6161 WIP) |
-| Network (네트워크) | 4 |
-| World (월드맵) | 4 |
+| UI (인터페이스) | 20 (AWQA-6161 WIP) |
+| Network (네트워크) | 5 |
+| World (월드맵) | 5 |
 | Infrastructure (인프라) | 1 |
 | Improvements (개선) | 2 |
-| **합계** | **99** |
+| **합계** | **102** |
 
 ---
 
-*마지막 업데이트: 2026-05-22 (신규 2건 추가 — Troop_Send 행군대열 파견 패널·TroopFormation 부대편성 전체 구조 분석)*
+*마지막 업데이트: 2026-05-22 (신규 1건 추가 — SVS_Eve_Event_System 전야제 이벤트 시스템 분석)*
 

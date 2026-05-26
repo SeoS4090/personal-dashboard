@@ -7,7 +7,7 @@ aliases:
   - 인터페이스 MOC
 description: 무한 스크롤, 팝업, 이벤트 UI, 연맹전 랠리, 부대 편성·관리 UI 분석 MOC
 created: 2026-05-20
-updated: 2026-05-22
+updated: 2026-05-22 (신규 1건 — SVS_Eve_Event_System 세 클래스 구조·버그 분석)
 
 ---
 
@@ -82,6 +82,7 @@ updated: 2026-05-22
 |------|-----------|------|
 | [[EventUi_Achievement_System_Analysis]] | EventUi partial class 구조, Achievement 3종 오버로드, SVS_Event_Eve 상속 | done |
 | [[SVS_Eve_RankingRewardPopup_Analysis]] | RankingRewardPopup SVS 전야제 개인·월드 랭킹 보상 팝업 | done |
+| [[SVS_Eve_Event_System_Analysis]] | SVS_Event_viewer 파사드·SVS_Eve_Preview(1003)·SVS_Event_Eve(1004) 세 클래스 구조·First() 예외 위험 | done |
 
 ---
 
@@ -97,7 +98,7 @@ updated: 2026-05-22
 ## 연관 시스템
 
 - [[WorldSearchPopup_Analysis]] ↔ [[WorldManager_RefreshPushBlockJoinLeave_SearchBlockLeak_BugFix]] (searchBlockDict 소실 근본 원인 공유)
-- [[EventUi_Achievement_System_Analysis]] ↔ [[SVS_Eve_RankingRewardPopup_Analysis]] (SVS_Event_Eve 상속 구조 공유)
+- [[EventUi_Achievement_System_Analysis]] ↔ [[SVS_Eve_RankingRewardPopup_Analysis]] ↔ [[SVS_Eve_Event_System_Analysis]] (SVS_Event_Eve 상속·랭킹 팝업 호출 흐름 공유)
 - [[InfiniteScrollManager_Analysis]] ↔ [[MKCommon_ReplaceAllDataKeepingVisualElements_Analysis]] (가상 스크롤 데이터 교체 쌍)
 - [[WarAlert_ReconnectIcon_BugAnalysis_AWQA5814]] ↔ [[TroopManagement_WarAlert_Stale_BugFix]] (비동기 콜백 시점에 UI 참조 무효화 가능성 — 동일 null 가드 패턴 공유)
 - [[Troop_Send_Analysis]] ↔ [[WarCallbackManager_Analysis]] (VisualElement 이벤트 딕셔너리 관리 패턴 공유)

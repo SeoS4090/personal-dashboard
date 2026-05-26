@@ -1,0 +1,43 @@
+filters:
+  and:
+    - file.folder.contains("04. Work/AN Games")
+    - file.ext == "md"
+views:
+  - type: table
+    name: 전체 현황
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - description
+      - tags
+      - updated
+    sort:
+      - property: status
+        direction: DESC
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: 진행 중
+    filters:
+      and:
+        - status == "wip"
+    order:
+      - file.name
+      - description
+      - updated
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: 최근 수정
+    order:
+      - file.name
+      - status
+      - updated
+    sort:
+      - property: file.mtime
+        direction: DESC
+    limit: 20
