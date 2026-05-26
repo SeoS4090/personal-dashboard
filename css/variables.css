@@ -1,0 +1,77 @@
+:root {
+  /* 배경 */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #0f0f1a;
+  --bg-accent: #12121f;
+
+  /* Glass 효과 */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-bg-active: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-strong: rgba(255, 255, 255, 0.2);
+  --glass-blur: blur(12px);
+  --glass-blur-strong: blur(20px);
+
+  /* 텍스트 */
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-muted: rgba(255, 255, 255, 0.3);
+
+  /* 포인트 컬러 (메뉴별) */
+  --color-life: #64ffda;       /* 청록 */
+  --color-game: #ff6b9d;       /* 핑크 */
+  --color-dev: #7c83ff;        /* 퍼플 */
+  --color-media: #ffd166;      /* 골드 */
+  --color-accent: #64ffda;     /* 기본 포인트 */
+
+  /* 그림자 */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow-life: 0 0 20px rgba(100, 255, 218, 0.15);
+  --shadow-glow-game: 0 0 20px rgba(255, 107, 157, 0.15);
+  --shadow-glow-dev: 0 0 20px rgba(124, 131, 255, 0.15);
+  --shadow-glow-media: 0 0 20px rgba(255, 209, 102, 0.15);
+
+  /* 레이아웃 */
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 64px;
+  --header-height: 60px;
+  --border-radius: 16px;
+  --border-radius-sm: 10px;
+
+  /* 트랜지션 */
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 글자 크기 (종류별 변수) */
+  --fs-title: 20px;    /* 페이지 섹션 제목 */
+  --fs-card: 14px;     /* 카드 제목, 상단바 제목 */
+  --fs-body: 13px;     /* 버튼, 입력창, 탐색 레이블 */
+  --fs-desc: 12px;     /* 부연 설명, 레이블 */
+}
+
+/* ── 라이트 테마 ── */
+[data-theme="light"] {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
+  --bg-accent: #e4e8f0;
+
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg-hover: rgba(255, 255, 255, 0.82);
+  --glass-bg-active: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-border-strong: rgba(0, 0, 0, 0.2);
+
+  --text-primary: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.55);
+  --text-muted: rgba(0, 0, 0, 0.38);
+
+  --shadow-glass: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  --color-life: #00b89c;
+  --color-game: #e0176e;
+  --color-dev: #5059d4;
+  --color-media: #e09000;
+  --color-accent: #00b89c;
+}
+

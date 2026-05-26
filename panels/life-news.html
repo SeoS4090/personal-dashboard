@@ -1,0 +1,15 @@
+<section class="panel" id="panel-life-news">
+  <div class="section-header">
+    <div>
+      <div class="section-title" style="color:var(--color-life)">📰 뉴스</div>
+      <div class="section-desc">관심 뉴스 피드</div>
+    </div>
+    <button class="btn" id="news-refresh-btn" onclick="News.refresh()">새로고침</button>
+  </div>
+  <div id="news-filter" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;"></div>
+  <div id="news-content" class="widget-grid wide">
+    <div class="card skeleton" style="height:120px"></div>
+    <div class="card skeleton" style="height:120px"></div>
+    <div class="card skeleton" style="height:120px"></div>
+  </div>
+</section>

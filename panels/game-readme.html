@@ -1,0 +1,39 @@
+<section class="panel" id="panel-game-readme">
+  <div class="section-header">
+    <div>
+      <div class="section-title" style="color:var(--color-game)">📖 ReadMe · Game</div>
+      <div class="section-desc">Game 메뉴 소개 및 예정 기능</div>
+    </div>
+  </div>
+
+  <div class="readme-tab-bar">
+    <button class="readme-tab active" onclick="switchReadmeTab(this,'readme-game-dashboard')">🎯 대시보드</button>
+  </div>
+
+  <div class="readme-tab-content active" id="readme-game-dashboard">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" style="color:var(--color-game)">🎮 Game 섹션 소개</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">게임 플레이 기록과 정보를 한 곳에서 관리하는 섹션입니다. 현재 개발 중입니다.</p>
+        <ul class="readme-steps">
+          <li>최근 플레이한 게임 기록 및 플레이 타임 통계</li>
+          <li>Steam / 닌텐도 / PlayStation 계정 연동 (예정)</li>
+          <li>관심 게임 위시리스트 관리</li>
+          <li>게임별 메모 및 공략 노트</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🔧 현재 상태</div>
+        </div>
+        <ul class="readme-steps">
+          <li>섹션 UI 틀 완성 — 기능 구현 진행 중</li>
+          <li>Steam Web API 연동을 통한 라이브러리 불러오기 우선 개발 예정</li>
+          <li>API 키 설정은 ⚙️ 설정 패널에 추가될 예정입니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
