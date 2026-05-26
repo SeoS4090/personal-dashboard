@@ -30,7 +30,11 @@ WebProject/
 ├── js/
 │   ├── app.js                     ← 라우터(비동기 패널 로드), Settings, toast, switchReadmeTab
 │   └── modules/
-│       ├── life/CLAUDE.md         ← Life 메뉴 작업 관리
+│       ├── life/
+│       │   ├── CLAUDE.md          ← Life 메뉴 작업 관리
+│       │   ├── calendar.js        ← Google Calendar API v3 연동
+│       │   ├── news.js            ← NewsAPI.org 연동
+│       │   └── memo.js            ← localStorage 메모 CRUD
 │       ├── game/CLAUDE.md         ← Game 메뉴 작업 관리
 │       ├── dev/CLAUDE.md          ← Dev 메뉴 작업 관리
 │       └── media/CLAUDE.md        ← Media 메뉴 작업 관리
@@ -54,6 +58,7 @@ WebProject/
 |------|--------------|
 | `docs/planning.md` | 구현 현황 테이블 — 완료/진행 중 상태 반영 |
 | `docs/features.md` | 메뉴 구조 트리, 기능 목록, 섹션 내용 반영 |
+| `docs/settings-spec.md` | localStorage 키·설정 항목 변경 시 반영 |
 | 해당 메뉴 `CLAUDE.md` | TODO 체크박스 상태 업데이트 |
 
 ### 2. Obsidian wikilink 검증
@@ -95,6 +100,18 @@ obsidian eval code="(() => {
 
 > **패널 파일 규칙**: `panels/*.html`은 `<section class="panel" id="panel-{id}">` 루트 요소 하나만 포함.
 > `active` 클래스는 쓰지 않음 — `App.navigate()`가 단독으로 관리.
+
+---
+
+## 배포
+
+GitHub Actions로 자동 배포. `main` 브랜치에 push 시, `03. Game/WebProject/**` 경로가 변경되면 자동 트리거.
+
+- **워크플로우**: `.github/workflows/deploy-dashboard.yml`
+- **배포 브랜치**: `gh-pages` (publish_dir: `03. Game/WebProject`)
+- **배포 URL**: `https://seoss4090.github.io/Obsidian_Memo/`
+
+> 수동 재배포가 필요하면 GitHub → Actions 탭에서 워크플로우를 직접 실행.
 
 ---
 
