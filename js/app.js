@@ -120,10 +120,13 @@ const App = (() => {
       el.textContent = '일정 · 뉴스 · Srello';
       return;
     }
-    const { lists, cards } = Srello.getStats();
-    el.textContent = cards > 0
-      ? `Srello · 카드 ${cards}개 (${lists}열)`
-      : '일정 · 뉴스 · Srello';
+    const { lists, cards, dueSoon } = Srello.getStats();
+    if (cards > 0) {
+      const duePart = dueSoon > 0 ? ` · 마감 ${dueSoon}` : '';
+      el.textContent = `Srello · 카드 ${cards}개 (${lists}열)${duePart}`;
+    } else {
+      el.textContent = '일정 · 뉴스 · Srello';
+    }
   }
 
   function init() {

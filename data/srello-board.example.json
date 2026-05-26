@@ -8,7 +8,12 @@
           "desc": "이 파일을 복사해 srello-board.local.json 으로 저장한 뒤 Srello에서 가져오기 하세요.",
           "priority": "P2",
           "category": "Life",
-          "color": "#7c83ff"
+          "color": "#7c83ff",
+          "dueDate": "2026-06-01",
+          "checklist": [
+            { "text": "하위 작업 1", "done": false },
+            { "text": "하위 작업 2", "done": true }
+          ]
         }
       ]
     },
