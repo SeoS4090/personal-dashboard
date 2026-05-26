@@ -899,6 +899,312 @@
   font-weight: 500;
 }
 
+.srello-toolbar .btn.active {
+  background: rgba(100, 255, 218, 0.15);
+  border-color: rgba(100, 255, 218, 0.4);
+  color: var(--color-accent);
+}
+
+.srello-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-sm);
+}
+
+.srello-filter-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-desc);
+  color: var(--text-muted);
+}
+
+.srello-filter-select {
+  min-width: 100px;
+  padding: 6px 10px;
+}
+
+.srello-list-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.srello-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.srello-card-category {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--glass-bg-active);
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+}
+
+.srello-card-cover {
+  font-size: 18px;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.srello-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.srello-card-due {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(124, 131, 255, 0.15);
+  color: var(--color-dev);
+}
+
+.srello-card-due.overdue {
+  background: rgba(255, 107, 157, 0.2);
+  color: var(--color-game);
+}
+
+.srello-card-due.today {
+  background: rgba(100, 255, 218, 0.15);
+  color: var(--color-life);
+}
+
+.srello-card-checkprog {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.srello-calendar {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  padding: 16px;
+}
+
+.srello-cal-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--color-life);
+}
+
+.srello-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.srello-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.srello-cal-cell {
+  min-height: 72px;
+  padding: 4px;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  background: var(--glass-bg-active);
+}
+
+.srello-cal-cell.empty {
+  background: transparent;
+  border-color: transparent;
+}
+
+.srello-cal-cell.today {
+  border-color: var(--color-life);
+  background: rgba(100, 255, 218, 0.06);
+}
+
+.srello-cal-day {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.srello-cal-item {
+  font-size: 9px;
+  padding: 2px 4px;
+  margin-bottom: 2px;
+  border-left: 2px solid var(--color-life);
+  background: var(--glass-bg);
+  border-radius: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.srello-cal-more {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.srello-cal-hint {
+  margin-top: 12px;
+  font-size: var(--fs-desc);
+  color: var(--text-muted);
+}
+
 .srello-modal {
   max-width: 520px;
+}
+
+.srello-modal-wide {
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.srello-modal-hdr {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--color-life);
+}
+
+.srello-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.srello-modal-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.srello-field-label {
+  font-size: var(--fs-desc);
+  color: var(--text-muted);
+  min-width: 72px;
+}
+
+.srello-modal-section {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 12px;
+}
+
+.srello-section-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.srello-checklist,
+.srello-comments,
+.srello-attachments,
+.srello-activity {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.srello-check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.srello-check-text {
+  flex: 1;
+  padding: 4px 8px;
+}
+
+.srello-comment-item,
+.srello-activity-item {
+  font-size: var(--fs-desc);
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.srello-comment-time,
+.srello-activity-item time {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.srello-comment-add {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.srello-comment-add .input {
+  flex: 1;
+}
+
+.srello-attach-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-desc);
+}
+
+.srello-attach-item a {
+  color: var(--color-accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.srello-empty-hint {
+  font-size: var(--fs-desc);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.srello-prio-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.srello-prio-btn.active {
+  border-color: var(--prio, var(--color-accent)) !important;
+  color: var(--prio, var(--color-accent));
+}
+
+.srello-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.srello-modal-footer-right {
+  display: flex;
+  gap: 8px;
 }

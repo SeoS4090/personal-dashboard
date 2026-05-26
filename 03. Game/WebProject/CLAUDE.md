@@ -3,13 +3,34 @@
 ## 프로젝트 개요
 
 순수 HTML/CSS/Vanilla JS 기반 개인 웹 대시보드. Glass Morphism UI. 프레임워크 없음.
-상세 기획: `docs/planning.md` (Obsidian MOC)
+상세 기획: `docs/planning.md` (Obsidian MOC) · 사용자용 요약: `README.md`
+
+## Git 원격 (이중 push)
+
+로컬 저장소는 **동일한 `main` 브랜치**를 두 원격에 mirror 한다.
+
+| 원격 | 레포 | 용도 |
+|------|------|------|
+| `origin` | `SeoS4090/Obsidian_Memo` | Obsidian 볼트 전체 |
+| `dashboard` | `SeoS4090/personal-dashboard` | GitHub Pages 배포 소스 |
+
+코드·기획 반영 후 push:
+
+```bash
+git push origin main
+git push dashboard main
+```
+
+> `origin`만 push하면 Obsidian_Memo만 갱신되고, **배포 URL**(`personal-dashboard`)은 `dashboard` push까지 해야 Actions가 돈다.
+> WebProject 변경은 AN Games 등 다른 볼트 문서와 **별도 커밋** 유지.
 
 ## 파일 구조
 
 ```
 WebProject/
 ├── CLAUDE.md                      ← 루트: 공통 규칙 (현재 파일)
+├── README.md                      ← 레포/실행 요약 (GitHub 표시용)
+├── .gitignore                     ← 개인 Srello JSON 등 제외
 ├── index.html                     ← shell + 홈 패널 인라인 (SPA)
 ├── panels/                        ← 패널별 HTML 파일 (fetch로 지연 로드)
 │   ├── life-calendar.html
@@ -61,7 +82,9 @@ WebProject/
 |------|--------------|
 | `docs/planning.md` | 구현 현황 테이블 — 완료/진행 중 상태 반영 |
 | `docs/features.md` | 메뉴 구조 트리, 기능 목록, 섹션 내용 반영 |
-| `docs/settings-spec.md` | localStorage 키·설정 항목 변경 시 반영 |
+| `docs/settings-spec.md` | localStorage 키·설정 항목·Srello JSON 파일 정책 반영 |
+| `docs/architecture.md` | 폴더 구조·모듈 역할 변경 시 반영 |
+| `README.md` | 실행 방법·배포 URL·주요 기능 변경 시 반영 |
 | 해당 메뉴 `CLAUDE.md` | TODO 체크박스 상태 업데이트 |
 
 ### 2. Obsidian wikilink 검증
@@ -82,10 +105,33 @@ obsidian eval code="(() => {
 })()"
 ```
 
-### 3. 커밋
+### 3. 커밋 · push
 
 - WebProject 변경은 AN Games 문서와 **분리하여 별도 커밋**
-- 기획 문서 업데이트는 코드 커밋과 **같은 커밋 또는 직후 커밋**
+- 기획 문서·`README.md` 업데이트는 코드 커밋과 **같은 커밋 또는 직후 커밋**
+- push 시 **`origin` + `dashboard` 둘 다** (위 Git 원격 표 참고)
+- 커밋에 포함하지 않을 것: `data/srello-board.local.json`, `*.stackdump`, `resource/` 등 — `.gitignore` 확인
+
+---
+
+## Srello (칸반) 규칙
+
+Life 메뉴의 작업 보드. 구 `life-memo` / `memo.js`는 **제거됨** — `life-srello` / `srello.js`만 사용.
+
+| 항목 | 규칙 |
+|------|------|
+| 패널 ID | `panel-life-srello` · `panels/life-srello.html` |
+| MENU_MAP | `life-srello` |
+| 런타임 저장 | `localStorage` 키 `srello_board` |
+| 부가 키 | `srello_templates`, `srello_view_mode` |
+| 카드 필드 | `dueDate`, `checklist`, `comments`, `attachments`, `activity`, `priority`, `category`, `cover` |
+| 개인 할 일 데이터 | **Git에 넣지 않음** — JS 시드·하드코딩 목록 금지 |
+| 로컬 백업 파일 | `data/srello-board.local.json` (`.gitignore`) |
+| 형식 예시만 Git | `data/srello-board.example.json` |
+| UI 백업 | 패널 **↓ 보내기** / **↑ 가져오기** (JSON 파일) |
+
+기능 추가·수정 시 `srello.js`와 `css/components.css`의 `.srello-*` 스타일을 함께 본다.
+우선순위 P0–P3는 카드 `priority` + `color` 필드·뱃지로 표시 (리스트 내 P0 우선 정렬).
 
 ---
 
@@ -108,13 +154,15 @@ obsidian eval code="(() => {
 
 ## 배포
 
-GitHub Actions로 자동 배포. `main` 브랜치에 push 시, `03. Game/WebProject/**` 경로가 변경되면 자동 트리거.
+GitHub Actions 자동 배포. `main`에 `03. Game/WebProject/**` 변경이 push되면 트리거.
 
-- **워크플로우**: `.github/workflows/deploy-dashboard.yml`
-- **배포 브랜치**: `gh-pages` (publish_dir: `03. Game/WebProject`)
+- **워크플로우**: `.github/workflows/deploy-dashboard.yml` (`Obsidian_Memo`·`personal-dashboard` 각 레포에 동일)
+- **배포 브랜치**: `gh-pages` (`publish_dir`: `03. Game/WebProject`)
 - **배포 URL**: `https://seos4090.github.io/personal-dashboard/`
+- **트리거 레포**: Pages URL 기준으로는 **`git push dashboard main`** 필수
 
-> 수동 재배포가 필요하면 GitHub → Actions 탭에서 워크플로우를 직접 실행.
+> `origin`만 push한 경우 Obsidian_Memo는 갱신되나, personal-dashboard Pages는 갱신되지 않을 수 있음.
+> 수동 재배포: GitHub → `personal-dashboard` 레포 → Actions → 워크플로우 실행.
 
 ### 캐시 버스팅
 
@@ -137,6 +185,8 @@ sed -i "s/__BUILD_HASH__/$HASH/g" "03. Game/WebProject/index.html"
 - **SPA 방식**: 히스토리 API 사용 안 함. `App.navigate(panelId)`로 패널 전환
 - **CSS 변수**: 색상·크기는 반드시 `variables.css` 변수 참조 (`var(--color-life)` 등)
 - **API 키**: 모두 `localStorage`에 저장. 키 이름은 `settings-spec.md` 참조
-- **ReadMe 패널**: 새 메뉴 추가 시 `panel-{menu}-readme`도 함께 추가
+- **개인 데이터**: Srello 보드·API 토큰·메모 본문은 **코드/커밋에 포함하지 않음** (`localStorage` 또는 gitignore JSON)
+- **ReadMe 패널**: 새 메뉴 추가 시 `panel-{menu}-readme`도 함께 추가 (Life: 일정·뉴스·Srello 탭)
 - **탭 전환**: `switchReadmeTab(btn, contentId)` — `app.js` 전역 함수 사용
 - **캐시 버스팅**: `index.html`에 CSS/JS 파일 추가 시 반드시 `?v=__BUILD_HASH__` 붙일 것
+- **Life 진입 훅**: `app.js` `onPanelEnter` — `life-srello` → `Srello.init()`, `life-calendar` → `Calendar.init()` 등

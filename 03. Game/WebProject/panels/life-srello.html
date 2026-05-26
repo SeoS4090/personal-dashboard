@@ -5,10 +5,13 @@
       <div class="section-desc">브라우저 localStorage 저장 · JSON 백업은 로컬 파일만</div>
     </div>
     <div class="srello-toolbar">
+      <button type="button" class="btn btn-sm" id="srello-view-board" title="칸반 보드">▦ 보드</button>
+      <button type="button" class="btn btn-sm" id="srello-view-calendar" title="마감일 캘린더">📅</button>
       <button type="button" class="btn btn-sm" id="srello-export-btn" title="localStorage → JSON 파일">↓ 보내기</button>
       <button type="button" class="btn btn-sm btn-primary" id="srello-import-btn" title="JSON 파일 → localStorage">↑ 가져오기</button>
       <input type="file" id="srello-import-file" accept=".json,application/json" hidden>
     </div>
   </div>
+  <div id="srello-filters" class="srello-filters" aria-label="필터"></div>
   <div id="srello-board" class="srello-board" aria-label="Srello 보드"></div>
 </section>
