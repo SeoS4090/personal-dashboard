@@ -15,10 +15,10 @@ created: 2026-05-26
 ```
 Dashboard (홈)  ← 로고 텍스트 클릭으로 언제든 복귀
 ├── Life
-│   ├── 📖 ReadMe   — 탭별 설정 가이드 (일정·뉴스·메모)
+│   ├── 📖 ReadMe   — 탭별 설정 가이드 (일정·뉴스·Srello)
 │   ├── 일정         — Google Calendar API
 │   ├── 뉴스         — NewsAPI.org
-│   └── 메모         — localStorage
+│   └── Srello       — 칸반 보드 (localStorage)
 ├── Game
 │   └── 📖 ReadMe   — 섹션 소개 및 예정 기능
 ├── Dev
@@ -43,7 +43,7 @@ Dashboard (홈)  ← 로고 텍스트 클릭으로 언제든 복귀
 
 | 메뉴 | 탭 구성 |
 |------|---------|
-| Life | 📅 일정 (Google Calendar 연동), 📰 뉴스 (NewsAPI 연동), 📝 메모 (저장 방식) |
+| Life | 📅 일정 (Google Calendar 연동), 📰 뉴스 (NewsAPI 연동), 📋 Srello (칸반·저장 방식) |
 | Game | 🎯 대시보드 (섹션 소개·예정 기능) |
 | Dev | 🗂️ 프로젝트 (GitHub API 예정·현재 상태) |
 | Media | ✨ 대시보드 (Spotify 예정·현재 상태) |
@@ -71,11 +71,16 @@ Dashboard (홈)  ← 로고 텍스트 클릭으로 언제든 복귀
 - 카테고리 필터 버튼 (기술 / 게임 / 개발)
 - 새로고침 버튼
 
-### 메모 (`life-memo`)
-- localStorage(`dashboard_memos`) 저장
-- CRUD: 추가 / 삭제
-- 메모별 색상 선택 (모달)
-- 홈 대시보드에 메모 개수 미리보기
+### Srello (`life-srello`)
+- Trello 스타일 칸반: 리스트(열) + 카드
+- localStorage(`srello_board`) 저장
+- 드래그 앤 드롭으로 카드 이동·순서 변경
+- 리스트 추가·이름 변경·삭제, 카드 추가·편집·삭제(모달)
+- 우선순위 P0–P3 (색상·뱃지, 리스트 내 P0 우선 정렬)
+- localStorage 자동 저장 + JSON 보내기/가져오기 (로컬 파일 백업)
+- 개인 보드 JSON: `data/srello-board.local.json` (Git 제외)
+- 구 메모(`dashboard_memos`) → 「할 일」 자동 이전 (1회)
+- 홈 대시보드에 카드·리스트 수 미리보기
 
 ---
 
@@ -118,7 +123,7 @@ Dashboard (홈)  ← 로고 텍스트 클릭으로 언제든 복귀
 ## 홈 대시보드 (`home`)
 
 각 메뉴 섹션의 미리보기 카드 그리드.
-현재 Life 카드에는 저장된 메모 개수 표시.
+현재 Life 카드에는 Srello 카드·리스트 수 표시.
 나머지 섹션 완성 시 각 카드에 요약 정보 추가 예정.
 로고 텍스트 클릭으로 어느 패널에서든 홈으로 복귀 가능.
 

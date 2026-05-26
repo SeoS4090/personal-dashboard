@@ -17,13 +17,16 @@ created: 2026-05-26
 | 언어 | HTML5 / CSS3 / Vanilla JavaScript |
 | UI 패러다임 | Glass Morphism (backdrop-filter blur, 반투명 레이어) |
 | 외부 API | Google Calendar API v3, NewsAPI.org |
-| 저장소 | `localStorage` (설정, 메모) |
+| 저장소 | `localStorage` (설정, Srello 보드) |
 | 번들러 / 프레임워크 | 없음 — 순수 SPA (패널 show/hide 방식) |
 
 ## 폴더 구조
 
 ```
 WebProject/
+├── data/
+│   ├── srello-board.example.json  ← Srello JSON 형식 예시 (Git 포함)
+│   └── srello-board.local.json    ← 개인 보드 백업 (Git 제외, .gitignore)
 ├── docs/
 │   ├── planning.md          ← 기획 인덱스 (MOC)
 │   ├── architecture.md      ← 현재 문서
@@ -33,7 +36,7 @@ WebProject/
 ├── panels/                  ← 패널별 HTML (fetch로 지연 로드)
 │   ├── life-calendar.html
 │   ├── life-news.html
-│   ├── life-memo.html
+│   ├── life-srello.html
 │   ├── life-readme.html
 │   ├── game-dashboard.html
 │   ├── game-readme.html
@@ -52,9 +55,19 @@ WebProject/
 │       └── life/
 │           ├── calendar.js  ← Google Calendar API 연동 + 토큰 복원
 │           ├── news.js      ← NewsAPI.org 연동
-│           └── memo.js      ← 메모 CRUD
+│           └── srello.js    ← Srello 칸반 CRUD + DnD + JSON 백업
+├── .gitignore               ← srello-board.local.json 등 개인 데이터 제외
 └── index.html               ← shell + 홈 패널 인라인 (패널은 fetch 지연 로드)
 ```
+
+### `srello.js` 주요 구조
+
+| 함수 | 역할 |
+|------|------|
+| `load()` / `save()` | `localStorage` 키 `srello_board` 입출력 |
+| `exportBoard()` | 보드를 JSON 파일로 다운로드 |
+| `importBoard()` | JSON 파일 파싱 후 보드 복원·병합 |
+| `render()` | 칸반 UI, 드래그 앤 드롭 |
 
 ## 주요 모듈 역할
 

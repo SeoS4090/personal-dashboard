@@ -66,7 +66,18 @@ created: 2026-05-26
 | `gcal_week_start` | string | `'0'` | 주 시작 요일 (0=일, 1=월) |
 | `news_api_key` | string | `''` | NewsAPI.org API Key |
 | `news_keywords` | string | `''` | 뉴스 관심 키워드 (쉼표 구분) |
-| `dashboard_memos` | JSON | `'[]'` | 메모 배열 |
+| `srello_board` | JSON | 기본 3열 | Srello 칸반 보드 `{ lists: [{ id, title, cards }] }` |
+| `srello_memo_migrated` | string | — | 구 메모 이전 완료 플래그 (`'1'`) |
+| `dashboard_memos` | JSON | `'[]'` | (레거시) 구 메모 — Srello 최초 1회 이전 후 미사용 |
+
+### Srello JSON 백업 (파일)
+
+| 파일 | Git | 설명 |
+|------|-----|------|
+| `data/srello-board.example.json` | 포함 | import 형식 예시 |
+| `data/srello-board.local.json` | **제외** | 개인 할 일·보드 백업 (`.gitignore`) |
+
+패널 **↓ 보내기** / **↑ 가져오기**로 `localStorage`와 로컬 JSON을 동기화한다.
 
 ---
 

@@ -8,13 +8,13 @@
 |------|------|
 | `calendar.js` | Google Calendar API v3 연동 |
 | `news.js` | NewsAPI.org 연동, 키워드 필터 |
-| `memo.js` | localStorage 메모 CRUD |
+| `srello.js` | localStorage 칸반 + JSON 보내기/가져오기 |
 
 **index.html 패널 ID**
-- `panel-life-readme` — 설정 가이드 (탭: 일정·뉴스·메모)
+- `panel-life-readme` — 설정 가이드 (탭: 일정·뉴스·Srello)
 - `panel-life-calendar` — 일정
 - `panel-life-news` — 뉴스
-- `panel-life-memo` — 메모
+- `panel-life-srello` — Srello
 
 **localStorage 키**
 - `gcal_client_id` — Google OAuth 2.0 Client ID
@@ -25,6 +25,8 @@
 - `gcal_view_mode` — 뷰 모드 (month / week / list)
 - `gcal_week_start` — 주 시작 요일 (0=일, 1=월)
 - `news_api_key`, `news_keywords` — NewsAPI
+- `srello_board` — Srello 보드 `{ lists: [{ id, title, cards: [...] }] }`
+- `srello_memo_migrated` — 구 메모(`dashboard_memos`) 이전 완료 플래그
 
 ---
 
@@ -36,12 +38,13 @@
 - [x] ‹ › 기간 탐색 (이전/다음 월·주·30일)
 - [x] 주 시작 요일 설정 (일/월 선택)
 - [x] NewsAPI.org 연동 (키워드 필터, 카드 그리드)
-- [x] 메모 CRUD (추가·삭제, localStorage)
-- [x] ReadMe 패널 — 일정·뉴스·메모 탭별 설정 가이드
+- [x] Srello 칸반 (리스트·카드 CRUD, 드래그 앤 드롭, localStorage)
+- [x] 구 메모 → Srello 「할 일」 자동 이전
+- [x] ReadMe 패널 — 일정·뉴스·Srello 탭별 설정 가이드
 
 ## TODO
 
-- [ ] 메모 편집 기능 (현재 추가/삭제만)
-- [ ] 메모 색상 선택 기능 (모달)
+- [ ] Srello 카드에 마감일·체크리스트
+- [x] Srello 보드 JSON보내기/가져오기 (로컬 파일, Git 제외)
 - [ ] 뉴스 카테고리 필터 버튼 (기술·게임·개발) 활성화
 - [ ] 홈 카드 — 오늘 일정 미리보기 표시

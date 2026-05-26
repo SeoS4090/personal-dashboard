@@ -30,7 +30,9 @@ created: 2026-05-26
 | 일정 — 캘린더 목록 자동 불러오기 + 토글 스위치 | ✅ 완료 |
 | 일정 — OAuth 토큰 자동 복원 (새로고침 재연결 불필요) | ✅ 완료 |
 | 뉴스 — NewsAPI.org 연동 | ✅ 완료 |
-| 메모 — localStorage CRUD | ✅ 완료 |
+| Srello — 칸반 보드 (localStorage, DnD, P0–P3) | ✅ 완료 |
+| Srello — JSON 보내기/가져오기 (로컬 파일 백업, Git 제외) | ✅ 완료 |
+| 메모 — `life-memo` 패널 | ❌ 제거 → Srello로 대체 |
 
 ### 설정 / 공통
 
@@ -41,6 +43,16 @@ created: 2026-05-26
 | 각 메뉴별 ReadMe 패널 (탭 UI) | ✅ 완료 |
 | 홈 네비게이션 (Dashboard 텍스트 클릭) | ✅ 완료 |
 | GitHub Pages 배포 + 캐시 버스팅 | ✅ 완료 |
+
+### Srello 백로그 (개인 데이터는 Git 미포함)
+
+| 항목 | 상태 |
+|------|------|
+| 카드 마감일·체크리스트 | 🚧 예정 |
+| 뉴스 카테고리 필터 (기술·게임·개발) | 🚧 예정 |
+| 홈 카드 — 오늘 일정 미리보기 | 🚧 예정 |
+
+> 개인 할 일 목록은 `data/srello-board.local.json`에 보관 후 Srello **가져오기**로 로드. 형식은 `data/srello-board.example.json` 참고.
 
 ### 미구현
 
