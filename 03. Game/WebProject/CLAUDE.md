@@ -10,13 +10,25 @@
 ```
 WebProject/
 ├── CLAUDE.md                      ← 루트: 공통 규칙 (현재 파일)
-├── index.html                     ← 모든 패널 포함 (SPA)
+├── index.html                     ← shell + 홈 패널 인라인 (SPA)
+├── panels/                        ← 패널별 HTML 파일 (fetch로 지연 로드)
+│   ├── life-calendar.html
+│   ├── life-news.html
+│   ├── life-memo.html
+│   ├── life-readme.html
+│   ├── game-dashboard.html
+│   ├── game-readme.html
+│   ├── dev-dashboard.html
+│   ├── dev-readme.html
+│   ├── media-dashboard.html
+│   ├── media-readme.html
+│   └── settings.html
 ├── css/
 │   ├── variables.css              ← CSS 변수, 테마
 │   ├── layout.css                 ← 사이드바, 상단바, 메인 레이아웃
 │   └── components.css             ← 공통 컴포넌트
 ├── js/
-│   ├── app.js                     ← 라우터, Settings, toast, switchReadmeTab
+│   ├── app.js                     ← 라우터(비동기 패널 로드), Settings, toast, switchReadmeTab
 │   └── modules/
 │       ├── life/CLAUDE.md         ← Life 메뉴 작업 관리
 │       ├── game/CLAUDE.md         ← Game 메뉴 작업 관리
@@ -73,13 +85,16 @@ obsidian eval code="(() => {
 
 새 패널을 추가할 때 빠뜨리지 않도록 확인한다.
 
-- [ ] `index.html` — `<section class="panel" id="panel-{id}">` 추가
+- [ ] `panels/{panelId}.html` — `<section class="panel" id="panel-{id}">` 포함하여 생성
 - [ ] `index.html` — 사이드바 `nav-sub-item` 추가
-- [ ] `js/app.js` — `MENU_MAP`에 항목 추가
+- [ ] `js/app.js` — `MENU_MAP`에 항목 추가 (fetch 캐싱은 자동 처리됨)
 - [ ] `js/modules/{menu}/` — 기능 JS 모듈 작성
 - [ ] `docs/features.md` — 메뉴 구조 트리 및 기능 설명 업데이트
 - [ ] `docs/planning.md` — 구현 현황 테이블 업데이트
 - [ ] 해당 메뉴 `CLAUDE.md` — TODO 항목 추가 및 완료 처리
+
+> **패널 파일 규칙**: `panels/*.html`은 `<section class="panel" id="panel-{id}">` 루트 요소 하나만 포함.
+> `active` 클래스는 쓰지 않음 — `App.navigate()`가 단독으로 관리.
 
 ---
 

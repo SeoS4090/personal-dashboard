@@ -1,0 +1,40 @@
+<section class="panel" id="panel-dev-readme">
+  <div class="section-header">
+    <div>
+      <div class="section-title" style="color:var(--color-dev)">📖 ReadMe · Dev</div>
+      <div class="section-desc">Dev 메뉴 소개 및 예정 기능</div>
+    </div>
+  </div>
+
+  <div class="readme-tab-bar">
+    <button class="readme-tab active" onclick="switchReadmeTab(this,'readme-dev-project')">🗂️ 프로젝트</button>
+  </div>
+
+  <div class="readme-tab-content active" id="readme-dev-project">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" style="color:var(--color-dev)">⚡ Dev 섹션 소개</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">개인 개발 프로젝트와 GitHub 활동을 대시보드에서 관리하는 섹션입니다.</p>
+        <ul class="readme-steps">
+          <li>GitHub 저장소 목록 및 최근 커밋 히스토리</li>
+          <li>이슈 · PR 상태 트래킹</li>
+          <li>개인 프로젝트 메모 및 TODO 관리</li>
+          <li>기술 스택 통계 시각화</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🔧 현재 상태</div>
+        </div>
+        <ul class="readme-steps">
+          <li>섹션 UI 틀 완성 — 기능 구현 진행 중</li>
+          <li>GitHub API (Personal Access Token) 연동 우선 개발 예정</li>
+          <li>PAT(Personal Access Token)은 GitHub Settings → Developer settings에서 발급</li>
+          <li>API 키 설정은 ⚙️ 설정 패널에 추가될 예정입니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,115 @@
+<section class="panel" id="panel-life-readme">
+  <div class="section-header">
+    <div>
+      <div class="section-title" style="color:var(--color-life)">📖 ReadMe · Life</div>
+      <div class="section-desc">Life 메뉴 설정 및 사용 가이드</div>
+    </div>
+  </div>
+
+  <div class="readme-tab-bar">
+    <button class="readme-tab active" onclick="switchReadmeTab(this,'readme-life-cal')">📅 일정</button>
+    <button class="readme-tab" onclick="switchReadmeTab(this,'readme-life-news')">📰 뉴스</button>
+    <button class="readme-tab" onclick="switchReadmeTab(this,'readme-life-memo')">📝 메모</button>
+  </div>
+
+  <!-- 탭: 일정 -->
+  <div class="readme-tab-content active" id="readme-life-cal">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📅 Google Calendar 연동 (OAuth 2.0)</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">OAuth 2.0으로 Google 계정에 직접 로그인하여 비공개 캘린더를 포함한 모든 캘린더를 불러옵니다.</p>
+        <ol class="readme-steps">
+          <li><a href="https://console.cloud.google.com" target="_blank" style="color:var(--color-accent)">Google Cloud Console</a> 접속 후 새 프로젝트 생성</li>
+          <li><strong>API 및 서비스 → 라이브러리</strong>에서 <span class="code-inline">Google Calendar API</span> 검색 후 활성화</li>
+          <li><strong>자격 증명 → OAuth 클라이언트 ID 만들기</strong> 선택 → 유형: <strong>웹 애플리케이션</strong></li>
+          <li><strong>승인된 JavaScript 원본</strong>에 서비스 중인 주소 추가 (예: <span class="code-inline">https://username.github.io</span>)</li>
+          <li>생성된 <strong>클라이언트 ID</strong> 복사 후 <strong>⚙️ 설정 → Google Calendar → OAuth 2.0 Client ID</strong> 에 입력 후 저장</li>
+          <li><strong>Google 계정 연결</strong> 버튼 클릭 → 팝업에서 계정 선택 및 권한 허용</li>
+          <li>연결 후 <strong>설정 → 캘린더 목록</strong>에서 원하는 캘린더 ID를 추가</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 자주 사용하는 캘린더 ID</div>
+        </div>
+        <ul class="readme-steps">
+          <li>내 기본 캘린더: <span class="code-inline">primary</span></li>
+          <li>대한민국 공휴일: <span class="code-inline">ko.south_korea#holiday@group.v.calendar.google.com</span></li>
+          <li>회사/공유 캘린더: <span class="code-inline">캘린더 설정 → 캘린더 통합 → 캘린더 ID</span> 확인</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🗓️ 뷰 전환 및 탐색</div>
+        </div>
+        <ul class="readme-steps">
+          <li><strong>월별</strong>: 달력 그리드로 한 달 일정 한눈에 확인</li>
+          <li><strong>주별</strong>: 7일 시간대별 상세 뷰 (오전 7시 ~ 오후 10시)</li>
+          <li><strong>일정</strong>: 앞으로 30일간 일정 목록 (캘린더 색상 구분)</li>
+          <li>‹ › 버튼으로 이전/다음 기간으로 이동</li>
+          <li>주 시작 요일은 <strong>⚙️ 설정</strong>에서 일요일 / 월요일 선택 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭: 뉴스 -->
+  <div class="readme-tab-content" id="readme-life-news">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📰 NewsAPI.org 연동</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">NewsAPI.org를 통해 키워드 기반 뉴스를 실시간으로 가져옵니다.</p>
+        <ol class="readme-steps">
+          <li><a href="https://newsapi.org" target="_blank" style="color:var(--color-accent)">newsapi.org</a> 회원가입 (무료 플랜 제공)</li>
+          <li>로그인 후 <strong>My Account</strong> 페이지에서 API Key 복사</li>
+          <li>대시보드 <strong>⚙️ 설정 → News API</strong>에 API Key 입력</li>
+          <li>관심 키워드를 쉼표로 구분해 입력 (예: <span class="code-inline">게임, AI, 개발, 스타트업</span>)</li>
+          <li>저장 후 뉴스 패널로 이동하면 자동으로 로드됩니다</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">⚠️ 무료 플랜 제한사항</div>
+        </div>
+        <ul class="readme-steps">
+          <li>무료 플랜은 <strong>하루 100회</strong> API 호출 제한 (일반 사용에 충분)</li>
+          <li>기사 본문은 일부만 제공 — 전문은 카드 클릭 후 원본 링크에서 확인</li>
+          <li>해외 뉴스 중심이므로 영문 키워드를 함께 추가하면 더 많은 결과를 얻을 수 있습니다</li>
+          <li>한국 뉴스 위주로 받으려면 키워드에 <span class="code-inline">korea</span>를 포함하거나 한글 키워드 사용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭: 메모 -->
+  <div class="readme-tab-content" id="readme-life-memo">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📝 메모 사용법</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">별도 API 없이 브라우저 로컬 스토리지에 저장하는 빠른 메모 기능입니다.</p>
+        <ul class="readme-steps">
+          <li><strong>+ 새 메모</strong> 버튼 클릭 → 제목과 내용 입력 후 저장</li>
+          <li>메모 카드를 클릭하면 편집 모드로 전환됩니다</li>
+          <li>카드 우상단 <strong>✕</strong> 버튼으로 개별 삭제 가능</li>
+          <li>메모 목록은 최근 수정 순으로 정렬됩니다</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💾 저장 방식 안내</div>
+        </div>
+        <ul class="readme-steps">
+          <li>인터넷 연결 없이도 작동하며 서버에 데이터를 전송하지 않습니다</li>
+          <li>브라우저 데이터(캐시·쿠키) 초기화 시 메모가 삭제될 수 있으니 중요한 내용은 별도 백업 권장</li>
+          <li>같은 기기의 같은 브라우저에서만 메모를 확인할 수 있습니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

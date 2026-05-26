@@ -15,8 +15,27 @@ const App = (() => {
   };
 
   let currentPanel = 'home';
+  const _panelCache = new Set(['home']); // home은 인라인
+  let _settingsControlsInited = false;
 
-  function navigate(panelId) {
+  async function _ensurePanel(panelId) {
+    if (_panelCache.has(panelId)) return;
+    const res = await fetch(`./panels/${panelId}.html`);
+    if (!res.ok) throw new Error(`패널 로드 실패: ${panelId} (${res.status})`);
+    const html = await res.text();
+    document.getElementById('content').insertAdjacentHTML('beforeend', html);
+    _panelCache.add(panelId);
+  }
+
+  async function navigate(panelId) {
+    try {
+      await _ensurePanel(panelId);
+    } catch (e) {
+      console.error(e);
+      toast('패널을 불러오지 못했습니다.', 'error');
+      return;
+    }
+
     // 패널 전환
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     const target = document.getElementById('panel-' + panelId);
@@ -30,15 +49,12 @@ const App = (() => {
 
     const info = MENU_MAP[panelId];
     if (info) {
-      // 상단 바 타이틀
       document.getElementById('topbar-title').textContent = info.title;
       document.getElementById('topbar-breadcrumb').textContent = info.sub;
 
-      // 서브메뉴 아이템 active
       const subItem = document.querySelector(`.nav-sub-item[data-panel="${panelId}"]`);
       if (subItem) {
         subItem.classList.add('active');
-        // 부모 메뉴 open
         if (info.parent) openMenu(info.parent);
       }
       if (panelId === 'settings') {
@@ -50,7 +66,12 @@ const App = (() => {
       document.getElementById('topbar-breadcrumb').textContent = '';
     }
 
-    // 패널별 초기화
+    // 설정 패널 최초 진입 시 컨트롤 바인딩
+    if (panelId === 'settings' && !_settingsControlsInited) {
+      Settings.initControls();
+      _settingsControlsInited = true;
+    }
+
     onPanelEnter(panelId);
   }
 
@@ -74,6 +95,7 @@ const App = (() => {
   }
 
   function onPanelEnter(panelId) {
+    if (panelId === 'home')          updateHomeLifePreview();
     if (panelId === 'life-memo')     Memo.render();
     if (panelId === 'life-news')     News.init();
     if (panelId === 'life-calendar') Calendar.init();
@@ -91,62 +113,51 @@ const App = (() => {
     if (descEl) descEl.textContent = dateStr;
   }
 
+  function updateHomeLifePreview() {
+    const el = document.getElementById('home-life-preview');
+    if (!el) return;
+    const memos = Memo.getAll();
+    el.textContent = memos.length > 0 ? `메모 ${memos.length}개` : '일정 · 뉴스 · 메모 관리';
+  }
+
   function init() {
     Settings.initAppearance();
-    Settings.initControls();
+
+    // 시스템 테마 변경 감지 (전역 — 설정 패널 로드 전에도 동작해야 함)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (localStorage.getItem('appearance_theme') === 'system') Settings.applyTheme('system');
+    });
 
     updateDate();
     setInterval(updateDate, 60000);
 
-    // 사이드바 로고 아이콘 → collapse 토글
     document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('collapsed');
     });
 
-    // 로고 텍스트 → 홈으로 이동
     document.getElementById('home-btn')?.addEventListener('click', () => {
       navigate('home');
     });
 
-    // 모바일 토글
     const mobileToggle = document.getElementById('mobile-toggle');
     if (window.innerWidth <= 768) mobileToggle.style.display = 'flex';
     mobileToggle?.addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('open');
     });
 
-    // 메뉴 클릭 이벤트
     document.querySelectorAll('.nav-item[data-menu]').forEach(item => {
-      item.addEventListener('click', () => {
-        toggleMenu(item.dataset.menu);
-      });
+      item.addEventListener('click', () => toggleMenu(item.dataset.menu));
     });
 
-    // 서브메뉴 클릭
     document.querySelectorAll('.nav-sub-item[data-panel]').forEach(item => {
-      item.addEventListener('click', () => {
-        navigate(item.dataset.panel);
-      });
+      item.addEventListener('click', () => navigate(item.dataset.panel));
     });
 
-    // 설정 버튼
     document.querySelector('.nav-item[data-panel="settings"]')?.addEventListener('click', () => {
       navigate('settings');
     });
 
-    // 홈 대시보드 Life 미리보기
     updateHomeLifePreview();
-  }
-
-  function updateHomeLifePreview() {
-    const el = document.getElementById('home-life-preview');
-    if (!el) return;
-    const memos = Memo.getAll();
-    if (memos.length > 0) {
-      el.textContent = `메모 ${memos.length}개`;
-    } else {
-      el.textContent = '일정 · 뉴스 · 메모 관리';
-    }
   }
 
   return { navigate, init, openMenu, toggleMenu, updateHomeLifePreview };
@@ -170,8 +181,7 @@ const Settings = (() => {
   function applyTheme(theme) {
     const root = document.documentElement;
     if (theme === 'system') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      root.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     } else {
       root.setAttribute('data-theme', theme);
     }
@@ -189,6 +199,7 @@ const Settings = (() => {
     applyAllFontSizes();
   }
 
+  // 설정 패널 DOM이 존재할 때 1회만 호출
   function initControls() {
     // 테마 버튼
     document.querySelectorAll('.setting-btn[data-group="theme"]').forEach(btn => {
@@ -214,20 +225,23 @@ const Settings = (() => {
       });
     });
 
-    // 시스템 테마 변경 감지
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-      if (localStorage.getItem('appearance_theme') === 'system') applyTheme('system');
+    // 주 시작 요일 버튼
+    document.querySelectorAll('.setting-btn[data-group="week-start"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        localStorage.setItem('gcal_week_start', btn.dataset.value);
+        document.querySelectorAll('.setting-btn[data-group="week-start"]').forEach(b => {
+          b.classList.toggle('active', b === btn);
+        });
+      });
     });
   }
 
   function updateSettingsUI() {
-    // 테마 버튼 active 상태
     const theme = localStorage.getItem('appearance_theme') || 'dark';
     document.querySelectorAll('.setting-btn[data-group="theme"]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.value === theme);
     });
 
-    // 슬라이더 값 반영
     document.querySelectorAll('.fs-slider').forEach(slider => {
       const key = slider.dataset.fsKey;
       const val = localStorage.getItem(key) || FS_DEFAULTS[key];
@@ -235,28 +249,80 @@ const Settings = (() => {
       const valEl = document.getElementById('fs-val-' + slider.id.replace('fs-', ''));
       if (valEl) valEl.textContent = val;
     });
+
+    const weekStart = localStorage.getItem('gcal_week_start') || '0';
+    document.querySelectorAll('.setting-btn[data-group="week-start"]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.value === weekStart);
+    });
+  }
+
+  const _CAL_COLORS = ['#64ffda','#ff6b9d','#7c83ff','#ffd166','#ff9f43','#48dbfb'];
+
+  function _escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   function load() {
     const el = id => document.getElementById(id);
-    const calKey  = localStorage.getItem('gcal_api_key')   || '';
-    const calId   = localStorage.getItem('gcal_cal_id')    || '';
-    const newsKey = localStorage.getItem('news_api_key')   || '';
-    const newsKw  = localStorage.getItem('news_keywords')  || '';
-
-    if (el('setting-gcal-apikey'))   el('setting-gcal-apikey').value   = calKey;
-    if (el('setting-gcal-calid'))    el('setting-gcal-calid').value    = calId;
-    if (el('setting-news-apikey'))   el('setting-news-apikey').value   = newsKey;
-    if (el('setting-news-keywords')) el('setting-news-keywords').value = newsKw;
-
+    if (el('setting-gcal-clientid')) el('setting-gcal-clientid').value = localStorage.getItem('gcal_client_id') || '';
+    if (el('setting-news-apikey'))   el('setting-news-apikey').value   = localStorage.getItem('news_api_key')   || '';
+    if (el('setting-news-keywords')) el('setting-news-keywords').value = localStorage.getItem('news_keywords')  || '';
+    renderCalendarList();
     updateSettingsUI();
   }
 
+  function renderCalendarList() {
+    const container = document.getElementById('gcal-calendars-list');
+    if (!container) return;
+    let cals = [];
+    try { cals = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
+    if (!cals.length) {
+      container.innerHTML = '<div style="font-size:12px;color:var(--text-muted);">추가된 캘린더가 없습니다.</div>';
+      return;
+    }
+    container.innerHTML = cals.map((cal, i) => `
+      <div class="gcal-cal-item">
+        <div class="gcal-cal-dot" style="background:${cal.color || _CAL_COLORS[i % _CAL_COLORS.length]};"></div>
+        <div class="gcal-cal-info">
+          <div class="gcal-cal-name">${_escHtml(cal.name || cal.id)}</div>
+          <div class="gcal-cal-id">${_escHtml(cal.id)}</div>
+        </div>
+        <button class="btn btn-sm" onclick="Settings.removeCalendar(${i})" style="padding:3px 8px;">×</button>
+      </div>`).join('');
+  }
+
+  function addCalendar() {
+    const idEl   = document.getElementById('setting-gcal-add-id');
+    const nameEl = document.getElementById('setting-gcal-add-name');
+    const id     = idEl?.value.trim();
+    const name   = nameEl?.value.trim() || id;
+    if (!id) { toast('Calendar ID를 입력하세요.', 'error'); return; }
+
+    let cals = [];
+    try { cals = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
+    if (cals.find(c => c.id === id)) { toast('이미 추가된 캘린더입니다.', 'error'); return; }
+
+    cals.push({ id, name, color: _CAL_COLORS[cals.length % _CAL_COLORS.length] });
+    localStorage.setItem('gcal_calendars', JSON.stringify(cals));
+    if (idEl)   idEl.value   = '';
+    if (nameEl) nameEl.value = '';
+    renderCalendarList();
+    toast(`'${name}' 캘린더가 추가되었습니다.`, 'success');
+  }
+
+  function removeCalendar(index) {
+    let cals = [];
+    try { cals = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
+    cals.splice(index, 1);
+    localStorage.setItem('gcal_calendars', JSON.stringify(cals));
+    renderCalendarList();
+    toast('캘린더가 제거되었습니다.', 'success');
+  }
+
   function saveCalendar() {
-    const key = document.getElementById('setting-gcal-apikey')?.value.trim();
-    const id  = document.getElementById('setting-gcal-calid')?.value.trim();
-    if (key) localStorage.setItem('gcal_api_key', key);
-    if (id)  localStorage.setItem('gcal_cal_id',  id);
+    const clientId = document.getElementById('setting-gcal-clientid')?.value.trim();
+    if (clientId) localStorage.setItem('gcal_client_id', clientId);
+    Calendar.resetInit();
     toast('캘린더 설정이 저장되었습니다.', 'success');
   }
 
@@ -268,7 +334,7 @@ const Settings = (() => {
     toast('뉴스 설정이 저장되었습니다.', 'success');
   }
 
-  return { load, saveCalendar, saveNews, initAppearance, initControls };
+  return { load, saveCalendar, saveNews, initAppearance, applyTheme, initControls, addCalendar, removeCalendar, renderCalendarList };
 })();
 
 /* ── Toast ── */

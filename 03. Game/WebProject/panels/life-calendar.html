@@ -1,0 +1,21 @@
+<section class="panel" id="panel-life-calendar">
+  <div class="section-header" style="flex-wrap:wrap; gap:10px;">
+    <div>
+      <div class="section-title" style="color:var(--color-life)">📅 일정</div>
+      <div class="section-desc">Google Calendar 연동</div>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <div class="setting-btn-group" id="cal-view-btns">
+        <button class="setting-btn active" data-view="month" onclick="Calendar.setView('month')">월별</button>
+        <button class="setting-btn" data-view="week" onclick="Calendar.setView('week')">주별</button>
+        <button class="setting-btn" data-view="list" onclick="Calendar.setView('list')">일정</button>
+      </div>
+      <div style="display:flex; gap:4px; align-items:center;">
+        <button class="btn btn-sm" onclick="Calendar.prevPeriod()">‹</button>
+        <span id="cal-period-label" style="font-size:13px; min-width:110px; text-align:center; color:var(--text-secondary);"></span>
+        <button class="btn btn-sm" onclick="Calendar.nextPeriod()">›</button>
+      </div>
+    </div>
+  </div>
+  <div id="calendar-content"></div>
+</section>

@@ -33,8 +33,10 @@ created: 2026-05-26
 
 | 항목 | 입력 타입 | localStorage 키 |
 |------|----------|-----------------|
-| API Key | `password` | `gcal_api_key` |
-| Calendar ID | `text` | `gcal_cal_id` |
+| OAuth 2.0 Client ID | `text` | `gcal_client_id` |
+| 캘린더 목록 | JSON 배열 | `gcal_calendars` |
+| 뷰 모드 | string | `gcal_view_mode` |
+| 주 시작 요일 | string (0/1) | `gcal_week_start` |
 
 ### 📰 News API
 
@@ -54,8 +56,10 @@ created: 2026-05-26
 | `fs_card` | string | `'14px'` | 카드 제목 글자 크기 |
 | `fs_body` | string | `'13px'` | 본문·버튼·입력 글자 크기 |
 | `fs_desc` | string | `'12px'` | 설명·레이블 글자 크기 |
-| `gcal_api_key` | string | `''` | Google Calendar API Key |
-| `gcal_cal_id` | string | `''` | Google Calendar ID |
+| `gcal_client_id` | string | `''` | Google OAuth 2.0 Client ID |
+| `gcal_calendars` | JSON | `'[]'` | 캘린더 목록 `[{id,name,color}]` |
+| `gcal_view_mode` | string | `'month'` | 캘린더 뷰 (month/week/list) |
+| `gcal_week_start` | string | `'0'` | 주 시작 요일 (0=일, 1=월) |
 | `news_api_key` | string | `''` | NewsAPI.org API Key |
 | `news_keywords` | string | `''` | 뉴스 관심 키워드 (쉼표 구분) |
 | `dashboard_memos` | JSON | `'[]'` | 메모 배열 |

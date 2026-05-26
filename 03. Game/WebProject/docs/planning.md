@@ -24,6 +24,7 @@ created: 2026-05-26
 | 항목 | 상태 |
 |------|------|
 | Life — 일정 (Google Calendar) | ✅ 완료 |
+| Life — 일정 OAuth 2.0 + 다중 캘린더 + 멀티뷰 | ✅ 완료 |
 | Life — 뉴스 (NewsAPI.org) | ✅ 완료 |
 | Life — 메모 (localStorage) | ✅ 완료 |
 | 설정 — 테마 (다크/라이트/시스템) | ✅ 완료 |
