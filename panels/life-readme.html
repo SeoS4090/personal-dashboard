@@ -75,6 +75,25 @@
 
       <div class="card">
         <div class="card-header">
+          <div class="card-title">🔄 연결 유지 (자동 토큰 복원)</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:14px;">한 번 연결하면 새로고침(F5)이나 탭 재방문 시에도 <strong>자동으로 연결 상태가 복원</strong>됩니다.</p>
+        <ul class="readme-steps">
+          <li>연결 후 액세스 토큰이 브라우저에 저장되며, <strong>58분간 유효</strong>합니다</li>
+          <li>유효한 토큰이 남아 있으면 새로고침해도 팝업 없이 캘린더가 바로 표시됩니다</li>
+          <li>토큰이 만료되어도 Google 로그인 세션이 살아 있으면 <strong>팝업 없이 자동 재인증</strong>합니다</li>
+          <li>Google 세션까지 만료된 경우에만 "다시 연결" 버튼이 표시됩니다</li>
+          <li>Client ID를 변경하면 저장된 토큰이 초기화되고 재인증이 필요합니다</li>
+        </ul>
+        <div style="margin-top:12px; padding:10px 12px; background:rgba(100,255,218,0.06); border-radius:8px; border-left:3px solid var(--color-accent);">
+          <p style="font-size:var(--fs-desc); color:var(--text-secondary); margin:0;">
+            💡 토큰은 이 브라우저의 localStorage에만 저장됩니다. 다른 브라우저나 기기에서는 별도로 연결해야 합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
           <div class="card-title">🗓️ 뷰 전환 및 탐색</div>
         </div>
         <ul class="readme-steps">
@@ -99,7 +118,7 @@
             <strong>"이 앱은 Google에서 확인하지 않았습니다"</strong> — <em>고급 → (앱 이름)(으)로 이동</em> 클릭. OAuth 동의 화면이 테스트 상태일 때 표시되는 정상 메시지
           </li>
           <li>
-            <strong>인증 만료 오류</strong> — <strong>Google 계정 연결</strong>을 다시 눌러 재인증. 액세스 토큰은 1시간 후 만료됨
+            <strong>인증 만료 오류</strong> — Google 세션이 살아 있으면 자동으로 재인증됩니다. "다시 연결" 버튼이 표시되는 경우에만 클릭해 재인증하세요
           </li>
           <li>
             <strong>캘린더 일정이 안 보임</strong> — 설정에서 해당 캘린더 토글이 ON인지 확인. Client ID 저장 후 저장 버튼을 눌렀는지도 확인
