@@ -18,6 +18,8 @@
 
 **localStorage 키**
 - `gcal_client_id` — Google OAuth 2.0 Client ID
+- `gcal_access_token` — OAuth 액세스 토큰 (새로고침 후 자동 복원용, 만료 시 자동 삭제)
+- `gcal_token_expiry` — 토큰 만료 시각 (epoch ms, 발급 후 58분)
 - `gcal_all_calendars` — Google API로 불러온 전체 캘린더 목록 `[{id, name, color, enabled}]`
 - `gcal_calendars` — enabled된 캘린더만 동기화된 배열 `[{id, name, color}]` (gcal_all_calendars에서 파생)
 - `gcal_view_mode` — 뷰 모드 (month / week / list)

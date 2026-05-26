@@ -58,6 +58,8 @@ created: 2026-05-26
 | `fs_body` | string | `'13px'` | 본문·버튼·입력 글자 크기 |
 | `fs_desc` | string | `'12px'` | 설명·레이블 글자 크기 |
 | `gcal_client_id` | string | `''` | Google OAuth 2.0 Client ID |
+| `gcal_access_token` | string | `''` | OAuth 액세스 토큰 (새로고침 복원용, 만료 시 자동 삭제) |
+| `gcal_token_expiry` | string | `''` | 토큰 만료 시각 (epoch ms, 발급 후 58분) |
 | `gcal_all_calendars` | JSON | `'[]'` | Google API에서 불러온 전체 캘린더 `[{id,name,color,enabled}]` |
 | `gcal_calendars` | JSON | `'[]'` | 활성화된 캘린더만 동기화 `[{id,name,color}]` (gcal_all_calendars 파생) |
 | `gcal_view_mode` | string | `'month'` | 캘린더 뷰 (month/week/list) |
