@@ -109,7 +109,7 @@ GitHub Actions로 자동 배포. `main` 브랜치에 push 시, `03. Game/WebProj
 
 - **워크플로우**: `.github/workflows/deploy-dashboard.yml`
 - **배포 브랜치**: `gh-pages` (publish_dir: `03. Game/WebProject`)
-- **배포 URL**: `https://seoss4090.github.io/personal-dashboard/`
+- **배포 URL**: `https://seos4090.github.io/personal-dashboard/`
 
 > 수동 재배포가 필요하면 GitHub → Actions 탭에서 워크플로우를 직접 실행.
 
