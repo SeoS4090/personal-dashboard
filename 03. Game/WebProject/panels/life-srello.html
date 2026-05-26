@@ -1,0 +1,14 @@
+<section class="panel panel-srello" id="panel-life-srello">
+  <div class="section-header">
+    <div>
+      <div class="section-title" style="color:var(--color-life)">📋 Srello</div>
+      <div class="section-desc">브라우저 localStorage 저장 · JSON 백업은 로컬 파일만</div>
+    </div>
+    <div class="srello-toolbar">
+      <button type="button" class="btn btn-sm" id="srello-export-btn" title="localStorage → JSON 파일">↓ 보내기</button>
+      <button type="button" class="btn btn-sm btn-primary" id="srello-import-btn" title="JSON 파일 → localStorage">↑ 가져오기</button>
+      <input type="file" id="srello-import-file" accept=".json,application/json" hidden>
+    </div>
+  </div>
+  <div id="srello-board" class="srello-board" aria-label="Srello 보드"></div>
+</section>

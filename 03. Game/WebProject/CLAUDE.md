@@ -14,7 +14,7 @@ WebProject/
 ├── panels/                        ← 패널별 HTML 파일 (fetch로 지연 로드)
 │   ├── life-calendar.html
 │   ├── life-news.html
-│   ├── life-memo.html
+│   ├── life-srello.html
 │   ├── life-readme.html
 │   ├── game-dashboard.html
 │   ├── game-readme.html
@@ -23,6 +23,9 @@ WebProject/
 │   ├── media-dashboard.html
 │   ├── media-readme.html
 │   └── settings.html
+├── data/
+│   ├── srello-board.example.json  ← JSON 형식 예시
+│   └── srello-board.local.json    ← 개인 보드 (Git 제외)
 ├── css/
 │   ├── variables.css              ← CSS 변수, 테마
 │   ├── layout.css                 ← 사이드바, 상단바, 메인 레이아웃
@@ -34,7 +37,7 @@ WebProject/
 │       │   ├── CLAUDE.md          ← Life 메뉴 작업 관리
 │       │   ├── calendar.js        ← Google Calendar API v3 연동
 │       │   ├── news.js            ← NewsAPI.org 연동
-│       │   └── memo.js            ← localStorage 메모 CRUD
+│       │   └── srello.js          ← localStorage 칸반 + JSON 백업
 │       ├── game/CLAUDE.md         ← Game 메뉴 작업 관리
 │       ├── dev/CLAUDE.md          ← Dev 메뉴 작업 관리
 │       └── media/CLAUDE.md        ← Media 메뉴 작업 관리

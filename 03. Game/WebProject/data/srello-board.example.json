@@ -1,0 +1,24 @@
+{
+  "lists": [
+    {
+      "title": "할 일",
+      "cards": [
+        {
+          "title": "예시 카드",
+          "desc": "이 파일을 복사해 srello-board.local.json 으로 저장한 뒤 Srello에서 가져오기 하세요.",
+          "priority": "P2",
+          "category": "Life",
+          "color": "#7c83ff"
+        }
+      ]
+    },
+    {
+      "title": "진행 중",
+      "cards": []
+    },
+    {
+      "title": "완료",
+      "cards": []
+    }
+  ]
+}

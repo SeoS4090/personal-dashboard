@@ -690,3 +690,215 @@
   transform: translateX(16px);
   background: var(--color-accent);
 }
+
+/* ── Srello (칸반) ── */
+.srello-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.panel-srello.active {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-height) - 48px);
+  margin: -24px;
+  padding: 24px;
+}
+
+.srello-board {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.srello-board-scroll {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 16px;
+  flex: 1;
+  min-height: 420px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+
+.srello-board-scroll::-webkit-scrollbar { height: 8px; }
+.srello-board-scroll::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 4px;
+}
+
+.srello-list {
+  flex: 0 0 280px;
+  max-width: 280px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-height) - 140px);
+}
+
+.srello-list--add {
+  background: transparent;
+  border: 1px dashed var(--glass-border);
+  min-height: 48px;
+  justify-content: center;
+}
+
+.srello-list-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 8px;
+  flex-shrink: 0;
+}
+
+.srello-list-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: var(--fs-card);
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.srello-list-title:hover,
+.srello-list-title:focus {
+  border-color: var(--glass-border);
+  background: var(--glass-bg-hover);
+}
+
+.srello-list-actions {
+  flex-shrink: 0;
+}
+
+.srello-list-del {
+  opacity: 0.45;
+}
+
+.srello-list-del:hover {
+  opacity: 1;
+}
+
+.srello-list-cards {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 8px;
+  scrollbar-width: thin;
+}
+
+.srello-list-cards--over {
+  background: rgba(100, 255, 218, 0.06);
+  border-radius: var(--border-radius-sm);
+  outline: 1px dashed rgba(100, 255, 218, 0.35);
+  outline-offset: -2px;
+}
+
+.srello-card {
+  position: relative;
+  background: var(--glass-bg-active);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-sm);
+  padding: 10px 12px 10px 16px;
+  cursor: grab;
+  transition: box-shadow var(--transition), transform var(--transition), opacity var(--transition);
+}
+
+.srello-card:hover {
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--shadow-glass);
+}
+
+.srello-card--dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.srello-card-accent {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--card-accent, var(--color-life));
+}
+
+.srello-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.srello-card-priority {
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--prio-color, var(--color-life)) 22%, transparent);
+  color: var(--prio-color, var(--color-life));
+  border: 1px solid color-mix(in srgb, var(--prio-color, var(--color-life)) 45%, transparent);
+}
+
+.srello-card-title {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin: 0;
+  word-break: break-word;
+}
+
+.srello-card-desc {
+  margin: 6px 0 0;
+  font-size: var(--fs-desc);
+  color: var(--text-muted);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.srello-add-card,
+.srello-add-list {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--fs-body);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  transition: background var(--transition), color var(--transition);
+}
+
+.srello-add-card {
+  margin: 0 8px 8px;
+  width: calc(100% - 16px);
+}
+
+.srello-add-card:hover,
+.srello-add-list:hover {
+  background: var(--glass-bg-hover);
+  color: var(--text-primary);
+}
+
+.srello-list--add .srello-add-list {
+  text-align: center;
+  font-weight: 500;
+}
+
+.srello-modal {
+  max-width: 520px;
+}

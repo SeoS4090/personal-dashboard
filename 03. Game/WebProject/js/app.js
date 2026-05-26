@@ -4,7 +4,7 @@ const App = (() => {
     'life-readme':    { parent: 'life',  title: 'Life',  sub: 'ReadMe' },
     'life-calendar':  { parent: 'life',  title: 'Life',  sub: '일정' },
     'life-news':      { parent: 'life',  title: 'Life',  sub: '뉴스' },
-    'life-memo':      { parent: 'life',  title: 'Life',  sub: '메모' },
+    'life-srello':    { parent: 'life',  title: 'Life',  sub: 'Srello' },
     'game-readme':    { parent: 'game',  title: 'Game',  sub: 'ReadMe' },
     'game-dashboard': { parent: 'game',  title: 'Game',  sub: '대시보드' },
     'dev-readme':     { parent: 'dev',   title: 'Dev',   sub: 'ReadMe' },
@@ -96,7 +96,7 @@ const App = (() => {
 
   function onPanelEnter(panelId) {
     if (panelId === 'home')          updateHomeLifePreview();
-    if (panelId === 'life-memo')     Memo.render();
+    if (panelId === 'life-srello')   Srello.init();
     if (panelId === 'life-news')     News.init();
     if (panelId === 'life-calendar') Calendar.init();
     if (panelId === 'settings')      Settings.load();
@@ -116,8 +116,14 @@ const App = (() => {
   function updateHomeLifePreview() {
     const el = document.getElementById('home-life-preview');
     if (!el) return;
-    const memos = Memo.getAll();
-    el.textContent = memos.length > 0 ? `메모 ${memos.length}개` : '일정 · 뉴스 · 메모 관리';
+    if (typeof Srello === 'undefined') {
+      el.textContent = '일정 · 뉴스 · Srello';
+      return;
+    }
+    const { lists, cards } = Srello.getStats();
+    el.textContent = cards > 0
+      ? `Srello · 카드 ${cards}개 (${lists}열)`
+      : '일정 · 뉴스 · Srello';
   }
 
   function init() {

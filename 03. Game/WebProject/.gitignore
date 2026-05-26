@@ -1,0 +1,7 @@
+# Srello 개인 보드 백업 (Git 제외, 브라우저 가져오기용)
+data/srello-board.local.json
+srello-board.local.json
+srello-board-*.local.json
+
+# 로컬 잡파일
+*.stackdump
