@@ -34,7 +34,8 @@ created: 2026-05-26
 | 항목 | 입력 타입 | localStorage 키 |
 |------|----------|-----------------|
 | OAuth 2.0 Client ID | `text` | `gcal_client_id` |
-| 캘린더 목록 | JSON 배열 | `gcal_calendars` |
+| 캘린더 전체 목록 (enabled 포함) | JSON 배열 | `gcal_all_calendars` |
+| 활성화된 캘린더 목록 (파생) | JSON 배열 | `gcal_calendars` |
 | 뷰 모드 | string | `gcal_view_mode` |
 | 주 시작 요일 | string (0/1) | `gcal_week_start` |
 
@@ -57,7 +58,8 @@ created: 2026-05-26
 | `fs_body` | string | `'13px'` | 본문·버튼·입력 글자 크기 |
 | `fs_desc` | string | `'12px'` | 설명·레이블 글자 크기 |
 | `gcal_client_id` | string | `''` | Google OAuth 2.0 Client ID |
-| `gcal_calendars` | JSON | `'[]'` | 캘린더 목록 `[{id,name,color}]` |
+| `gcal_all_calendars` | JSON | `'[]'` | Google API에서 불러온 전체 캘린더 `[{id,name,color,enabled}]` |
+| `gcal_calendars` | JSON | `'[]'` | 활성화된 캘린더만 동기화 `[{id,name,color}]` (gcal_all_calendars 파생) |
 | `gcal_view_mode` | string | `'month'` | 캘린더 뷰 (month/week/list) |
 | `gcal_week_start` | string | `'0'` | 주 시작 요일 (0=일, 1=월) |
 | `news_api_key` | string | `''` | NewsAPI.org API Key |

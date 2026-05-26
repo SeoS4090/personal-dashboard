@@ -405,5 +405,22 @@ const Calendar = (() => {
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
 
-  return { init, render, authorize, setView, prevPeriod, nextPeriod, resetInit };
+  async function fetchCalendarList() {
+    if (!accessToken) throw new Error('NO_TOKEN');
+    const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const data = await res.json();
+    if (data.error) {
+      if (data.error.code === 401) { accessToken = null; throw new Error('AUTH_EXPIRED'); }
+      throw new Error(data.error.message);
+    }
+    return (data.items || []).map(c => ({
+      id: c.id,
+      name: c.summary,
+      color: c.backgroundColor || CAL_COLORS[0]
+    }));
+  }
+
+  return { init, render, authorize, setView, prevPeriod, nextPeriod, resetInit, fetchCalendarList };
 })();

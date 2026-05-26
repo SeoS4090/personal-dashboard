@@ -18,7 +18,8 @@
 
 **localStorage 키**
 - `gcal_client_id` — Google OAuth 2.0 Client ID
-- `gcal_calendars` — 캘린더 목록 JSON 배열 `[{id, name, color}]`
+- `gcal_all_calendars` — Google API로 불러온 전체 캘린더 목록 `[{id, name, color, enabled}]`
+- `gcal_calendars` — enabled된 캘린더만 동기화된 배열 `[{id, name, color}]` (gcal_all_calendars에서 파생)
 - `gcal_view_mode` — 뷰 모드 (month / week / list)
 - `gcal_week_start` — 주 시작 요일 (0=일, 1=월)
 - `news_api_key`, `news_keywords` — NewsAPI
@@ -28,7 +29,7 @@
 ## 완료
 
 - [x] Google Calendar OAuth 2.0 연동 (비공개 캘린더 포함)
-- [x] 다중 캘린더 지원 (설정에서 추가/삭제, 캘린더별 색상)
+- [x] 다중 캘린더 지원 (Google API 자동 불러오기, 토글로 활성화/비활성화, 캘린더별 색상)
 - [x] 월별 / 주별 / 일정 목록 뷰 전환
 - [x] ‹ › 기간 탐색 (이전/다음 월·주·30일)
 - [x] 주 시작 요일 설정 (일/월 선택)

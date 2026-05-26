@@ -274,55 +274,88 @@ const Settings = (() => {
   function renderCalendarList() {
     const container = document.getElementById('gcal-calendars-list');
     if (!container) return;
-    let cals = [];
-    try { cals = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
-    if (!cals.length) {
-      container.innerHTML = '<div style="font-size:12px;color:var(--text-muted);">추가된 캘린더가 없습니다.</div>';
+
+    let all = [];
+    try { all = JSON.parse(localStorage.getItem('gcal_all_calendars') || '[]'); } catch(e) {}
+
+    // 구버전 데이터 마이그레이션: gcal_calendars → gcal_all_calendars
+    if (!all.length) {
+      let old = [];
+      try { old = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
+      if (old.length) {
+        all = old.map(c => ({ ...c, enabled: true }));
+        localStorage.setItem('gcal_all_calendars', JSON.stringify(all));
+      }
+    }
+
+    if (!all.length) {
+      container.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:4px 0;">계정 연결 후 ↻ 목록 불러오기를 클릭하세요.</div>';
       return;
     }
-    container.innerHTML = cals.map((cal, i) => `
+
+    container.innerHTML = all.map((cal, i) => `
       <div class="gcal-cal-item">
         <div class="gcal-cal-dot" style="background:${cal.color || _CAL_COLORS[i % _CAL_COLORS.length]};"></div>
         <div class="gcal-cal-info">
           <div class="gcal-cal-name">${_escHtml(cal.name || cal.id)}</div>
           <div class="gcal-cal-id">${_escHtml(cal.id)}</div>
         </div>
-        <button class="btn btn-sm" onclick="Settings.removeCalendar(${i})" style="padding:3px 8px;">×</button>
+        <label class="toggle-switch">
+          <input type="checkbox" ${cal.enabled ? 'checked' : ''} data-cal-id="${_escHtml(cal.id)}" onchange="Settings.toggleCalendar(this.dataset.calId)">
+          <span class="toggle-slider"></span>
+        </label>
       </div>`).join('');
   }
 
-  function addCalendar() {
-    const idEl   = document.getElementById('setting-gcal-add-id');
-    const nameEl = document.getElementById('setting-gcal-add-name');
-    const id     = idEl?.value.trim();
-    const name   = nameEl?.value.trim() || id;
-    if (!id) { toast('Calendar ID를 입력하세요.', 'error'); return; }
+  async function fetchCalendarList() {
+    const btn = document.getElementById('gcal-fetch-btn');
+    if (btn) { btn.disabled = true; btn.textContent = '불러오는 중...'; }
+    try {
+      const list = await Calendar.fetchCalendarList();
 
-    let cals = [];
-    try { cals = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
-    if (cals.find(c => c.id === id)) { toast('이미 추가된 캘린더입니다.', 'error'); return; }
+      let prev = [];
+      try { prev = JSON.parse(localStorage.getItem('gcal_all_calendars') || '[]'); } catch(e) {}
+      const prevMap = new Map(prev.map(c => [c.id, c.enabled]));
 
-    cals.push({ id, name, color: _CAL_COLORS[cals.length % _CAL_COLORS.length] });
-    localStorage.setItem('gcal_calendars', JSON.stringify(cals));
-    if (idEl)   idEl.value   = '';
-    if (nameEl) nameEl.value = '';
-    renderCalendarList();
-    toast(`'${name}' 캘린더가 추가되었습니다.`, 'success');
+      const merged = list.map(c => ({
+        ...c,
+        enabled: prevMap.has(c.id) ? prevMap.get(c.id) : true
+      }));
+
+      localStorage.setItem('gcal_all_calendars', JSON.stringify(merged));
+      _syncEnabledCalendars();
+      renderCalendarList();
+      toast(`캘린더 ${merged.length}개를 불러왔습니다.`, 'success');
+    } catch(err) {
+      if (err.message === 'AUTH_EXPIRED') toast('인증이 만료되었습니다. 다시 연결해주세요.', 'error');
+      else if (err.message === 'NO_TOKEN')  toast('먼저 Google 계정을 연결해주세요.', 'error');
+      else                                  toast('목록을 불러오지 못했습니다: ' + err.message, 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '↻ 목록 불러오기'; }
+    }
   }
 
-  function removeCalendar(index) {
-    let cals = [];
-    try { cals = JSON.parse(localStorage.getItem('gcal_calendars') || '[]'); } catch(e) {}
-    cals.splice(index, 1);
-    localStorage.setItem('gcal_calendars', JSON.stringify(cals));
-    renderCalendarList();
-    toast('캘린더가 제거되었습니다.', 'success');
+  function toggleCalendar(calId) {
+    let all = [];
+    try { all = JSON.parse(localStorage.getItem('gcal_all_calendars') || '[]'); } catch(e) {}
+    const cal = all.find(c => c.id === calId);
+    if (cal) cal.enabled = !cal.enabled;
+    localStorage.setItem('gcal_all_calendars', JSON.stringify(all));
+    _syncEnabledCalendars();
+  }
+
+  function _syncEnabledCalendars() {
+    let all = [];
+    try { all = JSON.parse(localStorage.getItem('gcal_all_calendars') || '[]'); } catch(e) {}
+    const enabled = all.filter(c => c.enabled).map(({ id, name, color }) => ({ id, name, color }));
+    localStorage.setItem('gcal_calendars', JSON.stringify(enabled));
   }
 
   function saveCalendar() {
-    const clientId = document.getElementById('setting-gcal-clientid')?.value.trim();
-    if (clientId) localStorage.setItem('gcal_client_id', clientId);
-    Calendar.resetInit();
+    const newId  = document.getElementById('setting-gcal-clientid')?.value.trim();
+    const prevId = localStorage.getItem('gcal_client_id');
+    if (newId) localStorage.setItem('gcal_client_id', newId);
+    if (newId && newId !== prevId) Calendar.resetInit();
     toast('캘린더 설정이 저장되었습니다.', 'success');
   }
 
@@ -334,7 +367,7 @@ const Settings = (() => {
     toast('뉴스 설정이 저장되었습니다.', 'success');
   }
 
-  return { load, saveCalendar, saveNews, initAppearance, applyTheme, initControls, addCalendar, removeCalendar, renderCalendarList };
+  return { load, saveCalendar, saveNews, initAppearance, applyTheme, initControls, fetchCalendarList, toggleCalendar, renderCalendarList };
 })();
 
 /* ── Toast ── */

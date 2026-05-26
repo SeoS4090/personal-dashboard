@@ -96,15 +96,11 @@
 
         <!-- 캘린더 목록 -->
         <div>
-          <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:8px;">캘린더 목록</label>
-          <div id="gcal-calendars-list" style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;"></div>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <input type="text" class="input" id="setting-gcal-add-id"
-                   placeholder="Calendar ID (예: primary)" style="flex:2; min-width:130px;">
-            <input type="text" class="input" id="setting-gcal-add-name"
-                   placeholder="이름" style="flex:1; min-width:80px;">
-            <button class="btn" onclick="Settings.addCalendar()" style="flex-shrink:0;">추가</button>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <label style="font-size:12px; color:var(--text-muted);">캘린더 목록</label>
+            <button class="btn btn-sm" id="gcal-fetch-btn" onclick="Settings.fetchCalendarList()">↻ 목록 불러오기</button>
           </div>
+          <div id="gcal-calendars-list" style="display:flex; flex-direction:column; gap:6px;"></div>
         </div>
 
         <div class="divider" style="margin:0;"></div>
