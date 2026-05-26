@@ -15,43 +15,101 @@
   <!-- 탭: 일정 -->
   <div class="readme-tab-content active" id="readme-life-cal">
     <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📅 Google Calendar 연동 (OAuth 2.0)</div>
+          <div class="card-title">📅 최초 연동 설정 (OAuth 2.0)</div>
         </div>
-        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">OAuth 2.0으로 Google 계정에 직접 로그인하여 비공개 캘린더를 포함한 모든 캘린더를 불러옵니다.</p>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">OAuth 2.0으로 Google 계정에 직접 로그인하여 비공개 캘린더를 포함한 모든 캘린더를 가져옵니다. 아래 순서대로 한 번만 설정하면 됩니다.</p>
         <ol class="readme-steps">
-          <li><a href="https://console.cloud.google.com" target="_blank" style="color:var(--color-accent)">Google Cloud Console</a> 접속 후 새 프로젝트 생성</li>
-          <li><strong>API 및 서비스 → 라이브러리</strong>에서 <span class="code-inline">Google Calendar API</span> 검색 후 활성화</li>
-          <li><strong>자격 증명 → OAuth 클라이언트 ID 만들기</strong> 선택 → 유형: <strong>웹 애플리케이션</strong></li>
-          <li><strong>승인된 JavaScript 원본</strong>에 서비스 중인 주소 추가 (예: <span class="code-inline">https://username.github.io</span>)</li>
-          <li>생성된 <strong>클라이언트 ID</strong> 복사 후 <strong>⚙️ 설정 → Google Calendar → OAuth 2.0 Client ID</strong> 에 입력 후 저장</li>
-          <li><strong>Google 계정 연결</strong> 버튼 클릭 → 팝업에서 계정 선택 및 권한 허용</li>
-          <li>연결 후 <strong>설정 → 캘린더 목록</strong>에서 원하는 캘린더 ID를 추가</li>
+          <li>
+            <a href="https://console.cloud.google.com" target="_blank" style="color:var(--color-accent)">Google Cloud Console</a> 접속 후 새 프로젝트 생성
+          </li>
+          <li>
+            <strong>API 및 서비스 → 라이브러리</strong>에서 <span class="code-inline">Google Calendar API</span> 검색 후 <strong>사용 설정</strong>
+          </li>
+          <li>
+            <strong>API 및 서비스 → OAuth 동의 화면</strong> 설정<br>
+            <span style="font-size:var(--fs-desc); color:var(--text-muted);">앱 유형: 외부 / 앱 이름 자유 입력 / 테스트 사용자에 본인 Google 계정 추가</span>
+          </li>
+          <li>
+            <strong>자격 증명 → OAuth 클라이언트 ID 만들기</strong> → 유형: <strong>웹 애플리케이션</strong><br>
+            <strong>승인된 JavaScript 원본</strong>에 아래 주소 추가:<br>
+            <span class="code-inline">https://seos4090.github.io</span><br>
+            <span style="font-size:var(--fs-desc); color:var(--text-muted);">로컬에서 테스트할 경우 <span class="code-inline">http://localhost</span>도 함께 추가</span>
+          </li>
+          <li>
+            생성된 <strong>클라이언트 ID</strong> 복사 →<br>
+            <strong>⚙️ 설정 → Google Calendar → OAuth 2.0 Client ID</strong>에 붙여넣기 후 <strong>저장</strong>
+          </li>
+          <li>
+            <strong>Google 계정 연결</strong> 버튼 클릭 → 팝업에서 계정 선택 후 권한 허용
+          </li>
+          <li>
+            연결 성공 후 <strong>↻ 목록 불러오기</strong> 버튼 클릭 → Google에 등록된 모든 캘린더 자동 로드
+          </li>
+          <li>
+            불러온 목록에서 표시할 캘린더를 <strong>토글 스위치</strong>로 활성화
+          </li>
         </ol>
       </div>
+
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📋 자주 사용하는 캘린더 ID</div>
+          <div class="card-title">🗂️ 캘린더 목록 관리</div>
         </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:14px;">계정 연결 후 <strong>↻ 목록 불러오기</strong>를 누르면 Google 계정에 등록된 캘린더가 전부 나타납니다.</p>
         <ul class="readme-steps">
-          <li>내 기본 캘린더: <span class="code-inline">primary</span></li>
-          <li>대한민국 공휴일: <span class="code-inline">ko.south_korea#holiday@group.v.calendar.google.com</span></li>
-          <li>회사/공유 캘린더: <span class="code-inline">캘린더 설정 → 캘린더 통합 → 캘린더 ID</span> 확인</li>
+          <li><strong>토글 ON</strong> — 일정 패널에 해당 캘린더의 일정이 표시됩니다</li>
+          <li><strong>토글 OFF</strong> — 목록에는 유지되지만 일정 패널에서 숨겨집니다</li>
+          <li>캘린더별 색상은 Google Calendar에 설정된 색상을 그대로 사용합니다</li>
+          <li>새 캘린더를 Google에서 추가했다면 <strong>↻ 목록 불러오기</strong>로 갱신하세요</li>
+          <li>인증이 만료된 경우 <strong>Google 계정 연결</strong>을 다시 클릭해 재인증합니다</li>
         </ul>
+        <div style="margin-top:12px; padding:10px 12px; background:rgba(100,255,218,0.06); border-radius:8px; border-left:3px solid var(--color-accent);">
+          <p style="font-size:var(--fs-desc); color:var(--text-secondary); margin:0;">
+            💡 <strong>대한민국 공휴일</strong>을 표시하려면 Google Calendar 앱에서 <em>다른 캘린더 → 관심 있는 캘린더 찾아보기 → 대한민국</em>을 구독한 후 목록을 다시 불러오세요.
+          </p>
+        </div>
       </div>
+
       <div class="card">
         <div class="card-header">
           <div class="card-title">🗓️ 뷰 전환 및 탐색</div>
         </div>
         <ul class="readme-steps">
-          <li><strong>월별</strong>: 달력 그리드로 한 달 일정 한눈에 확인</li>
-          <li><strong>주별</strong>: 7일 시간대별 상세 뷰 (오전 7시 ~ 오후 10시)</li>
-          <li><strong>일정</strong>: 앞으로 30일간 일정 목록 (캘린더 색상 구분)</li>
-          <li>‹ › 버튼으로 이전/다음 기간으로 이동</li>
-          <li>주 시작 요일은 <strong>⚙️ 설정</strong>에서 일요일 / 월요일 선택 가능</li>
+          <li><strong>월별</strong> — 달력 그리드로 한 달 일정을 한눈에 확인. 날짜 칸에 일정 점(dot)으로 표시</li>
+          <li><strong>주별</strong> — 7일 타임라인 뷰 (오전 7시 ~ 오후 10시). 시간대 겹침 일정도 표시</li>
+          <li><strong>일정 목록</strong> — 오늘부터 30일간 일정을 날짜별로 그룹핑하여 목록 표시</li>
+          <li><strong>‹ ›</strong> 버튼으로 이전 / 다음 기간으로 이동</li>
+          <li>상단 날짜 표시 클릭 시 오늘로 빠르게 복귀</li>
+          <li>주 시작 요일은 <strong>⚙️ 설정 → 주 시작 요일</strong>에서 일요일 / 월요일 선택 가능</li>
         </ul>
       </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">⚠️ 문제 해결</div>
+        </div>
+        <ul class="readme-steps">
+          <li>
+            <strong>팝업이 차단됨</strong> — 브라우저 주소창 우측의 팝업 차단 아이콘을 클릭해 허용 후 재시도
+          </li>
+          <li>
+            <strong>"이 앱은 Google에서 확인하지 않았습니다"</strong> — <em>고급 → (앱 이름)(으)로 이동</em> 클릭. OAuth 동의 화면이 테스트 상태일 때 표시되는 정상 메시지
+          </li>
+          <li>
+            <strong>인증 만료 오류</strong> — <strong>Google 계정 연결</strong>을 다시 눌러 재인증. 액세스 토큰은 1시간 후 만료됨
+          </li>
+          <li>
+            <strong>캘린더 일정이 안 보임</strong> — 설정에서 해당 캘린더 토글이 ON인지 확인. Client ID 저장 후 저장 버튼을 눌렀는지도 확인
+          </li>
+          <li>
+            <strong>승인된 원본 오류 (origin mismatch)</strong> — Google Cloud Console 자격 증명에서 현재 접속 주소가 <em>승인된 JavaScript 원본</em>에 등록되어 있는지 확인
+          </li>
+        </ul>
+      </div>
+
     </div>
   </div>
 
