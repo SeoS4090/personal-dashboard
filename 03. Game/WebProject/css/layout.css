@@ -296,15 +296,17 @@ body::before {
 /* ── 패널 전환 ── */
 .panel {
   display: none;
-  animation: fadeSlideIn 0.3s var(--transition);
 }
 
 .panel.active {
   display: block;
+  /* animation은 .active 진입 시점에만 — var(--transition)에 포함된 duration이
+     delay로 오인돼 "보임→순간 사라짐→재등장" 깜빡임을 일으키는 것을 방지 */
+  animation: fadeSlideIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
