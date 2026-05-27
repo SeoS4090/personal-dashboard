@@ -46,6 +46,8 @@ created: 2026-05-26
 | Srello — 리스트 순서 변경 (⋮⋮ 핸들 드래그) | ✅ 완료 |
 | Srello — 카드 정렬 드롭다운 (수동·우선순위·마감일·상태·제목) | ✅ 완료 |
 | Srello — Settings 모달 (라벨 색상·카테고리 CRUD, `srello_settings`) | ✅ 완료 |
+| Srello — 카드 모달 2-컬럼 레이아웃 + 우측 설정 사이드바 아코디언 | ✅ 완료 |
+| Srello — desc textarea 자동 높이 버그 수정 (overflow:hidden) | ✅ 완료 |
 | 메모 — `life-memo` 패널 | ❌ 제거 → Srello로 대체 |
 
 ### 설정 / 공통

@@ -918,6 +918,13 @@ select.input option {
   white-space: pre-wrap;
 }
 
+#srello-card-desc {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+
 .srello-add-card,
 .srello-add-list {
   width: 100%;
@@ -1131,7 +1138,8 @@ select.input option {
 }
 
 .srello-modal-wide {
-  max-width: 560px;
+  max-width: 860px;
+  width: 92vw;
 }
 
 .srello-modal-hdr {
@@ -1150,6 +1158,108 @@ select.input option {
   flex: 1;
   min-height: 0;
   padding-right: 2px;
+}
+
+/* ── Srello Modal 2-column layout ── */
+.srello-modal-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.srello-modal-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 16px;
+  border-right: 1px solid var(--glass-border);
+}
+
+.srello-modal-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding-left: 16px;
+}
+
+/* Accordion */
+.srello-accordion-item {
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.srello-accordion-item:last-child {
+  border-bottom: none;
+}
+
+.srello-accordion-hdr {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  text-align: left;
+  gap: 6px;
+}
+
+.srello-accordion-hdr:hover {
+  color: var(--color-life);
+}
+
+.srello-ac-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.srello-accordion-body {
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.srello-color-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Textarea 자동 높이 — overflow:hidden 이 핵심 */
+.srello-desc-area {
+  resize: none;
+  overflow: hidden;
+  min-height: 72px;
+}
+
+/* 좁은 화면 반응형 (모바일) */
+@media (max-width: 720px) {
+  .srello-modal-layout {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .srello-modal-main {
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
+    padding-right: 0;
+    padding-bottom: 16px;
+    overflow-y: visible;
+  }
+  .srello-modal-sidebar {
+    width: 100%;
+    padding-left: 0;
+    padding-top: 8px;
+    overflow-y: visible;
+  }
 }
 
 .srello-modal-row {
