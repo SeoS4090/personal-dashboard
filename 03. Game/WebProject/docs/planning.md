@@ -43,6 +43,9 @@ created: 2026-05-26
 | Srello — 활동 내역 아코디언 UI (접기/펼치기 토글) | ✅ 완료 |
 | Srello — 카드 간 연결 기능 (`linkedCardIds`) | ✅ 완료 |
 | Life Calendar — Srello 마감일 통합 뷰 (점선 칩으로 구분) | ✅ 완료 |
+| Srello — 리스트 순서 변경 (⋮⋮ 핸들 드래그) | ✅ 완료 |
+| Srello — 카드 정렬 드롭다운 (수동·우선순위·마감일·상태·제목) | ✅ 완료 |
+| Srello — Settings 모달 (라벨 색상·카테고리 CRUD, `srello_settings`) | ✅ 완료 |
 | 메모 — `life-memo` 패널 | ❌ 제거 → Srello로 대체 |
 
 ### 설정 / 공통
