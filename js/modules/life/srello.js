@@ -1263,13 +1263,18 @@ const Srello = (() => {
     document.body.appendChild(overlay);
 
     // 설명 textarea 자동 높이
+    // box-sizing: border-box 환경에서 scrollHeight는 border를 포함하지 않으므로
+    // 상하 border 합산값을 더해야 clientHeight === scrollHeight가 됨
     const descEl = overlay.querySelector('#srello-card-desc');
     function autoResizeDesc() {
-      descEl.style.height = 'auto';
-      descEl.style.height = descEl.scrollHeight + 'px';
+      descEl.style.height = '0';
+      const s = getComputedStyle(descEl);
+      const border = parseFloat(s.borderTopWidth) + parseFloat(s.borderBottomWidth);
+      descEl.style.height = Math.max(descEl.scrollHeight + border, 72) + 'px';
     }
     descEl.addEventListener('input', autoResizeDesc);
-    requestAnimationFrame(autoResizeDesc);
+    // double rAF: 첫 번째 rAF에서 DOM 연결, 두 번째에서 레이아웃 완료 후 측정
+    requestAnimationFrame(() => requestAnimationFrame(autoResizeDesc));
 
     let selectedColor = card.color || getColors()[0] || DEFAULT_LABEL_COLORS[0];
     let selectedPriority = card.priority || '';
