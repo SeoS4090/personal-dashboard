@@ -42,6 +42,7 @@
 - [x] NewsAPI.org 연동 (키워드 필터, 카드 그리드)
 - [x] Srello 칸반 (리스트·카드 CRUD, 드래그 앤 드롭, localStorage)
 - [x] Srello 마감일·체크리스트·댓글·첨부·활동 로그
+- [x] Srello 이미지 Ctrl+V 붙여넣기 (base64, 600 KB 제한, 썸네일 표시)
 - [x] Srello 필터·캘린더 뷰·템플릿·완료 리스트 자동화
 - [x] Srello JSON보내기/가져오기 (로컬 파일, Git 제외)
 - [x] 구 메모 → Srello 「할 일」 자동 이전
