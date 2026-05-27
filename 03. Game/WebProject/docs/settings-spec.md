@@ -66,7 +66,7 @@ created: 2026-05-26
 | `gcal_week_start` | string | `'0'` | 주 시작 요일 (0=일, 1=월) |
 | `news_api_key` | string | `''` | NewsAPI.org API Key |
 | `news_keywords` | string | `''` | 뉴스 관심 키워드 (쉼표 구분) |
-| `srello_board` | JSON | 기본 3열 | Srello 보드. 카드: `dueDate`, `checklist`, `comments`, `attachments`, `activity`, `cover` |
+| `srello_board` | JSON | 기본 3열 | Srello 보드. 카드 필드: `title`, `desc`, `priority`(P0–P3), `category`, `status`(기획중 등), `cover`, `color`, `dueDate`, `done`, `checklist`, `comments`, `attachments`, `activity` |
 | `srello_templates` | JSON | `'[]'` | 카드 템플릿 (최대 20개) |
 | `srello_view_mode` | string | `'board'` | Srello 뷰 (`board` / `calendar`) |
 | `srello_memo_migrated` | string | — | 구 메모 이전 완료 플래그 (`'1'`) |
