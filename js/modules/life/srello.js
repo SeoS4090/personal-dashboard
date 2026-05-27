@@ -9,12 +9,15 @@ const Srello = (() => {
   const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
   const CATEGORIES = ['Srello', 'Life', 'Game', 'Dev', 'Media', '공통'];
   const DONE_LIST_NAMES = ['완료', 'done', 'Done'];
+  const STATUSES = ['기획중', '개발중', '테스트중', '완료', '보류'];
+  const STATUS_COLORS = { '기획중': '#7c83ff', '개발중': '#ffd166', '테스트중': '#ff9f43', '완료': '#64ffda', '보류': '#8899aa' };
 
   let board = null;
   let drag = null;
   let viewMode = localStorage.getItem(VIEW_KEY) || 'board';
   let filterPriority = '';
   let filterCategory = '';
+  let boardContainerBound = false;
 
   function genId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -35,6 +38,8 @@ const Srello = (() => {
     if (!card.comments) card.comments = [];
     if (!card.attachments) card.attachments = [];
     if (!card.activity) card.activity = [];
+    if (card.done === undefined) card.done = false;
+    if (card.status === undefined) card.status = '';
     return card;
   }
 
@@ -78,9 +83,11 @@ const Srello = (() => {
       desc: c.desc,
       priority: c.priority,
       category: c.category,
+      status: c.status,
       color: c.color,
       cover: c.cover,
       dueDate: c.dueDate,
+      done: c.done,
       checklist: c.checklist,
       comments: c.comments,
       attachments: c.attachments,
@@ -102,6 +109,8 @@ const Srello = (() => {
       color: raw.color || (priority ? PRIORITY_COLORS[priority] : LABEL_COLORS[0]),
       cover: raw.cover || '',
       dueDate: raw.dueDate || '',
+      done: !!raw.done,
+      status: STATUSES.includes(raw.status) ? raw.status : '',
       checklist: Array.isArray(raw.checklist) ? raw.checklist.map(i => ({
         id: i.id || genId(),
         text: String(i.text || ''),
@@ -369,8 +378,10 @@ const Srello = (() => {
       if (patch.priority && PRIORITY_COLORS[patch.priority]) card.color = PRIORITY_COLORS[patch.priority];
     }
     if (patch.category !== undefined) card.category = patch.category || undefined;
+    if (patch.status !== undefined) card.status = patch.status || '';
     if (patch.cover !== undefined) card.cover = patch.cover || '';
     if (patch.dueDate !== undefined) card.dueDate = patch.dueDate || '';
+    if (patch.done !== undefined) card.done = !!patch.done;
     if (patch.checklist !== undefined) card.checklist = patch.checklist;
     if (patch.comments !== undefined) card.comments = patch.comments;
     if (patch.attachments !== undefined) card.attachments = patch.attachments;
@@ -466,6 +477,9 @@ const Srello = (() => {
     const cat = card.category
       ? `<span class="srello-card-category">${escHtml(card.category)}</span>`
       : '';
+    const statusBadge = card.status
+      ? `<span class="srello-card-status" style="--status-color:${STATUS_COLORS[card.status] || '#8899aa'}">${escHtml(card.status)}</span>`
+      : '';
     const cover = card.cover
       ? `<div class="srello-card-cover">${escHtml(card.cover)}</div>`
       : '';
@@ -481,14 +495,21 @@ const Srello = (() => {
     const label = card.desc
       ? `<p class="srello-card-desc">${escHtml(card.desc.slice(0, 100))}${card.desc.length > 100 ? '…' : ''}</p>`
       : '';
+    const doneClass = card.done ? ' srello-card--done' : '';
+    const doneBtn = `<button type="button" class="btn btn-icon srello-card-done-btn${card.done ? ' active' : ''}"
+        data-action="toggle-done" data-list-id="${listId}" data-card-id="${card.id}"
+        title="${card.done ? '완료 취소' : '완료 표시'}">${card.done ? '✓' : '○'}</button>`;
     return `
-      <article class="srello-card" draggable="true"
+      <article class="srello-card${doneClass}" draggable="true"
         data-card-id="${card.id}" data-list-id="${listId}"
         style="--card-accent: ${card.color}">
         ${cover}
         <div class="srello-card-accent"></div>
         <div class="srello-card-top">
-          <div class="srello-card-badges">${badge}${cat}</div>
+          <div class="srello-card-title-row">
+            <div class="srello-card-badges">${badge}${cat}${statusBadge}</div>
+            ${doneBtn}
+          </div>
           <h3 class="srello-card-title">${escHtml(card.title)}</h3>
         </div>
         ${meta}
@@ -594,33 +615,51 @@ const Srello = (() => {
   }
 
   function bindBoardEvents(container) {
-    container.querySelector('#srello-add-list-btn')?.addEventListener('click', promptNewList);
+    // 컨테이너 레벨 이벤트는 최초 1회만 바인딩 (renderBoard 호출마다 중복 방지)
+    if (!boardContainerBound) {
+      container.addEventListener('click', e => {
+        // + 리스트 추가 버튼 (이벤트 위임)
+        if (e.target.closest('#srello-add-list-btn')) { promptNewList(); return; }
 
-    container.addEventListener('click', e => {
-      const btn = e.target.closest('[data-action]');
-      if (btn) {
-        const action = btn.dataset.action;
-        const listId = btn.dataset.listId;
-        if (action === 'add-card') promptNewCard(listId);
-        if (action === 'delete-list') deleteList(listId);
-        return;
-      }
-      const card = e.target.closest('.srello-card');
-      if (card) openCardModal(card.dataset.listId, card.dataset.cardId);
-    });
+        const btn = e.target.closest('[data-action]');
+        if (btn) {
+          const action = btn.dataset.action;
+          const listId = btn.dataset.listId;
+          const cardId = btn.dataset.cardId;
+          if (action === 'add-card') { promptNewCard(listId); return; }
+          if (action === 'delete-list') { deleteList(listId); return; }
+          if (action === 'toggle-done') {
+            const found = findCard(listId, cardId);
+            if (found) {
+              found.card.done = !found.card.done;
+              logActivity(found.card, found.card.done ? '완료로 표시' : '완료 취소');
+              save();
+              render();
+            }
+            return; // 카드 모달 열기 차단
+          }
+          return;
+        }
+        const card = e.target.closest('.srello-card');
+        if (card) openCardModal(card.dataset.listId, card.dataset.cardId);
+      });
 
-    container.addEventListener('change', e => {
-      const input = e.target.closest('[data-action="rename-list"]');
-      if (!input) return;
-      renameList(input.dataset.listId, input.value);
-    });
+      container.addEventListener('change', e => {
+        const input = e.target.closest('[data-action="rename-list"]');
+        if (!input) return;
+        renameList(input.dataset.listId, input.value);
+      });
 
-    container.addEventListener('keydown', e => {
-      if (e.key !== 'Enter') return;
-      const input = e.target.closest('[data-action="rename-list"]');
-      if (input) { e.preventDefault(); input.blur(); }
-    });
+      container.addEventListener('keydown', e => {
+        if (e.key !== 'Enter') return;
+        const input = e.target.closest('[data-action="rename-list"]');
+        if (input) { e.preventDefault(); input.blur(); }
+      });
 
+      boardContainerBound = true;
+    }
+
+    // 드래그 이벤트 — innerHTML 교체 후 새 요소에 재바인딩 필요
     container.querySelectorAll('.srello-list-cards').forEach(zone => {
       zone.addEventListener('dragover', onDragOver);
       zone.addEventListener('dragleave', onDragLeave);
@@ -778,6 +817,14 @@ const Srello = (() => {
             <select class="input" id="srello-card-category">
               <option value="">—</option>
               ${getAllCategories().map(c => `<option value="${escHtml(c)}" ${card.category === c ? 'selected' : ''}>${escHtml(c)}</option>`).join('')}
+            </select>
+          </div>
+
+          <div class="srello-modal-row">
+            <label class="srello-field-label">상태</label>
+            <select class="input" id="srello-card-status">
+              <option value="">—</option>
+              ${STATUSES.map(s => `<option value="${escHtml(s)}" ${card.status === s ? 'selected' : ''}>${escHtml(s)}</option>`).join('')}
             </select>
           </div>
 
@@ -1034,6 +1081,7 @@ const Srello = (() => {
         color: selectedColor,
         priority: selectedPriority,
         category: overlay.querySelector('#srello-card-category').value,
+        status: overlay.querySelector('#srello-card-status').value,
         cover: overlay.querySelector('#srello-card-cover').value,
         dueDate: overlay.querySelector('#srello-card-due').value,
         checklist: checklist.filter(i => i.text.trim()).map(i => ({

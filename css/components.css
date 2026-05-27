@@ -119,6 +119,16 @@
 
 .input::placeholder { color: var(--text-muted); }
 
+/* select 다크모드 — OS 기본 렌더링 대신 CSS 변수 적용 */
+select.input {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+select.input option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
 /* ── 섹션 헤더 ── */
 .section-header {
   display: flex;
@@ -823,6 +833,15 @@
   cursor: grabbing;
 }
 
+/* 완료 표시 카드 */
+.srello-card--done {
+  opacity: 0.65;
+}
+.srello-card--done .srello-card-title {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
 .srello-card-accent {
   position: absolute;
   left: 0;
@@ -831,6 +850,31 @@
   width: 3px;
   border-radius: 2px;
   background: var(--card-accent, var(--color-life));
+}
+
+/* 제목 행 (뱃지 + 완료 토글 버튼) */
+.srello-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.srello-card-done-btn {
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-muted);
+  padding: 0 2px;
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: color var(--transition), opacity var(--transition);
+}
+.srello-card-done-btn.active {
+  color: var(--color-life);
+  opacity: 1;
+}
+.srello-card:hover .srello-card-done-btn {
+  opacity: 0.85;
 }
 
 .srello-card-top {
@@ -940,6 +984,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+}
+
+.srello-card-status {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  background: var(--status-color, #8899aa);
+  color: #111;
+  opacity: 0.9;
 }
 
 .srello-card-category {

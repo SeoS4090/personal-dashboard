@@ -25,7 +25,7 @@
 - `gcal_view_mode` — 뷰 모드 (month / week / list)
 - `gcal_week_start` — 주 시작 요일 (0=일, 1=월)
 - `news_api_key`, `news_keywords` — NewsAPI
-- `srello_board` — Srello 보드 `{ lists: [{ id, title, cards }] }`
+- `srello_board` — Srello 보드 `{ lists: [{ id, title, cards }] }` — 카드 필드: `done`, `status` 포함
 - `srello_templates` — 카드 템플릿 배열
 - `srello_view_mode` — `board` | `calendar`
 - `srello_memo_migrated` — 구 메모(`dashboard_memos`) 이전 완료 플래그
@@ -47,6 +47,10 @@
 - [x] Srello JSON보내기/가져오기 (로컬 파일, Git 제외)
 - [x] 구 메모 → Srello 「할 일」 자동 이전
 - [x] ReadMe 패널 — 일정·뉴스·Srello 탭별 설정 가이드
+- [x] Srello 카드 모달 중복 로드 버그 수정 (boardContainerBound 플래그)
+- [x] Srello 다크모드 select 드롭다운 배경/글자색 수정
+- [x] Srello Status 상태 필드 (기획중·개발중·테스트중·완료·보류)
+- [x] Srello 카드 face 완료 토글 버튼 (done 필드, 줄긋기 표시)
 
 ## TODO
 
