@@ -25,7 +25,7 @@
 - `gcal_view_mode` — 뷰 모드 (month / week / list)
 - `gcal_week_start` — 주 시작 요일 (0=일, 1=월)
 - `news_api_key`, `news_keywords` — NewsAPI
-- `srello_board` — Srello 보드 `{ lists: [{ id, title, cards }] }` — 카드 필드: `done`, `status` 포함
+- `srello_board` — Srello 보드 `{ lists: [{ id, title, cards }] }` — 카드 필드: `done`, `status`, `linkedCardIds` 포함
 - `srello_templates` — 카드 템플릿 배열
 - `srello_view_mode` — `board` | `calendar`
 - `srello_memo_migrated` — 구 메모(`dashboard_memos`) 이전 완료 플래그
@@ -51,6 +51,12 @@
 - [x] Srello 다크모드 select 드롭다운 배경/글자색 수정
 - [x] Srello Status 상태 필드 (기획중·개발중·테스트중·완료·보류)
 - [x] Srello 카드 face 완료 토글 버튼 (done 필드, 줄긋기 표시)
+- [x] Srello 라벨 색 변경 버그 수정 (priority 색이 사용자 선택 색 덮어쓰던 문제)
+- [x] Srello done/status 3-way 동기화 (face 토글 · 모달 status 선택 · 완료 리스트 이동)
+- [x] Srello 다크모드 날짜 입력 위젯 가시성 수정 (color-scheme: dark)
+- [x] Srello 활동 내역 아코디언 UI (접기/펼치기)
+- [x] Srello 카드 간 연결 기능 (linkedCardIds 필드 + 모달 연결 UI)
+- [x] Life Calendar 뷰에 Srello 마감일 통합 표시 (API 연동 없이 뷰만 통합, 점선 칩으로 구분)
 
 ## TODO
 
