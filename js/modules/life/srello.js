@@ -16,12 +16,13 @@ const Srello = (() => {
   const STATUS_COLORS = { '기획중': '#7c83ff', '개발중': '#ffd166', '테스트중': '#ff9f43', '완료': '#64ffda', '보류': '#8899aa' };
 
   let board = null;
-  let drag = null;       // { kind:'card'|'list', cardId?, fromListId?, listId?, fromIdx? }
+  let drag = null;          // { kind:'card'|'list', cardId?, fromListId?, listId?, fromIdx? }
   let viewMode = localStorage.getItem(VIEW_KEY) || 'board';
   let filterPriority = '';
   let filterCategory = '';
   let sortMode = localStorage.getItem(SORT_KEY) || 'priority';
   let boardContainerBound = false;
+  let listDragHandle = false; // handle mousedown → list dragstart 허용 플래그
 
   function genId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -612,11 +613,9 @@ const Srello = (() => {
     const listsHtml = board.lists.map((list, listIdx) => {
       const cards = sortCards(list.cards).filter(cardMatchesFilter);
       return `
-      <div class="srello-list" data-list-id="${list.id}" data-list-idx="${listIdx}">
+      <div class="srello-list" data-list-id="${list.id}" data-list-idx="${listIdx}" draggable="true">
         <div class="srello-list-header">
-          <span class="srello-list-handle" draggable="true"
-            data-list-id="${list.id}" data-list-idx="${listIdx}"
-            title="드래그하여 순서 변경">⋮⋮</span>
+          <span class="srello-list-handle" title="드래그하여 순서 변경">⋮⋮</span>
           <input type="text" class="srello-list-title input" value="${escHtml(list.title)}"
             aria-label="리스트 제목" maxlength="80"
             data-action="rename-list" data-list-id="${list.id}">
@@ -769,16 +768,21 @@ const Srello = (() => {
       el.addEventListener('dragend', onDragEnd);
     });
 
-    // 리스트 드래그 — 핸들(⋮⋮) 자체가 draggable="true", 핸들에 직접 바인딩
+    // 리스트 드래그 — 리스트 자체가 draggable="true"
+    // handle mousedown → listDragHandle=true → list dragstart 허용
     container.querySelectorAll('.srello-list-handle').forEach(handle => {
-      handle.addEventListener('dragstart', onListDragStart);
-      handle.addEventListener('dragend', onListDragEnd);
+      handle.addEventListener('mousedown', () => { listDragHandle = true; });
     });
-    // 리스트 전체는 드롭 존으로만 사용
     container.querySelectorAll('.srello-list:not(.srello-list--add)').forEach(el => {
-      el.addEventListener('dragover', onListDragOver);
+      el.addEventListener('dragstart', (e) => {
+        if (!listDragHandle) { e.preventDefault(); return; } // 핸들 외 영역 drag 차단
+        listDragHandle = false;
+        onListDragStart(e);
+      });
+      el.addEventListener('dragend',   onListDragEnd);
+      el.addEventListener('dragover',  onListDragOver);
       el.addEventListener('dragleave', onListDragLeave);
-      el.addEventListener('drop', onListDrop);
+      el.addEventListener('drop',      onListDrop);
     });
   }
 
@@ -820,21 +824,23 @@ const Srello = (() => {
     }
   }
 
-  /* ── 리스트 드래그 (dragstart/dragend는 핸들에 바인딩) ── */
+  /* ── 리스트 드래그 (e.currentTarget = .srello-list) ── */
   function onListDragStart(e) {
-    // e.currentTarget = .srello-list-handle (draggable="true" 원소)
-    const handle = e.currentTarget;
-    const listId = handle.dataset.listId;
-    const fromIdx = parseInt(handle.dataset.listIdx, 10);
+    const el = e.currentTarget; // .srello-list
+    const listId = el.dataset.listId;
+    const fromIdx = parseInt(el.dataset.listIdx, 10);
     drag = { kind: 'list', listId, fromIdx };
-    handle.closest('.srello-list')?.classList.add('srello-list--dragging');
+    el.classList.add('srello-list--dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', listId);
-    e.stopPropagation();
+    // 드래그 이미지를 핸들로 교체 (전체 리스트 ghost 방지)
+    const handle = el.querySelector('.srello-list-handle');
+    if (handle) e.dataTransfer.setDragImage(handle, handle.offsetWidth / 2, handle.offsetHeight / 2);
   }
 
   function onListDragEnd(e) {
-    e.currentTarget.closest('.srello-list')?.classList.remove('srello-list--dragging');
+    listDragHandle = false;
+    e.currentTarget.classList.remove('srello-list--dragging');
     document.querySelectorAll('.srello-list--drop-over').forEach(el => el.classList.remove('srello-list--drop-over'));
     if (drag?.kind === 'list') drag = null;
   }
@@ -1536,6 +1542,11 @@ const Srello = (() => {
     if (!board) load();
     bindToolbar();
     setViewMode(viewMode);
+    // 드래그 없이 mouseup만 발생한 경우 플래그 초기화 (최초 1회)
+    if (!init._mouseUpBound) {
+      document.addEventListener('mouseup', () => { listDragHandle = false; });
+      init._mouseUpBound = true;
+    }
   }
 
   return { init, render, getStats, load, exportBoard, importBoard, getDueDateEvents };
