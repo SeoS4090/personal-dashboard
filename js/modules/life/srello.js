@@ -895,10 +895,10 @@ const Srello = (() => {
           <div class="srello-modal-section">
             <button type="button" class="srello-section-hdr srello-section-toggle" id="srello-activity-toggle"
               aria-expanded="false">
+              <span class="srello-toggle-chevron">▼</span>
               <span>활동 <span id="srello-activity-count"></span></span>
-              <span class="srello-toggle-chevron">▶</span>
             </button>
-            <ul class="srello-activity" id="srello-activity" hidden></ul>
+            <ul class="srello-activity" id="srello-activity" style="display:none"></ul>
           </div>
 
           <div class="srello-modal-row">
@@ -1123,10 +1123,12 @@ const Srello = (() => {
     // 활동 내역 아코디언 토글
     overlay.querySelector('#srello-activity-toggle')?.addEventListener('click', () => {
       const ul = overlay.querySelector('#srello-activity');
-      const isOpen = !ul.hidden;
-      ul.hidden = isOpen;
-      overlay.querySelector('#srello-activity-toggle').setAttribute('aria-expanded', String(!isOpen));
-      overlay.querySelector('.srello-toggle-chevron').textContent = isOpen ? '▶' : '▼';
+      const toggleBtn = overlay.querySelector('#srello-activity-toggle');
+      const chevron = toggleBtn.querySelector('.srello-toggle-chevron');
+      const isOpen = ul.style.display !== 'none';
+      ul.style.display = isOpen ? 'none' : '';
+      toggleBtn.setAttribute('aria-expanded', String(!isOpen));
+      chevron.textContent = isOpen ? '▼' : '▲';
     });
 
     // 연결된 카드 추가
