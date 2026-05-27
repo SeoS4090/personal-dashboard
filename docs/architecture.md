@@ -62,12 +62,16 @@ WebProject/
 
 ### `srello.js` 주요 구조
 
-| 함수 | 역할 |
-|------|------|
+| 함수 / 변수 | 역할 |
+|-------------|------|
 | `load()` / `save()` | `localStorage` 키 `srello_board` 입출력 |
+| `ensureCardFields()` | 카드 필드 기본값 보장 (`done`, `status` 포함) |
 | `exportBoard()` | 보드를 JSON 파일로 다운로드 |
 | `importBoard()` | JSON 파일 파싱 후 보드 복원·병합 |
-| `render()` | 칸반 UI, 드래그 앤 드롭 |
+| `render()` / `renderBoard()` | 칸반 보드 UI 렌더 |
+| `renderCalendar()` | 캘린더 뷰 렌더 (마감일 기준) |
+| `bindBoardEvents()` | 보드 이벤트 바인딩 (`boardContainerBound` 플래그로 중복 방지) |
+| `openCardModal()` | 카드 상세 모달 열기·편집·저장 |
 
 ## 주요 모듈 역할
 
