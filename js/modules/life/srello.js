@@ -740,13 +740,16 @@ const Srello = (() => {
   }
 
   function openCardModal(listId, cardId) {
+    // 이미 열린 모달이 있으면 닫고 새로 열기
+    document.querySelector('.modal-overlay.srello-card-modal')?.remove();
+
     const found = findCard(listId, cardId);
     if (!found) return;
     const { card } = found;
     ensureCardFields(card);
 
     const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
+    overlay.className = 'modal-overlay srello-card-modal';
     overlay.innerHTML = `
       <div class="modal srello-modal srello-modal-wide">
         <div class="srello-modal-hdr">📋 카드</div>
@@ -838,6 +841,32 @@ const Srello = (() => {
     let comments = card.comments.map(c => ({ ...c }));
     let attachments = card.attachments.map(a => ({ ...a }));
 
+    // 이미지 Ctrl+V 붙여넣기
+    function onPaste(e) {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.kind !== 'file' || !item.type.startsWith('image/')) continue;
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (!file) continue;
+        // 크기 제한: 600 KB (base64 후 ~800 KB → localStorage 여유 확보)
+        if (file.size > 600 * 1024) {
+          toast('이미지가 너무 큽니다 (600 KB 이하로 붙여넣기하세요).', 'error');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          attachments.push({ id: genId(), name: file.name || '이미지', dataUrl: reader.result });
+          renderAttachments();
+          toast('이미지가 첨부되었습니다.', 'success');
+        };
+        reader.readAsDataURL(file);
+        return; // 이미지 하나만 처리
+      }
+    }
+    overlay.addEventListener('paste', onPaste);
+
     function renderChecklist() {
       const ul = overlay.querySelector('#srello-checklist');
       ul.innerHTML = checklist.map((item, i) => `
@@ -862,12 +891,22 @@ const Srello = (() => {
     function renderAttachments() {
       const ul = overlay.querySelector('#srello-attachments');
       ul.innerHTML = attachments.length
-        ? attachments.map((a, i) => `
-          <li class="srello-attach-item">
-            <a href="${escHtml(a.url)}" target="_blank" rel="noopener">${escHtml(a.name || a.url)}</a>
-            <button type="button" class="btn btn-icon btn-sm" data-del-attach="${i}">✕</button>
-          </li>`).join('')
-        : '<li class="srello-empty-hint">첨부 없음</li>';
+        ? attachments.map((a, i) => {
+            if (a.dataUrl) {
+              return `
+                <li class="srello-attach-item srello-attach-image">
+                  <img src="${a.dataUrl}" alt="${escHtml(a.name || '이미지')}" class="srello-attach-thumb">
+                  <span class="srello-attach-label">${escHtml(a.name || '이미지')}</span>
+                  <button type="button" class="btn btn-icon btn-sm" data-del-attach="${i}">✕</button>
+                </li>`;
+            }
+            return `
+              <li class="srello-attach-item">
+                <a href="${escHtml(a.url)}" target="_blank" rel="noopener">${escHtml(a.name || a.url)}</a>
+                <button type="button" class="btn btn-icon btn-sm" data-del-attach="${i}">✕</button>
+              </li>`;
+          }).join('')
+        : '<li class="srello-empty-hint">첨부 없음 · 이미지를 Ctrl+V로 붙여넣기 가능</li>';
     }
 
     function renderActivity() {

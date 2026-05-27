@@ -129,8 +129,22 @@ const App = (() => {
     }
   }
 
+  function _initBuildVer() {
+    const verEl = document.getElementById('build-ver');
+    if (!verEl) return;
+    const raw = window.BUILD_VER;
+    if (!raw || raw === '__BUILD_HASH__') {
+      verEl.textContent = 'dev';
+      verEl.title = '로컬 개발 빌드';
+    } else {
+      verEl.textContent = `v ${raw}`;
+      verEl.title = `빌드 커밋: ${raw}`;
+    }
+  }
+
   function init() {
     Settings.initAppearance();
+    _initBuildVer();
 
     // 시스템 테마 변경 감지 (전역 — 설정 패널 로드 전에도 동작해야 함)
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
