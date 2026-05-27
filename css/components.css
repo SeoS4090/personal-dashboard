@@ -1358,3 +1358,105 @@ select.input option {
   transition: transform 0.2s ease;
   flex-shrink: 0;
 }
+
+/* ── 리스트 드래그 핸들 ── */
+.srello-list-handle {
+  cursor: grab;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 2px 4px;
+  opacity: 0.4;
+  flex-shrink: 0;
+  user-select: none;
+  transition: opacity var(--transition);
+  line-height: 1;
+}
+.srello-list-handle:hover { opacity: 1; }
+.srello-list-handle:active { cursor: grabbing; }
+
+.srello-list--dragging {
+  opacity: 0.35;
+  outline: 1px dashed rgba(100, 255, 218, 0.4);
+  pointer-events: none;
+}
+.srello-list--drop-over:not(.srello-list--add) {
+  outline: 2px solid rgba(100, 255, 218, 0.55);
+  outline-offset: -2px;
+  background: rgba(100, 255, 218, 0.04);
+}
+
+/* ── 정렬 드롭다운 ── */
+.srello-sort-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-desc);
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.srello-sort-select {
+  min-width: 110px;
+  padding: 6px 10px;
+}
+
+/* ── Settings 모달 ── */
+.srello-settings-section { margin-bottom: 22px; }
+.srello-settings-section:last-child { margin-bottom: 0; }
+.srello-settings-title {
+  font-size: var(--fs-card);
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.srello-settings-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.srello-settings-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.srello-settings-color-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--glass-border);
+  flex-shrink: 0;
+  display: inline-block;
+}
+.srello-settings-item input[type="color"] {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.srello-settings-item .srello-name-input {
+  flex: 1;
+  font-size: var(--fs-desc);
+  min-width: 80px;
+}
+.srello-settings-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.srello-settings-add-row .input {
+  flex: 1;
+  font-size: var(--fs-desc);
+}
+.srello-settings-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}

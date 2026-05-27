@@ -69,6 +69,8 @@ created: 2026-05-26
 | `srello_board` | JSON | 기본 3열 | Srello 보드. 카드 필드: `title`, `desc`, `priority`(P0–P3), `category`, `status`(기획중 등), `cover`, `color`, `dueDate`, `done`, `checklist`, `comments`, `attachments`, `activity` |
 | `srello_templates` | JSON | `'[]'` | 카드 템플릿 (최대 20개) |
 | `srello_view_mode` | string | `'board'` | Srello 뷰 (`board` / `calendar`) |
+| `srello_sort_mode` | string | `'priority'` | 카드 정렬 기준 (`manual`/`priority`/`due-asc`/`due-desc`/`status`/`title`) |
+| `srello_settings` | JSON | 기본 색상·카테고리 | Srello 사용자 설정 `{ colors: [{id,hex,name}], categories: [{id,name}] }` — 기본 카테고리: 기획·아트·개발·사운드·공통 |
 | `srello_memo_migrated` | string | — | 구 메모 이전 완료 플래그 (`'1'`) |
 | `dashboard_memos` | JSON | `'[]'` | (레거시) 구 메모 — Srello 최초 1회 이전 후 미사용 |
 

@@ -3,25 +3,57 @@ const Srello = (() => {
   const KEY = 'srello_board';
   const TPL_KEY = 'srello_templates';
   const VIEW_KEY = 'srello_view_mode';
+  const SETTINGS_KEY = 'srello_settings';
+  const SORT_KEY = 'srello_sort_mode';
   const MEMO_KEY = 'dashboard_memos';
   const PRIORITY_COLORS = { P0: '#ff6b9d', P1: '#ffd166', P2: '#7c83ff', P3: '#64ffda' };
-  const LABEL_COLORS = ['#64ffda', '#ff6b9d', '#7c83ff', '#ffd166'];
+  const DEFAULT_LABEL_COLORS = ['#64ffda', '#ff6b9d', '#7c83ff', '#ffd166'];
   const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
-  const CATEGORIES = ['Srello', 'Life', 'Game', 'Dev', 'Media', '공통'];
+  // Category 정의: 작업 종류(기획·아트·개발·사운드 등) — Settings에서 사용자 편집 가능
+  const DEFAULT_CATEGORIES = ['기획', '아트', '개발', '사운드', '공통'];
   const DONE_LIST_NAMES = ['완료', 'done', 'Done'];
   const STATUSES = ['기획중', '개발중', '테스트중', '완료', '보류'];
   const STATUS_COLORS = { '기획중': '#7c83ff', '개발중': '#ffd166', '테스트중': '#ff9f43', '완료': '#64ffda', '보류': '#8899aa' };
 
   let board = null;
-  let drag = null;
+  let drag = null;       // { kind:'card'|'list', cardId?, fromListId?, listId?, fromIdx? }
   let viewMode = localStorage.getItem(VIEW_KEY) || 'board';
   let filterPriority = '';
   let filterCategory = '';
+  let sortMode = localStorage.getItem(SORT_KEY) || 'priority';
   let boardContainerBound = false;
 
   function genId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   }
+
+  /* ── Settings (색상·카테고리 사용자 정의) ── */
+  function getSettings() {
+    try {
+      const raw = localStorage.getItem(SETTINGS_KEY);
+      const s = raw ? JSON.parse(raw) : {};
+      return {
+        colors: Array.isArray(s.colors) && s.colors.length
+          ? s.colors
+          : DEFAULT_LABEL_COLORS.map((hex, i) => ({ id: String(i), hex, name: hex })),
+        categories: Array.isArray(s.categories) && s.categories.length
+          ? s.categories
+          : DEFAULT_CATEGORIES.map((name, i) => ({ id: String(i), name })),
+      };
+    } catch {
+      return {
+        colors: DEFAULT_LABEL_COLORS.map((hex, i) => ({ id: String(i), hex, name: hex })),
+        categories: DEFAULT_CATEGORIES.map((name, i) => ({ id: String(i), name })),
+      };
+    }
+  }
+
+  function saveSettings(settings) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  function getColors() { return getSettings().colors.map(c => c.hex); }
+  function getCategories() { return getSettings().categories.map(c => c.name); }
 
   function defaultBoard() {
     return {
@@ -54,10 +86,29 @@ const Srello = (() => {
     if (card.activity.length > 40) card.activity.length = 40;
   }
 
-  function sortCardsByPriority(cards) {
-    return [...cards].sort(
-      (a, b) => (PRIORITY_ORDER[a.priority] ?? 9) - (PRIORITY_ORDER[b.priority] ?? 9)
-    );
+  function sortCards(cards) {
+    if (sortMode === 'manual') return [...cards];
+    return [...cards].sort((a, b) => {
+      if (sortMode === 'priority')
+        return (PRIORITY_ORDER[a.priority] ?? 9) - (PRIORITY_ORDER[b.priority] ?? 9);
+      if (sortMode === 'due-asc') {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return a.dueDate.localeCompare(b.dueDate);
+      }
+      if (sortMode === 'due-desc') {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return b.dueDate.localeCompare(a.dueDate);
+      }
+      if (sortMode === 'status')
+        return (a.status || '').localeCompare(b.status || '', 'ko');
+      if (sortMode === 'title')
+        return a.title.localeCompare(b.title, 'ko');
+      return 0;
+    });
   }
 
   function load() {
@@ -108,7 +159,7 @@ const Srello = (() => {
       desc: String(raw.desc || '').trim(),
       priority: priority || undefined,
       category: raw.category || undefined,
-      color: raw.color || (priority ? PRIORITY_COLORS[priority] : LABEL_COLORS[0]),
+      color: raw.color || (priority ? PRIORITY_COLORS[priority] : (getColors()[0] || DEFAULT_LABEL_COLORS[0])),
       cover: raw.cover || '',
       dueDate: raw.dueDate || '',
       done: !!raw.done,
@@ -206,6 +257,7 @@ const Srello = (() => {
     document.getElementById('srello-import-file')?.addEventListener('change', onImportFile);
     document.getElementById('srello-view-board')?.addEventListener('click', () => setViewMode('board'));
     document.getElementById('srello-view-calendar')?.addEventListener('click', () => setViewMode('calendar'));
+    document.getElementById('srello-settings-btn')?.addEventListener('click', openSettingsModal);
     toolbarBound = true;
   }
 
@@ -355,7 +407,7 @@ const Srello = (() => {
       desc: opts.desc?.trim() || '',
       priority: priority || undefined,
       category: opts.category,
-      color: opts.color || (priority ? PRIORITY_COLORS[priority] : LABEL_COLORS[0]),
+      color: opts.color || (priority ? PRIORITY_COLORS[priority] : (getColors()[0] || DEFAULT_LABEL_COLORS[0])),
       cover: opts.cover || '',
       dueDate: opts.dueDate || '',
       checklist: opts.checklist || [],
@@ -424,7 +476,7 @@ const Srello = (() => {
   }
 
   function getAllCategories() {
-    const set = new Set(CATEGORIES);
+    const set = new Set(getCategories());
     board.lists.forEach(l => l.cards.forEach(c => { if (c.category) set.add(c.category); }));
     return [...set];
   }
@@ -472,7 +524,18 @@ const Srello = (() => {
           ${cats.map(c => `<option value="${escHtml(c)}" ${filterCategory === c ? 'selected' : ''}>${escHtml(c)}</option>`).join('')}
         </select>
       </label>
-      <button type="button" class="btn btn-sm" id="srello-filter-clear">필터 초기화</button>`;
+      <button type="button" class="btn btn-sm" id="srello-filter-clear">필터 초기화</button>
+      <label class="srello-filter-label srello-sort-label">
+        <span>정렬</span>
+        <select id="srello-sort-select" class="input srello-filter-select srello-sort-select">
+          <option value="manual" ${sortMode === 'manual' ? 'selected' : ''}>수동 (드래그 순서)</option>
+          <option value="priority" ${sortMode === 'priority' ? 'selected' : ''}>우선순위</option>
+          <option value="due-asc" ${sortMode === 'due-asc' ? 'selected' : ''}>마감일 빠른 순</option>
+          <option value="due-desc" ${sortMode === 'due-desc' ? 'selected' : ''}>마감일 늦은 순</option>
+          <option value="status" ${sortMode === 'status' ? 'selected' : ''}>상태</option>
+          <option value="title" ${sortMode === 'title' ? 'selected' : ''}>제목</option>
+        </select>
+      </label>`;
     el.querySelector('#srello-filter-priority')?.addEventListener('change', e => {
       filterPriority = e.target.value;
       render();
@@ -484,6 +547,11 @@ const Srello = (() => {
     el.querySelector('#srello-filter-clear')?.addEventListener('click', () => {
       filterPriority = '';
       filterCategory = '';
+      render();
+    });
+    el.querySelector('#srello-sort-select')?.addEventListener('change', e => {
+      sortMode = e.target.value;
+      localStorage.setItem(SORT_KEY, sortMode);
       render();
     });
   }
@@ -541,11 +609,12 @@ const Srello = (() => {
     const container = document.getElementById('srello-board');
     if (!container || !board) return;
 
-    const listsHtml = board.lists.map(list => {
-      const cards = sortCardsByPriority(list.cards).filter(cardMatchesFilter);
+    const listsHtml = board.lists.map((list, listIdx) => {
+      const cards = sortCards(list.cards).filter(cardMatchesFilter);
       return `
-      <div class="srello-list" data-list-id="${list.id}">
+      <div class="srello-list" data-list-id="${list.id}" data-list-idx="${listIdx}">
         <div class="srello-list-header">
+          <span class="srello-list-handle" title="드래그하여 순서 변경">⋮⋮</span>
           <input type="text" class="srello-list-title input" value="${escHtml(list.title)}"
             aria-label="리스트 제목" maxlength="80"
             data-action="rename-list" data-list-id="${list.id}">
@@ -686,15 +755,35 @@ const Srello = (() => {
     }
 
     // 드래그 이벤트 — innerHTML 교체 후 새 요소에 재바인딩 필요
+
+    // 카드 드래그
     container.querySelectorAll('.srello-list-cards').forEach(zone => {
       zone.addEventListener('dragover', onDragOver);
       zone.addEventListener('dragleave', onDragLeave);
       zone.addEventListener('drop', onDrop);
     });
-
     container.querySelectorAll('.srello-card').forEach(el => {
       el.addEventListener('dragstart', onDragStart);
       el.addEventListener('dragend', onDragEnd);
+    });
+
+    // 리스트 드래그 (핸들 mousedown → list draggable 임시 활성)
+    container.querySelectorAll('.srello-list-handle').forEach(handle => {
+      handle.addEventListener('mousedown', () => {
+        const listEl = handle.closest('.srello-list');
+        if (listEl) listEl.setAttribute('draggable', 'true');
+      });
+      handle.addEventListener('mouseup', () => {
+        const listEl = handle.closest('.srello-list');
+        if (listEl) listEl.setAttribute('draggable', 'false');
+      });
+    });
+    container.querySelectorAll('.srello-list:not(.srello-list--add)').forEach(el => {
+      el.addEventListener('dragstart', onListDragStart);
+      el.addEventListener('dragend', onListDragEnd);
+      el.addEventListener('dragover', onListDragOver);
+      el.addEventListener('dragleave', onListDragLeave);
+      el.addEventListener('drop', onListDrop);
     });
   }
 
@@ -707,12 +796,14 @@ const Srello = (() => {
     return cards.length;
   }
 
+  /* ── 카드 드래그 ── */
   function onDragStart(e) {
     const el = e.currentTarget;
-    drag = { cardId: el.dataset.cardId, fromListId: el.dataset.listId };
+    drag = { kind: 'card', cardId: el.dataset.cardId, fromListId: el.dataset.listId };
     el.classList.add('srello-card--dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', drag.cardId);
+    e.stopPropagation(); // 리스트 dragstart 전파 차단
   }
 
   function onDragEnd(e) {
@@ -722,6 +813,7 @@ const Srello = (() => {
   }
 
   function onDragOver(e) {
+    if (drag?.kind !== 'card') return;
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
     e.currentTarget.classList.add('srello-list-cards--over');
@@ -733,11 +825,68 @@ const Srello = (() => {
     }
   }
 
+  /* ── 리스트 드래그 ── */
+  function onListDragStart(e) {
+    if (drag?.kind === 'card') return; // 카드 드래그 중이면 무시
+    const el = e.currentTarget;
+    const idx = parseInt(el.dataset.listIdx, 10);
+    drag = { kind: 'list', listId: el.dataset.listId, fromIdx: idx };
+    el.classList.add('srello-list--dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', el.dataset.listId);
+  }
+
+  function onListDragEnd(e) {
+    e.currentTarget.classList.remove('srello-list--dragging');
+    e.currentTarget.setAttribute('draggable', 'false');
+    document.querySelectorAll('.srello-list--drop-over').forEach(el => el.classList.remove('srello-list--drop-over'));
+    if (drag?.kind === 'list') drag = null;
+  }
+
+  function onListDragOver(e) {
+    if (drag?.kind !== 'list') return;
+    e.preventDefault();
+    e.stopPropagation();
+    const listEl = e.currentTarget;
+    if (listEl.dataset.listId === drag.listId) return;
+    document.querySelectorAll('.srello-list--drop-over').forEach(el => el.classList.remove('srello-list--drop-over'));
+    listEl.classList.add('srello-list--drop-over');
+  }
+
+  function onListDragLeave(e) {
+    if (drag?.kind !== 'list') return;
+    const listEl = e.currentTarget;
+    if (!listEl.contains(e.relatedTarget)) {
+      listEl.classList.remove('srello-list--drop-over');
+    }
+  }
+
+  function onListDrop(e) {
+    if (drag?.kind !== 'list') return;
+    e.preventDefault();
+    e.stopPropagation();
+    const targetEl = e.currentTarget;
+    targetEl.classList.remove('srello-list--drop-over');
+    const toIdx = parseInt(targetEl.dataset.listIdx, 10);
+    const fromIdx = drag.fromIdx;
+    if (isNaN(toIdx) || fromIdx === toIdx) return;
+    reorderList(fromIdx, toIdx);
+  }
+
+  function reorderList(fromIdx, toIdx) {
+    if (fromIdx < 0 || fromIdx >= board.lists.length) return;
+    if (toIdx < 0 || toIdx >= board.lists.length) return;
+    const [moved] = board.lists.splice(fromIdx, 1);
+    board.lists.splice(toIdx, 0, moved);
+    save();
+    render();
+  }
+
   function onDrop(e) {
     e.preventDefault();
     const zone = e.currentTarget;
     zone.classList.remove('srello-list-cards--over');
-    if (!drag) return;
+    if (!drag || drag.kind !== 'card') return;
     const toListId = zone.dataset.listId;
     const toIndex = getDropIndex(zone, e.clientY);
     if (drag.fromListId === toListId) {
@@ -748,6 +897,162 @@ const Srello = (() => {
       if (fromIdx === targetIdx) return;
     }
     moveCard(drag.cardId, drag.fromListId, toListId, toIndex);
+  }
+
+  /* ── Settings 모달 ── */
+  function openSettingsModal() {
+    document.querySelector('.modal-overlay.srello-settings-modal')?.remove();
+
+    const settings = getSettings();
+    // 로컬 복사본 (저장 전 편집용)
+    let localColors = settings.colors.map(c => ({ ...c }));
+    let localCategories = settings.categories.map(c => ({ ...c }));
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay srello-settings-modal';
+
+    function renderModalBody() {
+      overlay.innerHTML = `
+        <div class="modal srello-modal">
+          <div class="srello-modal-hdr">⚙ Srello 설정</div>
+          <div class="srello-modal-body">
+
+            <div class="srello-settings-section">
+              <div class="srello-settings-title">🎨 라벨 색상</div>
+              <ul class="srello-settings-list" id="srello-color-list">
+                ${localColors.map((c, i) => `
+                  <li class="srello-settings-item" data-idx="${i}">
+                    <span class="srello-settings-color-dot" style="background:${escHtml(c.hex)}"></span>
+                    <input type="color" class="srello-color-picker" value="${escHtml(c.hex)}" data-idx="${i}" title="색상 선택">
+                    <input type="text" class="input srello-name-input srello-color-name" value="${escHtml(c.name)}" placeholder="이름(예: 청록)" maxlength="30" data-idx="${i}">
+                    <button type="button" class="btn btn-icon btn-sm" data-del-color="${i}" title="삭제">✕</button>
+                  </li>`).join('')}
+              </ul>
+              <div class="srello-settings-add-row">
+                <input type="color" id="srello-new-color-picker" value="#64ffda">
+                <input type="text" class="input" id="srello-new-color-name" placeholder="새 색상 이름" maxlength="30">
+                <button type="button" class="btn btn-sm btn-primary" id="srello-add-color-btn">+ 추가</button>
+              </div>
+              <p class="srello-settings-hint">카드 라벨에 사용되는 색상입니다. 최소 1개 필요.</p>
+            </div>
+
+            <div class="srello-settings-section">
+              <div class="srello-settings-title">🏷️ 카테고리</div>
+              <p class="srello-settings-hint" style="margin-bottom:8px">작업 종류를 정의합니다 (예: 기획, 아트, 개발, 사운드)</p>
+              <ul class="srello-settings-list" id="srello-cat-list">
+                ${localCategories.map((c, i) => `
+                  <li class="srello-settings-item" data-idx="${i}">
+                    <input type="text" class="input srello-name-input srello-cat-name" value="${escHtml(c.name)}" placeholder="카테고리 이름" maxlength="40" data-idx="${i}">
+                    <button type="button" class="btn btn-icon btn-sm" data-del-cat="${i}" title="삭제">✕</button>
+                  </li>`).join('')}
+              </ul>
+              <div class="srello-settings-add-row">
+                <input type="text" class="input" id="srello-new-cat-name" placeholder="새 카테고리 이름" maxlength="40">
+                <button type="button" class="btn btn-sm btn-primary" id="srello-add-cat-btn">+ 추가</button>
+              </div>
+              <p class="srello-settings-hint">기존 카드의 카테고리 값은 그대로 유지됩니다.</p>
+            </div>
+
+          </div>
+          <div class="srello-modal-footer">
+            <button type="button" class="btn" id="srello-settings-reset" style="color:var(--color-game)">초기화</button>
+            <div class="srello-modal-footer-right">
+              <button type="button" class="btn" id="srello-settings-cancel">닫기</button>
+              <button type="button" class="btn btn-primary" id="srello-settings-save">저장</button>
+            </div>
+          </div>
+        </div>`;
+      bindSettingsModalEvents();
+    }
+
+    function bindSettingsModalEvents() {
+      // 색상 picker 변경
+      overlay.querySelector('#srello-color-list')?.addEventListener('input', e => {
+        const picker = e.target.closest('.srello-color-picker');
+        if (picker) {
+          const i = +picker.dataset.idx;
+          localColors[i].hex = picker.value;
+          localColors[i].name = localColors[i].name || picker.value;
+          // 미리보기 dot 업데이트
+          const dot = picker.closest('.srello-settings-item')?.querySelector('.srello-settings-color-dot');
+          if (dot) dot.style.background = picker.value;
+        }
+        const nameInput = e.target.closest('.srello-color-name');
+        if (nameInput) localColors[+nameInput.dataset.idx].name = nameInput.value;
+      });
+
+      // 카테고리 이름 편집
+      overlay.querySelector('#srello-cat-list')?.addEventListener('input', e => {
+        const input = e.target.closest('.srello-cat-name');
+        if (input) localCategories[+input.dataset.idx].name = input.value;
+      });
+
+      // 색상 삭제
+      overlay.querySelector('#srello-color-list')?.addEventListener('click', e => {
+        const btn = e.target.closest('[data-del-color]');
+        if (!btn) return;
+        if (localColors.length <= 1) { toast('색상은 최소 1개 필요합니다.', 'error'); return; }
+        localColors.splice(+btn.dataset.delColor, 1);
+        renderModalBody();
+      });
+
+      // 카테고리 삭제
+      overlay.querySelector('#srello-cat-list')?.addEventListener('click', e => {
+        const btn = e.target.closest('[data-del-cat]');
+        if (!btn) return;
+        if (localCategories.length <= 1) { toast('카테고리는 최소 1개 필요합니다.', 'error'); return; }
+        localCategories.splice(+btn.dataset.delCat, 1);
+        renderModalBody();
+      });
+
+      // 색상 추가
+      overlay.querySelector('#srello-add-color-btn')?.addEventListener('click', () => {
+        const hex = overlay.querySelector('#srello-new-color-picker').value;
+        const name = overlay.querySelector('#srello-new-color-name').value.trim() || hex;
+        localColors.push({ id: genId(), hex, name });
+        renderModalBody();
+      });
+
+      // 카테고리 추가
+      const addCatFn = () => {
+        const nameEl = overlay.querySelector('#srello-new-cat-name');
+        const name = nameEl?.value.trim();
+        if (!name) { toast('카테고리 이름을 입력하세요.', 'error'); return; }
+        if (localCategories.some(c => c.name === name)) { toast('이미 존재하는 이름입니다.', 'error'); return; }
+        localCategories.push({ id: genId(), name });
+        renderModalBody();
+      };
+      overlay.querySelector('#srello-add-cat-btn')?.addEventListener('click', addCatFn);
+      overlay.querySelector('#srello-new-cat-name')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); addCatFn(); }
+      });
+
+      // 초기화
+      overlay.querySelector('#srello-settings-reset')?.addEventListener('click', () => {
+        if (!confirm('색상과 카테고리를 기본값으로 초기화할까요?')) return;
+        localColors = DEFAULT_LABEL_COLORS.map((hex, i) => ({ id: String(i), hex, name: hex }));
+        localCategories = DEFAULT_CATEGORIES.map((name, i) => ({ id: String(i), name }));
+        renderModalBody();
+        toast('기본값으로 초기화했습니다.', 'info');
+      });
+
+      // 닫기 / 저장
+      overlay.querySelector('#srello-settings-cancel')?.addEventListener('click', () => overlay.remove());
+      overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+      overlay.querySelector('#srello-settings-save')?.addEventListener('click', () => {
+        const cleaned = localColors.filter(c => c.hex).map(c => ({ id: c.id || genId(), hex: c.hex, name: c.name || c.hex }));
+        const cleanedCats = localCategories.filter(c => c.name?.trim()).map(c => ({ id: c.id || genId(), name: c.name.trim() }));
+        if (!cleaned.length) { toast('색상은 최소 1개 필요합니다.', 'error'); return; }
+        if (!cleanedCats.length) { toast('카테고리는 최소 1개 필요합니다.', 'error'); return; }
+        saveSettings({ colors: cleaned, categories: cleanedCats });
+        overlay.remove();
+        render();
+        toast('설정이 저장되었습니다.', 'success');
+      });
+    }
+
+    renderModalBody();
+    document.body.appendChild(overlay);
   }
 
   function promptNewList() {
@@ -903,7 +1208,7 @@ const Srello = (() => {
 
           <div class="srello-modal-row">
             <label class="srello-field-label">라벨 색</label>
-            ${LABEL_COLORS.map(c => `
+            ${getColors().map(c => `
               <button type="button" class="srello-color-opt" data-color="${c}"
                 style="background:${c}; width:22px; height:22px; border-radius:50%; border:2px solid transparent; cursor:pointer"></button>`).join('')}
           </div>
@@ -920,7 +1225,7 @@ const Srello = (() => {
 
     document.body.appendChild(overlay);
 
-    let selectedColor = card.color || LABEL_COLORS[0];
+    let selectedColor = card.color || getColors()[0] || DEFAULT_LABEL_COLORS[0];
     let selectedPriority = card.priority || '';
     let checklist = card.checklist.map(i => ({ ...i }));
     let comments = card.comments.map(c => ({ ...c }));
