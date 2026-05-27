@@ -1125,12 +1125,13 @@ select.input option {
 
 .srello-modal {
   max-width: 520px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .srello-modal-wide {
   max-width: 560px;
-  max-height: 90vh;
-  overflow-y: auto;
 }
 
 .srello-modal-hdr {
@@ -1138,12 +1139,17 @@ select.input option {
   font-weight: 600;
   margin-bottom: 16px;
   color: var(--color-life);
+  flex-shrink: 0;
 }
 
 .srello-modal-body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: 2px;
 }
 
 .srello-modal-row {
@@ -1291,6 +1297,7 @@ select.input option {
   margin-top: 16px;
   padding-top: 12px;
   border-top: 1px solid var(--glass-border);
+  flex-shrink: 0;
 }
 
 .srello-modal-footer-right {
