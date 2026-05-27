@@ -1125,94 +1125,129 @@ const Srello = (() => {
     overlay.innerHTML = `
       <div class="modal srello-modal srello-modal-wide">
         <div class="srello-modal-hdr">📋 카드</div>
-        <div class="srello-modal-body">
-          <input type="text" class="input" id="srello-card-title" value="${escHtml(card.title)}" placeholder="제목">
-          <textarea class="input" id="srello-card-desc" rows="4" placeholder="설명">${escHtml(card.desc)}</textarea>
+        <div class="srello-modal-layout">
 
-          <div class="srello-modal-row">
-            <label class="srello-field-label">마감일</label>
-            <input type="date" class="input" id="srello-card-due" value="${escHtml(card.dueDate || '')}">
-            <button type="button" class="btn btn-sm" id="srello-card-due-clear">지우기</button>
-          </div>
+          <!-- 좌: 제목·설명·각종 섹션 -->
+          <div class="srello-modal-main">
+            <input type="text" class="input" id="srello-card-title" value="${escHtml(card.title)}" placeholder="제목">
+            <textarea class="input srello-desc-area" id="srello-card-desc" placeholder="설명">${escHtml(card.desc)}</textarea>
 
-          <div class="srello-modal-row">
-            <label class="srello-field-label">우선순위</label>
-            <div class="srello-prio-btns" id="srello-prio-btns">
-              ${['P0', 'P1', 'P2', 'P3'].map(p => `
-                <button type="button" class="btn btn-sm srello-prio-btn" data-prio="${p}"
-                  style="--prio:${PRIORITY_COLORS[p]}">${p}</button>`).join('')}
-              <button type="button" class="btn btn-sm" data-prio="">없음</button>
+            <div class="srello-modal-section">
+              <div class="srello-section-hdr">
+                <span>체크리스트</span>
+                <button type="button" class="btn btn-sm" id="srello-check-add">+ 항목</button>
+              </div>
+              <ul class="srello-checklist" id="srello-checklist"></ul>
+            </div>
+
+            <div class="srello-modal-section">
+              <div class="srello-section-hdr"><span>댓글</span></div>
+              <ul class="srello-comments" id="srello-comments"></ul>
+              <div class="srello-comment-add">
+                <input type="text" class="input" id="srello-comment-input" placeholder="댓글 입력">
+                <button type="button" class="btn btn-sm btn-primary" id="srello-comment-add">추가</button>
+              </div>
+            </div>
+
+            <div class="srello-modal-section">
+              <div class="srello-section-hdr">
+                <span>첨부 링크</span>
+                <button type="button" class="btn btn-sm" id="srello-attach-add">+ 링크</button>
+              </div>
+              <ul class="srello-attachments" id="srello-attachments"></ul>
+            </div>
+
+            <div class="srello-modal-section">
+              <div class="srello-section-hdr">
+                <span>연결된 카드</span>
+                <button type="button" class="btn btn-sm" id="srello-link-add">+ 연결</button>
+              </div>
+              <ul class="srello-linked-cards" id="srello-linked-cards"></ul>
+            </div>
+
+            <div class="srello-modal-section">
+              <button type="button" class="srello-section-hdr srello-section-toggle" id="srello-activity-toggle"
+                aria-expanded="false">
+                <span class="srello-toggle-chevron">▼</span>
+                <span>활동 <span id="srello-activity-count"></span></span>
+              </button>
+              <ul class="srello-activity" id="srello-activity" style="display:none"></ul>
             </div>
           </div>
 
-          <div class="srello-modal-row">
-            <label class="srello-field-label">카테고리</label>
-            <select class="input" id="srello-card-category">
-              <option value="">—</option>
-              ${getAllCategories().map(c => `<option value="${escHtml(c)}" ${card.category === c ? 'selected' : ''}>${escHtml(c)}</option>`).join('')}
-            </select>
-          </div>
+          <!-- 우: 아코디언 설정 사이드바 -->
+          <div class="srello-modal-sidebar">
 
-          <div class="srello-modal-row">
-            <label class="srello-field-label">상태</label>
-            <select class="input" id="srello-card-status">
-              <option value="">—</option>
-              ${STATUSES.map(s => `<option value="${escHtml(s)}" ${card.status === s ? 'selected' : ''}>${escHtml(s)}</option>`).join('')}
-            </select>
-          </div>
-
-          <div class="srello-modal-row">
-            <label class="srello-field-label">커버 (이모지·짧은 텍스트)</label>
-            <input type="text" class="input" id="srello-card-cover" value="${escHtml(card.cover || '')}" maxlength="24" placeholder="예: 🎯">
-          </div>
-
-          <div class="srello-modal-section">
-            <div class="srello-section-hdr">
-              <span>체크리스트</span>
-              <button type="button" class="btn btn-sm" id="srello-check-add">+ 항목</button>
+            <div class="srello-accordion-item srello-ac-open">
+              <button type="button" class="srello-accordion-hdr">
+                <span>📅 마감일</span><span class="srello-ac-chevron">▲</span>
+              </button>
+              <div class="srello-accordion-body">
+                <input type="date" class="input" id="srello-card-due" value="${escHtml(card.dueDate || '')}">
+                <button type="button" class="btn btn-sm" id="srello-card-due-clear">지우기</button>
+              </div>
             </div>
-            <ul class="srello-checklist" id="srello-checklist"></ul>
-          </div>
 
-          <div class="srello-modal-section">
-            <div class="srello-section-hdr"><span>댓글</span></div>
-            <ul class="srello-comments" id="srello-comments"></ul>
-            <div class="srello-comment-add">
-              <input type="text" class="input" id="srello-comment-input" placeholder="댓글 입력">
-              <button type="button" class="btn btn-sm btn-primary" id="srello-comment-add">추가</button>
+            <div class="srello-accordion-item srello-ac-open">
+              <button type="button" class="srello-accordion-hdr">
+                <span>⚡ 우선순위</span><span class="srello-ac-chevron">▲</span>
+              </button>
+              <div class="srello-accordion-body">
+                <div class="srello-prio-btns" id="srello-prio-btns">
+                  ${['P0', 'P1', 'P2', 'P3'].map(p => `
+                    <button type="button" class="btn btn-sm srello-prio-btn" data-prio="${p}"
+                      style="--prio:${PRIORITY_COLORS[p]}">${p}</button>`).join('')}
+                  <button type="button" class="btn btn-sm" data-prio="">없음</button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="srello-modal-section">
-            <div class="srello-section-hdr">
-              <span>첨부 링크</span>
-              <button type="button" class="btn btn-sm" id="srello-attach-add">+ 링크</button>
+            <div class="srello-accordion-item srello-ac-open">
+              <button type="button" class="srello-accordion-hdr">
+                <span>🏷 카테고리</span><span class="srello-ac-chevron">▲</span>
+              </button>
+              <div class="srello-accordion-body">
+                <select class="input" id="srello-card-category">
+                  <option value="">—</option>
+                  ${getAllCategories().map(c => `<option value="${escHtml(c)}" ${card.category === c ? 'selected' : ''}>${escHtml(c)}</option>`).join('')}
+                </select>
+              </div>
             </div>
-            <ul class="srello-attachments" id="srello-attachments"></ul>
-          </div>
 
-          <div class="srello-modal-section">
-            <div class="srello-section-hdr">
-              <span>연결된 카드</span>
-              <button type="button" class="btn btn-sm" id="srello-link-add">+ 연결</button>
+            <div class="srello-accordion-item srello-ac-open">
+              <button type="button" class="srello-accordion-hdr">
+                <span>🔄 상태</span><span class="srello-ac-chevron">▲</span>
+              </button>
+              <div class="srello-accordion-body">
+                <select class="input" id="srello-card-status">
+                  <option value="">—</option>
+                  ${STATUSES.map(s => `<option value="${escHtml(s)}" ${card.status === s ? 'selected' : ''}>${escHtml(s)}</option>`).join('')}
+                </select>
+              </div>
             </div>
-            <ul class="srello-linked-cards" id="srello-linked-cards"></ul>
-          </div>
 
-          <div class="srello-modal-section">
-            <button type="button" class="srello-section-hdr srello-section-toggle" id="srello-activity-toggle"
-              aria-expanded="false">
-              <span class="srello-toggle-chevron">▼</span>
-              <span>활동 <span id="srello-activity-count"></span></span>
-            </button>
-            <ul class="srello-activity" id="srello-activity" style="display:none"></ul>
-          </div>
+            <div class="srello-accordion-item">
+              <button type="button" class="srello-accordion-hdr">
+                <span>🎯 커버</span><span class="srello-ac-chevron">▼</span>
+              </button>
+              <div class="srello-accordion-body" style="display:none">
+                <input type="text" class="input" id="srello-card-cover" value="${escHtml(card.cover || '')}" maxlength="24" placeholder="예: 🎯">
+              </div>
+            </div>
 
-          <div class="srello-modal-row">
-            <label class="srello-field-label">라벨 색</label>
-            ${getColors().map(c => `
-              <button type="button" class="srello-color-opt" data-color="${c}"
-                style="background:${c}; width:22px; height:22px; border-radius:50%; border:2px solid transparent; cursor:pointer"></button>`).join('')}
+            <div class="srello-accordion-item">
+              <button type="button" class="srello-accordion-hdr">
+                <span>🎨 라벨 색</span><span class="srello-ac-chevron">▼</span>
+              </button>
+              <div class="srello-accordion-body" style="display:none">
+                <div class="srello-color-opts">
+                  ${getColors().map(c => `
+                    <button type="button" class="srello-color-opt" data-color="${c}"
+                      style="background:${c}; width:22px; height:22px; border-radius:50%; border:2px solid transparent; cursor:pointer"></button>`).join('')}
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="srello-modal-footer">
@@ -1226,6 +1261,15 @@ const Srello = (() => {
       </div>`;
 
     document.body.appendChild(overlay);
+
+    // 설명 textarea 자동 높이
+    const descEl = overlay.querySelector('#srello-card-desc');
+    function autoResizeDesc() {
+      descEl.style.height = 'auto';
+      descEl.style.height = descEl.scrollHeight + 'px';
+    }
+    descEl.addEventListener('input', autoResizeDesc);
+    requestAnimationFrame(autoResizeDesc);
 
     let selectedColor = card.color || getColors()[0] || DEFAULT_LABEL_COLORS[0];
     let selectedPriority = card.priority || '';
@@ -1365,6 +1409,19 @@ const Srello = (() => {
     renderActivity();
     highlightPrio();
     highlightColor();
+
+    // 우측 사이드바 아코디언 토글
+    overlay.querySelectorAll('.srello-accordion-hdr').forEach(hdr => {
+      hdr.addEventListener('click', () => {
+        const item = hdr.closest('.srello-accordion-item');
+        const body = item.querySelector('.srello-accordion-body');
+        const chevron = hdr.querySelector('.srello-ac-chevron');
+        const isOpen = body.style.display !== 'none';
+        body.style.display = isOpen ? 'none' : '';
+        item.classList.toggle('srello-ac-open', !isOpen);
+        chevron.textContent = isOpen ? '▼' : '▲';
+      });
+    });
 
     overlay.querySelector('#srello-prio-btns')?.addEventListener('click', e => {
       const btn = e.target.closest('[data-prio]');

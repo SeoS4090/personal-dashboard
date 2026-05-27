@@ -62,6 +62,9 @@
 - [x] Srello 리스트 순서 변경 — ⋮⋮ 핸들 드래그 앤 드롭 (kind:'list' 채널 분리)
 - [x] Srello 카드 정렬 드롭다운 — 수동/우선순위/마감일↑↓/상태/제목 (srello_sort_mode)
 - [x] Srello Settings 모달 — 라벨 색상·카테고리 CRUD (srello_settings, 기본: 기획·아트·개발·사운드·공통)
+- [x] Srello 카드 모달 2-컬럼 레이아웃 — 좌: 내용(설명·체크리스트·댓글·첨부·연결·활동) / 우: 설정 사이드바 아코디언(마감일·우선순위·카테고리·상태·커버·라벨색)
+- [x] Srello 카드 desc textarea 자동 높이 버그 수정 (overflow:hidden + min-height)
+- [x] Srello 모달 반응형 — 720px 이하에서 단일 컬럼 폴백
 
 ## TODO
 
