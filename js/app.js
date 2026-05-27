@@ -183,7 +183,25 @@ const App = (() => {
     updateHomeLifePreview();
   }
 
-  return { navigate, init, openMenu, toggleMenu, updateHomeLifePreview };
+  async function clearCacheAndReload() {
+    const btn = document.getElementById('btn-clear-cache');
+    if (btn) { btn.disabled = true; btn.textContent = '삭제 중…'; }
+
+    try {
+      // Cache Storage (Service Worker 캐시 등) 삭제
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+    } catch (e) {
+      console.warn('Cache Storage 삭제 실패 (무시):', e);
+    }
+
+    toast('캐시를 삭제했습니다. 최신 버전으로 새로고침합니다…', 'success', 1800);
+    setTimeout(() => window.location.reload(), 1800);
+  }
+
+  return { navigate, init, openMenu, toggleMenu, updateHomeLifePreview, clearCacheAndReload };
 })();
 
 /* ── Settings ── */
@@ -290,6 +308,12 @@ const Settings = (() => {
     if (el('setting-gcal-clientid')) el('setting-gcal-clientid').value = localStorage.getItem('gcal_client_id') || '';
     if (el('setting-news-apikey'))   el('setting-news-apikey').value   = localStorage.getItem('news_api_key')   || '';
     if (el('setting-news-keywords')) el('setting-news-keywords').value = localStorage.getItem('news_keywords')  || '';
+    // 설정 패널 버전 표시
+    const verEl = el('settings-build-ver');
+    if (verEl) {
+      const raw = window.BUILD_VER;
+      verEl.textContent = (!raw || raw === '__BUILD_HASH__') ? 'dev' : raw;
+    }
     renderCalendarList();
     updateSettingsUI();
     // 저장된 토큰으로 복원된 경우 연결 상태 UI 반영
