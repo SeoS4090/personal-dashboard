@@ -242,6 +242,16 @@ const Calendar = (() => {
 
     try {
       const events = await _fetchAll(timeMin, timeMax);
+      // Srello 마감일 통합 (API 연동 없이 뷰만 통합)
+      if (typeof Srello !== 'undefined') {
+        try {
+          const minDate = timeMin.split('T')[0];
+          const maxDate = timeMax.split('T')[0];
+          Srello.getDueDateEvents()
+            .filter(e => e.start.date >= minDate && e.start.date <= maxDate)
+            .forEach(e => events.push(e));
+        } catch { /* Srello 없으면 무시 */ }
+      }
       if      (currentView === 'month') _renderMonth(container, events);
       else if (currentView === 'week')  _renderWeek(container, events);
       else                              _renderList(container, events);
@@ -296,7 +306,7 @@ const Calendar = (() => {
           <div class="cal-day-num${isToday?' today-num':''}">${day}</div>
           <div class="cal-day-evts">
             ${evts.slice(0,3).map(e=>`
-              <div class="cal-evt-chip" style="background:${e._calColor}2e;border-left:2px solid ${e._calColor};" title="${_esc(e.summary||'')}">
+              <div class="cal-evt-chip${e._isSrello?' srello-evt':''}" style="background:${e._calColor}2e;border-left:2px solid ${e._calColor};" title="${_esc(e.summary||'')}">
                 ${_esc((e.summary||'').substring(0,9))}
               </div>`).join('')}
             ${evts.length>3?`<div class="cal-evt-more">+${evts.length-3}개</div>`:''}

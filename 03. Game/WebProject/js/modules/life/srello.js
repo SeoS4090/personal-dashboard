@@ -40,6 +40,7 @@ const Srello = (() => {
     if (!card.activity) card.activity = [];
     if (card.done === undefined) card.done = false;
     if (card.status === undefined) card.status = '';
+    if (!card.linkedCardIds) card.linkedCardIds = [];
     return card;
   }
 
@@ -92,6 +93,7 @@ const Srello = (() => {
       comments: c.comments,
       attachments: c.attachments,
       activity: c.activity,
+      linkedCardIds: c.linkedCardIds,
       createdAt: c.createdAt,
       updatedAt: c.updatedAt,
     };
@@ -119,6 +121,7 @@ const Srello = (() => {
       comments: Array.isArray(raw.comments) ? raw.comments : [],
       attachments: Array.isArray(raw.attachments) ? raw.attachments : [],
       activity: Array.isArray(raw.activity) ? raw.activity : [],
+      linkedCardIds: Array.isArray(raw.linkedCardIds) ? raw.linkedCardIds : [],
       createdAt: raw.createdAt || now,
       updatedAt: raw.updatedAt || now,
     };
@@ -287,7 +290,10 @@ const Srello = (() => {
     card.checklist.forEach(item => {
       if (!item.done) { item.done = true; changed = true; }
     });
-    if (changed) logActivity(card, `「${toList.title}」로 이동 — 체크리스트 완료 처리`);
+    // 3-way 동기화: 완료 리스트 이동 → done + status 모두 완료
+    if (!card.done) { card.done = true; changed = true; }
+    if (card.status !== '완료') { card.status = '완료'; changed = true; }
+    if (changed) logActivity(card, `「${toList.title}」로 이동 — 완료 처리`);
   }
 
   function moveCard(cardId, fromListId, toListId, toIndex) {
@@ -375,16 +381,30 @@ const Srello = (() => {
     if (patch.color !== undefined) card.color = patch.color;
     if (patch.priority !== undefined) {
       card.priority = patch.priority || undefined;
-      if (patch.priority && PRIORITY_COLORS[patch.priority]) card.color = PRIORITY_COLORS[patch.priority];
+      // patch.color가 명시된 경우 우선순위 색이 사용자 선택 색을 덮어쓰지 않음
+      if (patch.priority && PRIORITY_COLORS[patch.priority] && patch.color === undefined)
+        card.color = PRIORITY_COLORS[patch.priority];
     }
     if (patch.category !== undefined) card.category = patch.category || undefined;
-    if (patch.status !== undefined) card.status = patch.status || '';
+    if (patch.status !== undefined) {
+      card.status = patch.status || '';
+      // status 변경 → done 자동 동기화 (done이 명시 안 된 경우)
+      if (patch.done === undefined) card.done = card.status === '완료';
+    }
     if (patch.cover !== undefined) card.cover = patch.cover || '';
     if (patch.dueDate !== undefined) card.dueDate = patch.dueDate || '';
-    if (patch.done !== undefined) card.done = !!patch.done;
+    if (patch.done !== undefined) {
+      card.done = !!patch.done;
+      // done 변경 → status 자동 동기화 (status가 명시 안 된 경우)
+      if (patch.status === undefined) {
+        if (card.done) { if (card.status !== '완료') card.status = '완료'; }
+        else { if (card.status === '완료') card.status = ''; }
+      }
+    }
     if (patch.checklist !== undefined) card.checklist = patch.checklist;
     if (patch.comments !== undefined) card.comments = patch.comments;
     if (patch.attachments !== undefined) card.attachments = patch.attachments;
+    if (patch.linkedCardIds !== undefined) card.linkedCardIds = patch.linkedCardIds;
     card.updatedAt = new Date().toISOString();
     logActivity(card, '카드 수정');
     save();
@@ -632,6 +652,12 @@ const Srello = (() => {
             const found = findCard(listId, cardId);
             if (found) {
               found.card.done = !found.card.done;
+              // 3-way 동기화: face 토글 → status 동기화
+              if (found.card.done) {
+                found.card.status = '완료';
+              } else if (found.card.status === '완료') {
+                found.card.status = '';
+              }
               logActivity(found.card, found.card.done ? '완료로 표시' : '완료 취소');
               save();
               render();
@@ -859,8 +885,20 @@ const Srello = (() => {
           </div>
 
           <div class="srello-modal-section">
-            <div class="srello-section-hdr"><span>활동</span></div>
-            <ul class="srello-activity" id="srello-activity"></ul>
+            <div class="srello-section-hdr">
+              <span>연결된 카드</span>
+              <button type="button" class="btn btn-sm" id="srello-link-add">+ 연결</button>
+            </div>
+            <ul class="srello-linked-cards" id="srello-linked-cards"></ul>
+          </div>
+
+          <div class="srello-modal-section">
+            <button type="button" class="srello-section-hdr srello-section-toggle" id="srello-activity-toggle"
+              aria-expanded="false">
+              <span>활동 <span id="srello-activity-count"></span></span>
+              <span class="srello-toggle-chevron">▶</span>
+            </button>
+            <ul class="srello-activity" id="srello-activity" hidden></ul>
           </div>
 
           <div class="srello-modal-row">
@@ -887,6 +925,7 @@ const Srello = (() => {
     let checklist = card.checklist.map(i => ({ ...i }));
     let comments = card.comments.map(c => ({ ...c }));
     let attachments = card.attachments.map(a => ({ ...a }));
+    let linkedCardIds = (card.linkedCardIds || []).slice();
 
     // 이미지 Ctrl+V 붙여넣기
     function onPaste(e) {
@@ -913,6 +952,31 @@ const Srello = (() => {
       }
     }
     overlay.addEventListener('paste', onPaste);
+
+    function renderLinkedCards() {
+      const ul = overlay.querySelector('#srello-linked-cards');
+      if (!ul) return;
+      // 이미 삭제된 카드 ID 정리
+      linkedCardIds = linkedCardIds.filter(cid => {
+        for (const l of board.lists) { if (l.cards.find(c => c.id === cid)) return true; }
+        return false;
+      });
+      ul.innerHTML = linkedCardIds.length
+        ? linkedCardIds.map((cid, i) => {
+            let found = null;
+            for (const l of board.lists) {
+              const c = l.cards.find(c => c.id === cid);
+              if (c) { found = { card: c, list: l }; break; }
+            }
+            if (!found) return '';
+            return `<li class="srello-linked-item">
+              <button type="button" class="srello-linked-title" data-cid="${cid}" data-lid="${found.list.id}">${escHtml(found.card.title)}</button>
+              <span class="srello-linked-list">${escHtml(found.list.title)}</span>
+              <button type="button" class="btn btn-icon btn-sm" data-del-link="${i}">✕</button>
+            </li>`;
+          }).filter(Boolean).join('')
+        : '<li class="srello-empty-hint">연결된 카드 없음</li>';
+    }
 
     function renderChecklist() {
       const ul = overlay.querySelector('#srello-checklist');
@@ -958,6 +1022,8 @@ const Srello = (() => {
 
     function renderActivity() {
       const ul = overlay.querySelector('#srello-activity');
+      const countEl = overlay.querySelector('#srello-activity-count');
+      if (countEl) countEl.textContent = card.activity.length ? `(${card.activity.length}개)` : '';
       ul.innerHTML = card.activity.length
         ? card.activity.slice(0, 15).map(a => `
           <li class="srello-activity-item">
@@ -985,6 +1051,7 @@ const Srello = (() => {
       });
     }
 
+    renderLinkedCards();
     renderChecklist();
     renderComments();
     renderAttachments();
@@ -1053,6 +1120,48 @@ const Srello = (() => {
       renderAttachments();
     });
 
+    // 활동 내역 아코디언 토글
+    overlay.querySelector('#srello-activity-toggle')?.addEventListener('click', () => {
+      const ul = overlay.querySelector('#srello-activity');
+      const isOpen = !ul.hidden;
+      ul.hidden = isOpen;
+      overlay.querySelector('#srello-activity-toggle').setAttribute('aria-expanded', String(!isOpen));
+      overlay.querySelector('.srello-toggle-chevron').textContent = isOpen ? '▶' : '▼';
+    });
+
+    // 연결된 카드 추가
+    overlay.querySelector('#srello-link-add')?.addEventListener('click', () => {
+      const allCards = [];
+      board.lists.forEach(list => {
+        list.cards.forEach(c => {
+          if (c.id !== cardId && !linkedCardIds.includes(c.id))
+            allCards.push({ id: c.id, title: c.title, listTitle: list.title });
+        });
+      });
+      if (!allCards.length) { toast('연결할 수 있는 다른 카드가 없습니다.', 'info'); return; }
+      const lines = allCards.map((c, idx) => `${idx + 1}. [${c.listTitle}] ${c.title}`).join('\n');
+      const pick = prompt(`연결할 카드 번호:\n${lines}`);
+      if (pick === null) return;
+      const idx = parseInt(pick, 10) - 1;
+      if (!allCards[idx]) { toast('잘못된 번호입니다.', 'error'); return; }
+      linkedCardIds.push(allCards[idx].id);
+      renderLinkedCards();
+    });
+
+    overlay.querySelector('#srello-linked-cards')?.addEventListener('click', e => {
+      const delBtn = e.target.closest('[data-del-link]');
+      if (delBtn) {
+        linkedCardIds.splice(+delBtn.dataset.delLink, 1);
+        renderLinkedCards();
+        return;
+      }
+      const titleBtn = e.target.closest('.srello-linked-title');
+      if (titleBtn) {
+        overlay.remove();
+        openCardModal(titleBtn.dataset.lid, titleBtn.dataset.cid);
+      }
+    });
+
     overlay.querySelector('#srello-card-due-clear')?.addEventListener('click', () => {
       overlay.querySelector('#srello-card-due').value = '';
     });
@@ -1091,6 +1200,7 @@ const Srello = (() => {
         })),
         comments,
         attachments,
+        linkedCardIds: [...linkedCardIds],
       });
       overlay.remove();
       toast('카드가 저장되었습니다.', 'success');
@@ -1099,11 +1209,31 @@ const Srello = (() => {
     overlay.querySelector('#srello-card-title').focus();
   }
 
+  // 마감일 있는 카드 → Calendar 뷰 통합용 이벤트 배열 (API 호출 없이 뷰만 통합)
+  function getDueDateEvents() {
+    if (!board) load();
+    const events = [];
+    board.lists.forEach(list => {
+      list.cards.forEach(card => {
+        if (!card.dueDate) return;
+        events.push({
+          summary: `📌 ${card.title}`,
+          start: { date: card.dueDate },
+          end: { date: card.dueDate },
+          _calColor: card.done ? '#8899aa' : (card.color || '#64ffda'),
+          _isSrello: true,
+          _calName: `Srello · ${list.title}`,
+        });
+      });
+    });
+    return events;
+  }
+
   function init() {
     if (!board) load();
     bindToolbar();
     setViewMode(viewMode);
   }
 
-  return { init, render, getStats, load, exportBoard, importBoard };
+  return { init, render, getStats, load, exportBoard, importBoard, getDueDateEvents };
 })();

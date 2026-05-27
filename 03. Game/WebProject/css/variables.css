@@ -43,6 +43,9 @@
   --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* 다크모드 네이티브 입력 위젯 (date picker 등) 가시성 */
+  color-scheme: dark;
+
   /* 글자 크기 (종류별 변수) */
   --fs-title: 20px;    /* 페이지 섹션 제목 */
   --fs-card: 14px;     /* 카드 제목, 상단바 제목 */
@@ -73,5 +76,8 @@
   --color-dev: #5059d4;
   --color-media: #e09000;
   --color-accent: #00b89c;
+
+  /* 라이트모드 네이티브 입력 위젯 */
+  color-scheme: light;
 }
 

@@ -37,6 +37,12 @@ created: 2026-05-26
 | Srello — 이미지 Ctrl+V 붙여넣기 (base64, 600 KB 제한) | ✅ 완료 |
 | Srello — Status 상태 필드 (기획중·개발중·테스트중·완료·보류) | ✅ 완료 |
 | Srello — 카드 face 완료 토글 버튼 (done 필드) | ✅ 완료 |
+| Srello — 라벨 색 변경 버그 수정 (priority 색 덮어쓰기 제거) | ✅ 완료 |
+| Srello — done/status 3-way 동기화 (face·모달·리스트 이동) | ✅ 완료 |
+| Srello — 다크모드 날짜 입력 위젯 가시성 (`color-scheme: dark`) | ✅ 완료 |
+| Srello — 활동 내역 아코디언 UI (접기/펼치기 토글) | ✅ 완료 |
+| Srello — 카드 간 연결 기능 (`linkedCardIds`) | ✅ 완료 |
+| Life Calendar — Srello 마감일 통합 뷰 (점선 칩으로 구분) | ✅ 완료 |
 | 메모 — `life-memo` 패널 | ❌ 제거 → Srello로 대체 |
 
 ### 설정 / 공통
