@@ -196,7 +196,7 @@ select.input option {
   font-size: var(--fs-body);
   color: var(--text-primary);
   box-shadow: var(--shadow-glass);
-  animation: toastIn 0.3s var(--transition);
+  animation: toastIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 220px;
 }
 
@@ -429,7 +429,7 @@ select.input option {
   width: 90%;
   max-width: 480px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  animation: modalIn 0.3s var(--transition);
+  animation: modalIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes fadeIn {
