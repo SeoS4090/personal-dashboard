@@ -614,7 +614,9 @@ const Srello = (() => {
       return `
       <div class="srello-list" data-list-id="${list.id}" data-list-idx="${listIdx}">
         <div class="srello-list-header">
-          <span class="srello-list-handle" title="드래그하여 순서 변경">⋮⋮</span>
+          <span class="srello-list-handle" draggable="true"
+            data-list-id="${list.id}" data-list-idx="${listIdx}"
+            title="드래그하여 순서 변경">⋮⋮</span>
           <input type="text" class="srello-list-title input" value="${escHtml(list.title)}"
             aria-label="리스트 제목" maxlength="80"
             data-action="rename-list" data-list-id="${list.id}">
@@ -767,20 +769,13 @@ const Srello = (() => {
       el.addEventListener('dragend', onDragEnd);
     });
 
-    // 리스트 드래그 (핸들 mousedown → list draggable 임시 활성)
+    // 리스트 드래그 — 핸들(⋮⋮) 자체가 draggable="true", 핸들에 직접 바인딩
     container.querySelectorAll('.srello-list-handle').forEach(handle => {
-      handle.addEventListener('mousedown', () => {
-        const listEl = handle.closest('.srello-list');
-        if (listEl) listEl.setAttribute('draggable', 'true');
-      });
-      handle.addEventListener('mouseup', () => {
-        const listEl = handle.closest('.srello-list');
-        if (listEl) listEl.setAttribute('draggable', 'false');
-      });
+      handle.addEventListener('dragstart', onListDragStart);
+      handle.addEventListener('dragend', onListDragEnd);
     });
+    // 리스트 전체는 드롭 존으로만 사용
     container.querySelectorAll('.srello-list:not(.srello-list--add)').forEach(el => {
-      el.addEventListener('dragstart', onListDragStart);
-      el.addEventListener('dragend', onListDragEnd);
       el.addEventListener('dragover', onListDragOver);
       el.addEventListener('dragleave', onListDragLeave);
       el.addEventListener('drop', onListDrop);
@@ -825,20 +820,21 @@ const Srello = (() => {
     }
   }
 
-  /* ── 리스트 드래그 ── */
+  /* ── 리스트 드래그 (dragstart/dragend는 핸들에 바인딩) ── */
   function onListDragStart(e) {
-    if (drag?.kind === 'card') return; // 카드 드래그 중이면 무시
-    const el = e.currentTarget;
-    const idx = parseInt(el.dataset.listIdx, 10);
-    drag = { kind: 'list', listId: el.dataset.listId, fromIdx: idx };
-    el.classList.add('srello-list--dragging');
+    // e.currentTarget = .srello-list-handle (draggable="true" 원소)
+    const handle = e.currentTarget;
+    const listId = handle.dataset.listId;
+    const fromIdx = parseInt(handle.dataset.listIdx, 10);
+    drag = { kind: 'list', listId, fromIdx };
+    handle.closest('.srello-list')?.classList.add('srello-list--dragging');
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', el.dataset.listId);
+    e.dataTransfer.setData('text/plain', listId);
+    e.stopPropagation();
   }
 
   function onListDragEnd(e) {
-    e.currentTarget.classList.remove('srello-list--dragging');
-    e.currentTarget.setAttribute('draggable', 'false');
+    e.currentTarget.closest('.srello-list')?.classList.remove('srello-list--dragging');
     document.querySelectorAll('.srello-list--drop-over').forEach(el => el.classList.remove('srello-list--drop-over'));
     if (drag?.kind === 'list') drag = null;
   }
