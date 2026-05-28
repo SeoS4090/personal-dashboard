@@ -2,7 +2,7 @@
   <div class="section-header">
     <div>
       <div class="section-title" style="color:var(--color-life)">📋 Srello</div>
-      <div class="section-desc">브라우저 localStorage 저장 · JSON 백업은 로컬 파일만</div>
+      <div class="section-desc">브라우저 localStorage 저장 · 프로젝트별 분리 관리</div>
     </div>
     <div class="srello-toolbar">
       <button type="button" class="btn btn-sm" id="srello-view-board" title="칸반 보드">▦ 보드</button>
@@ -12,6 +12,11 @@
       <input type="file" id="srello-import-file" accept=".json,application/json" hidden>
       <button type="button" class="btn btn-sm" id="srello-settings-btn" title="Srello 설정">⚙</button>
     </div>
+  </div>
+  <div class="srello-project-bar">
+    <select id="srello-project-select" class="input srello-project-select" title="프로젝트 선택"></select>
+    <span class="srello-sync-badge" id="srello-sync-badge"></span>
+    <button type="button" class="btn btn-sm" id="srello-project-manage" title="프로젝트 관리">⚙ 프로젝트</button>
   </div>
   <div id="srello-filters" class="srello-filters" aria-label="필터"></div>
   <div id="srello-board" class="srello-board" aria-label="Srello 보드"></div>

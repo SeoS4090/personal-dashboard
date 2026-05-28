@@ -708,6 +708,94 @@ select.input option {
 }
 
 /* ── Srello (칸반) ── */
+
+/* 프로젝트 바 */
+.srello-project-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+}
+
+.srello-project-select {
+  flex: 0 1 auto;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 5px 8px;
+  font-size: 0.85rem;
+  height: auto;
+}
+
+.srello-sync-badge {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.srello-sync-local        { background: rgba(136, 153, 170, 0.18); color: #8899aa; }
+.srello-sync-never        { background: rgba(124, 131, 255, 0.15); color: #7c83ff; }
+.srello-sync-dirty        { background: rgba(255, 209, 102, 0.15); color: #ffd166; }
+.srello-sync-synced       { background: rgba(100, 255, 218, 0.15); color: #64ffda; }
+.srello-sync-syncing      { background: rgba(124, 131, 255, 0.2);  color: #7c83ff; animation: srello-pulse 1.2s ease-in-out infinite; }
+.srello-sync-failed       { background: rgba(255, 107, 157, 0.15); color: #ff6b9d; }
+.srello-sync-disconnected { background: rgba(136, 153, 170, 0.15); color: #8899aa; }
+
+@keyframes srello-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* 프로젝트 관리 모달 */
+.srello-project-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.srello-project-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.srello-project-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.srello-project-default-badge {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(100, 255, 218, 0.15);
+  color: #64ffda;
+  font-weight: 600;
+}
+
+.srello-project-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.srello-project-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.srello-project-add-row .input {
+  flex: 1;
+}
+
 .srello-toolbar {
   display: flex;
   gap: 8px;
@@ -918,12 +1006,6 @@ select.input option {
   white-space: pre-wrap;
 }
 
-#srello-card-desc {
-  resize: none;
-  overflow-y: hidden;
-  min-height: 80px;
-  box-sizing: border-box;
-}
 
 .srello-add-card,
 .srello-add-list {
@@ -1184,6 +1266,7 @@ select.input option {
   flex-shrink: 0;
   overflow-y: auto;
   padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* Accordion */
@@ -1234,11 +1317,13 @@ select.input option {
   gap: 6px;
 }
 
-/* Textarea 자동 높이 — overflow:hidden 이 핵심 */
+/* Textarea 자동 높이 — flex-shrink:0 으로 압축 방지 */
 .srello-desc-area {
   resize: none;
   overflow: hidden;
   min-height: 72px;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /* 좁은 화면 반응형 (모바일) */
@@ -1496,10 +1581,24 @@ select.input option {
   outline: 1px dashed rgba(100, 255, 218, 0.4);
   pointer-events: none;
 }
-.srello-list--drop-over:not(.srello-list--add) {
-  outline: 2px solid rgba(100, 255, 218, 0.55);
-  outline-offset: -2px;
-  background: rgba(100, 255, 218, 0.04);
+/* 카드 드롭 플레이스홀더 */
+.srello-card-placeholder {
+  height: 56px;
+  border: 2px dashed rgba(100, 255, 218, 0.5);
+  border-radius: var(--border-radius-sm);
+  background: rgba(100, 255, 218, 0.05);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* 리스트 드롭 플레이스홀더 (세로 인디케이터) */
+.srello-list-placeholder {
+  flex: 0 0 4px;
+  min-width: 4px;
+  background: rgba(100, 255, 218, 0.7);
+  border-radius: 2px;
+  align-self: stretch;
+  pointer-events: none;
 }
 
 /* ── 정렬 드롭다운 ── */
