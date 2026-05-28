@@ -708,6 +708,223 @@ select.input option {
 }
 
 /* ── Srello (칸반) ── */
+
+/* 프로젝트 바 */
+.srello-project-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+}
+
+.srello-project-select {
+  flex: 0 1 auto;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 5px 8px;
+  font-size: 0.85rem;
+  height: auto;
+}
+
+.srello-sync-badge {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.srello-sync-local        { background: rgba(136, 153, 170, 0.18); color: #8899aa; }
+.srello-sync-never        { background: rgba(124, 131, 255, 0.15); color: #7c83ff; }
+.srello-sync-dirty        { background: rgba(255, 209, 102, 0.15); color: #ffd166; }
+.srello-sync-synced       { background: rgba(100, 255, 218, 0.15); color: #64ffda; }
+.srello-sync-syncing      { background: rgba(124, 131, 255, 0.2);  color: #7c83ff; animation: srello-pulse 1.2s ease-in-out infinite; }
+.srello-sync-failed       { background: rgba(255, 107, 157, 0.15); color: #ff6b9d; }
+.srello-sync-disconnected { background: rgba(136, 153, 170, 0.15); color: #8899aa; }
+.srello-sync-offline      { background: rgba(255, 159, 67, 0.15);  color: #ff9f43; }
+
+@keyframes srello-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* 프로젝트 관리 모달 */
+.srello-project-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.srello-project-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.srello-project-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.srello-project-default-badge {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(100, 255, 218, 0.15);
+  color: #64ffda;
+  font-weight: 600;
+}
+
+.srello-project-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.srello-project-sheet-badge {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.srello-project-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.srello-project-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.srello-project-add-row .input {
+  flex: 1;
+}
+
+/* ── Srello 시트 연결 모달 ── */
+.srello-connect-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.srello-connect-warn {
+  color: #ffd166;
+  font-size: 0.83rem;
+}
+
+.srello-connect-section {
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.srello-connect-section-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.srello-connect-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 4px 0 10px;
+}
+
+.srello-connect-divider {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 4px 0;
+  position: relative;
+}
+
+.srello-connect-divider::before,
+.srello-connect-divider::after {
+  content: '';
+  display: inline-block;
+  width: 40%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+  margin: 0 8px;
+}
+
+.srello-connect-url-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.srello-connect-url-row .input {
+  flex: 1;
+}
+
+.srello-connect-error {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255, 107, 157, 0.1);
+  color: #ff6b9d;
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+/* ── Srello 충돌 모달 ── */
+.srello-conflict-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.srello-conflict-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.srello-conflict-side {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.srello-conflict-side-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.srello-conflict-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.84rem;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.srello-conflict-row:last-child {
+  border-bottom: none;
+}
+
+.srello-conflict-label { color: var(--text-muted); }
+.srello-conflict-value { color: var(--text-main); text-align: right; }
+
 .srello-toolbar {
   display: flex;
   gap: 8px;
@@ -918,12 +1135,6 @@ select.input option {
   white-space: pre-wrap;
 }
 
-#srello-card-desc {
-  resize: none;
-  overflow-y: hidden;
-  min-height: 80px;
-  box-sizing: border-box;
-}
 
 .srello-add-card,
 .srello-add-list {
@@ -1184,6 +1395,7 @@ select.input option {
   flex-shrink: 0;
   overflow-y: auto;
   padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* Accordion */
@@ -1234,11 +1446,13 @@ select.input option {
   gap: 6px;
 }
 
-/* Textarea 자동 높이 — overflow:hidden 이 핵심 */
+/* Textarea 자동 높이 — flex-shrink:0 으로 압축 방지 */
 .srello-desc-area {
   resize: none;
   overflow: hidden;
   min-height: 72px;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /* 좁은 화면 반응형 (모바일) */
@@ -1496,10 +1710,24 @@ select.input option {
   outline: 1px dashed rgba(100, 255, 218, 0.4);
   pointer-events: none;
 }
-.srello-list--drop-over:not(.srello-list--add) {
-  outline: 2px solid rgba(100, 255, 218, 0.55);
-  outline-offset: -2px;
-  background: rgba(100, 255, 218, 0.04);
+/* 카드 드롭 플레이스홀더 */
+.srello-card-placeholder {
+  height: 56px;
+  border: 2px dashed rgba(100, 255, 218, 0.5);
+  border-radius: var(--border-radius-sm);
+  background: rgba(100, 255, 218, 0.05);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* 리스트 드롭 플레이스홀더 (세로 인디케이터) */
+.srello-list-placeholder {
+  flex: 0 0 4px;
+  min-width: 4px;
+  background: rgba(100, 255, 218, 0.7);
+  border-radius: 2px;
+  align-self: stretch;
+  pointer-events: none;
 }
 
 /* ── 정렬 드롭다운 ── */

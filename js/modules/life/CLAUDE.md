@@ -63,10 +63,17 @@
 - [x] Srello 카드 정렬 드롭다운 — 수동/우선순위/마감일↑↓/상태/제목 (srello_sort_mode)
 - [x] Srello Settings 모달 — 라벨 색상·카테고리 CRUD (srello_settings, 기본: 기획·아트·개발·사운드·공통)
 - [x] Srello 카드 모달 2-컬럼 레이아웃 — 좌: 내용(설명·체크리스트·댓글·첨부·연결·활동) / 우: 설정 사이드바 아코디언(마감일·우선순위·카테고리·상태·커버·라벨색)
-- [x] Srello 카드 desc textarea 자동 높이 버그 수정 (overflow:hidden + min-height)
+- [x] Srello 카드 desc textarea 자동 높이 (flex-shrink:0 + requestAnimationFrame 재측정으로 flex 압축 문제 해결)
 - [x] Srello 모달 반응형 — 720px 이하에서 단일 컬럼 폴백
+- [x] Srello 리스트 드래그 핸들 개선 — handle span에 draggable 직접 부여, mousedown 플래그 경쟁 조건 제거
+- [x] Srello 카드·리스트 드래그 플레이스홀더 UI — 카드 사이 점선 슬롯 / 리스트 사이 세로 청록색 바로 삽입 위치 표시
+- [x] Srello 카드 드래그 시 수동 정렬 자동 전환 — priority 등 자동 정렬 중 드래그하면 manual로 전환
+- [x] Srello 멀티 프로젝트 기반 (1a) — `srello_board_<projectId>` 분리, v1→v2 마이그레이션(백업·롤백), 프로젝트 드롭다운·관리 모달(CRUD·기본 설정), 로컬 전용 배지, `srello-projects.js` 분리
 
 ## TODO
 
 - [ ] 뉴스 카테고리 필터 버튼 (기술·게임·개발) 활성화
 - [ ] 홈 카드 — 오늘 일정 미리보기 표시
+- [x] Srello Google Sheets 연동 (1b) — Sheets scope OAuth, URL 파싱, 시트 자동 생성/기존 연결, srello-sync.js
+- [x] Srello 수동 Push/Pull (1c) — ⬆ 저장 / ⬇ 불러오기 버튼, dirty 마킹, 충돌 3선택 모달, executePull, lastRemoteUpdatedAt 검사
+- [x] Srello 동기화 피드백 (1e) — lastSyncedAt 배지 표시(동기화됨 · N분 전), OAuth 미설정 경고 배지, 오프라인 감지(online/offline 이벤트, 버튼 비활성화/복원)

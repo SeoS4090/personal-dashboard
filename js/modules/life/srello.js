@@ -1,6 +1,5 @@
 /* ── Srello — Trello 스타일 칸반 (localStorage) ── */
 const Srello = (() => {
-  const KEY = 'srello_board';
   const TPL_KEY = 'srello_templates';
   const VIEW_KEY = 'srello_view_mode';
   const SETTINGS_KEY = 'srello_settings';
@@ -17,12 +16,57 @@ const Srello = (() => {
 
   let board = null;
   let drag = null;          // { kind:'card'|'list', cardId?, fromListId?, listId?, fromIdx? }
+  let _inSync = false;      // Pull 중 save() dirty 마킹 차단용
   let viewMode = localStorage.getItem(VIEW_KEY) || 'board';
   let filterPriority = '';
   let filterCategory = '';
   let sortMode = localStorage.getItem(SORT_KEY) || 'priority';
   let boardContainerBound = false;
-  let listDragHandle = false; // handle mousedown → list dragstart 허용 플래그
+  let listDragHandle = false;
+  let cardPlaceholder = null;
+  let listPlaceholder = null;
+  let _offlineListenerBound = false;
+
+  function getCardPlaceholder() {
+    if (!cardPlaceholder) {
+      cardPlaceholder = document.createElement('div');
+      cardPlaceholder.className = 'srello-card-placeholder';
+    }
+    return cardPlaceholder;
+  }
+
+  function getListPlaceholder() {
+    if (!listPlaceholder) {
+      listPlaceholder = document.createElement('div');
+      listPlaceholder.className = 'srello-list-placeholder';
+      // 플레이스홀더 위에서 드롭해도 처리되도록
+      listPlaceholder.addEventListener('dragover', e => {
+        if (drag?.kind !== 'list') return;
+        e.preventDefault();
+        e.stopPropagation();
+      });
+      listPlaceholder.addEventListener('drop', e => {
+        if (drag?.kind !== 'list') return;
+        e.preventDefault();
+        e.stopPropagation();
+        const scroll = listPlaceholder.parentElement;
+        let toIdx = 0;
+        if (scroll) {
+          for (const child of scroll.children) {
+            if (child === listPlaceholder) break;
+            if (child.classList.contains('srello-list') &&
+                !child.classList.contains('srello-list--add') &&
+                !child.classList.contains('srello-list--dragging')) toIdx++;
+          }
+        }
+        listPlaceholder.remove();
+        const fromIdx = drag.fromIdx;
+        drag = null;
+        if (fromIdx !== toIdx) reorderList(fromIdx, toIdx);
+      });
+    }
+    return listPlaceholder;
+  }
 
   function genId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -55,6 +99,12 @@ const Srello = (() => {
 
   function getColors() { return getSettings().colors.map(c => c.hex); }
   function getCategories() { return getSettings().categories.map(c => c.name); }
+
+  function getBoardKey() {
+    if (typeof SrelloProjects !== 'undefined')
+      return SrelloProjects.boardKey(SrelloProjects.getCurrentId());
+    return 'srello_board';
+  }
 
   function defaultBoard() {
     return {
@@ -114,7 +164,7 @@ const Srello = (() => {
 
   function load() {
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(getBoardKey());
       board = raw ? JSON.parse(raw) : { lists: [] };
       if (!board?.lists) board = { lists: [] };
     } catch {
@@ -126,7 +176,19 @@ const Srello = (() => {
   }
 
   function save() {
-    localStorage.setItem(KEY, JSON.stringify(board));
+    board.lastEditedAt = new Date().toISOString();
+    localStorage.setItem(getBoardKey(), JSON.stringify(board));
+    if (!_inSync && typeof SrelloProjects !== 'undefined') {
+      const id = SrelloProjects.getCurrentId();
+      const project = SrelloProjects.getProjects().find(p => p.id === id);
+      if (project?.sheetId) {
+        const status = SrelloProjects.getStatus(id);
+        if (['synced', 'never_synced', 'failed'].includes(status.state)) {
+          SrelloProjects.setStatus(id, 'dirty');
+          renderProjectBar();
+        }
+      }
+    }
     if (typeof App !== 'undefined') App.updateHomeLifePreview();
   }
 
@@ -248,6 +310,505 @@ const Srello = (() => {
     reader.readAsText(file, 'utf-8');
   }
 
+  /* ── 프로젝트 바 UI ── */
+  function renderProjectBar() {
+    const select = document.getElementById('srello-project-select');
+    const badge  = document.getElementById('srello-sync-badge');
+    if (!select || typeof SrelloProjects === 'undefined') return;
+
+    const projects = SrelloProjects.getProjects();
+    const currentId = SrelloProjects.getCurrentId();
+    select.innerHTML = projects
+      .map(p => `<option value="${p.id}"${p.id === currentId ? ' selected' : ''}>${escHtml(p.name)}</option>`)
+      .join('');
+
+    if (!badge) return;
+
+    // 오프라인 오버레이 — 다른 상태보다 우선 표시
+    if (!navigator.onLine) {
+      badge.textContent = '오프라인';
+      badge.className = 'srello-sync-badge srello-sync-offline';
+      badge.title = '인터넷에 연결되어 있지 않습니다';
+      return;
+    }
+
+    const project = projects.find(p => p.id === currentId);
+    const status  = SrelloProjects.getStatus(currentId);
+
+    if (!project?.sheetId) {
+      badge.textContent = '로컬 전용';
+      badge.className = 'srello-sync-badge srello-sync-local';
+      badge.title = '';
+      return;
+    }
+
+    // OAuth Client ID 미설정 경고
+    if (!localStorage.getItem('gcal_client_id')) {
+      badge.textContent = 'OAuth 미설정';
+      badge.className = 'srello-sync-badge srello-sync-failed';
+      badge.title = 'Google OAuth Client ID를 설정 패널에서 입력하세요 (일정 탭과 동일)';
+      return;
+    }
+
+    const BADGE = {
+      never_synced:  { label: '미동기화',    cls: 'srello-sync-never' },
+      dirty:         { label: '변경됨',      cls: 'srello-sync-dirty' },
+      synced:        { label: '동기화됨',    cls: 'srello-sync-synced' },
+      syncing:       { label: '동기화 중…', cls: 'srello-sync-syncing' },
+      failed:        { label: '동기화 실패', cls: 'srello-sync-failed' },
+      disconnected:  { label: '연결 해제',   cls: 'srello-sync-disconnected' },
+    };
+    const b = BADGE[status.state] || BADGE.never_synced;
+
+    // synced 상태일 때 배지 레이블에 상대 시간 포함
+    let label = b.label;
+    if (status.state === 'synced' && status.lastSyncedAt) {
+      label = `동기화됨 · ${relativeTime(status.lastSyncedAt)}`;
+    }
+    badge.textContent = label;
+    badge.className = `srello-sync-badge ${b.cls}`;
+    badge.title = status.lastSyncedAt
+      ? `마지막 동기화: ${new Date(status.lastSyncedAt).toLocaleString('ko-KR')}`
+      : '';
+  }
+
+  /* ── 시간 포맷 헬퍼 ── */
+  function relativeTime(iso) {
+    if (!iso) return '—';
+    const d = Date.now() - new Date(iso).getTime();
+    if (d < 60000)    return '방금 전';
+    if (d < 3600000)  return `${Math.floor(d / 60000)}분 전`;
+    if (d < 86400000) return `${Math.floor(d / 3600000)}시간 전`;
+    return `${Math.floor(d / 86400000)}일 전`;
+  }
+
+  /* ── Push / Pull 버튼 상태 ── */
+  function updateSyncButtons(loading) {
+    const push = document.getElementById('srello-push-btn');
+    const pull = document.getElementById('srello-pull-btn');
+    const offline = !navigator.onLine;
+    if (push) { push.disabled = loading || offline; push.textContent = loading ? '저장 중…'    : '⬆ 저장'; }
+    if (pull) { pull.disabled = loading || offline; pull.textContent = loading ? '불러오는 중…' : '⬇ 불러오기'; }
+  }
+
+  /* ── 오프라인 감지 ── */
+  function initOfflineDetection() {
+    if (_offlineListenerBound) return;
+    window.addEventListener('online',  () => { renderProjectBar(); updateSyncButtons(false); });
+    window.addEventListener('offline', () => { renderProjectBar(); updateSyncButtons(false); });
+    _offlineListenerBound = true;
+  }
+
+  /* ── 충돌 모달 ── */
+  function openConflictModal(localInfo, remoteInfo, onPull, onPush, onCancel) {
+    document.querySelector('.modal-overlay.srello-conflict-modal')?.remove();
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay srello-conflict-modal';
+    overlay.innerHTML = `
+      <div class="modal srello-modal">
+        <div class="srello-modal-hdr">⚠ 충돌이 감지되었습니다</div>
+        <div class="srello-modal-body">
+          <p class="srello-conflict-desc">마지막 동기화 이후 원격과 로컬 모두 변경되었습니다. 어떤 버전을 유지할지 선택하세요.</p>
+          <div class="srello-conflict-grid">
+            <div class="srello-conflict-side">
+              <div class="srello-conflict-side-title">원격 (Google Sheets)</div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정자</span>
+                <span class="srello-conflict-value">${escHtml(remoteInfo.updatedBy || '—')}</span>
+              </div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정 시각</span>
+                <span class="srello-conflict-value">${escHtml(relativeTime(remoteInfo.updatedAt))}</span>
+              </div>
+            </div>
+            <div class="srello-conflict-side">
+              <div class="srello-conflict-side-title">로컬 (이 브라우저)</div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정자</span>
+                <span class="srello-conflict-value">${escHtml(localInfo.updatedBy)}</span>
+              </div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정 시각</span>
+                <span class="srello-conflict-value">${escHtml(relativeTime(localInfo.updatedAt))}</span>
+              </div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">카드 수</span>
+                <span class="srello-conflict-value">${localInfo.cardCount}개</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="srello-modal-footer">
+          <button type="button" class="btn" id="srello-conflict-cancel">취소</button>
+          <div class="srello-modal-footer-right">
+            <button type="button" class="btn" id="srello-conflict-pull">원격으로 덮어쓰기</button>
+            <button type="button" class="btn btn-primary" id="srello-conflict-push">로컬로 덮어쓰기</button>
+          </div>
+        </div>
+      </div>`;
+
+    overlay.querySelector('#srello-conflict-cancel')?.addEventListener('click', () => { overlay.remove(); onCancel(); });
+    overlay.querySelector('#srello-conflict-pull')?.addEventListener('click',   () => { overlay.remove(); onPull(); });
+    overlay.querySelector('#srello-conflict-push')?.addEventListener('click',   () => { overlay.remove(); onPush(); });
+    overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.remove(); onCancel(); } });
+    document.body.appendChild(overlay);
+  }
+
+  /* ── Pull 실행 (handlePush 충돌 분기에서도 재사용) ── */
+  async function executePull(projectId, sheetId) {
+    _inSync = true;
+    try {
+      const { meta, boardJson } = await SrelloSync.pullBoard(sheetId);
+      board = JSON.parse(boardJson);
+      if (!board.lists) board.lists = [];
+      board.lastEditedAt = meta.updatedAt;
+      migrateBoardFields();
+      save(); // _inSync=true → dirty 마킹 없음
+      const now = new Date().toISOString();
+      SrelloProjects.setStatus(projectId, 'synced', { lastSyncedAt: now, lastRemoteUpdatedAt: meta.updatedAt });
+      render();
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('Google Sheets에서 보드를 불러왔습니다.', 'success');
+    } catch (err) {
+      SrelloProjects.setStatus(projectId, 'failed');
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('불러오기 실패: ' + err.message, 'error');
+    } finally {
+      _inSync = false;
+    }
+  }
+
+  /* ── Push ── */
+  async function handlePush() {
+    if (typeof SrelloProjects === 'undefined' || typeof SrelloSync === 'undefined') return;
+    const projectId = SrelloProjects.getCurrentId();
+    const project   = SrelloProjects.getProjects().find(p => p.id === projectId);
+
+    if (!project?.sheetId) {
+      openConnectSheetModal(projectId, () => toast('시트 연결 후 저장을 다시 시도하세요.', 'info'));
+      return;
+    }
+    const status = SrelloProjects.getStatus(projectId);
+    if (status.state === 'syncing') return;
+
+    SrelloProjects.setStatus(projectId, 'syncing');
+    renderProjectBar();
+    updateSyncButtons(true);
+
+    try {
+      if (!SrelloSync.isConnected()) await SrelloSync.authorize();
+
+      const remoteMeta = await SrelloSync.fetchRemoteMeta(project.sheetId);
+
+      // 충돌 감지: 원격 updatedAt이 있고, 마지막으로 우리가 쓴 값과 다를 때
+      if (remoteMeta?.updatedAt && remoteMeta.updatedAt !== status.lastRemoteUpdatedAt) {
+        const localCardCount = board.lists.reduce((acc, l) => acc + l.cards.length, 0);
+        const choice = await new Promise(resolve => {
+          openConflictModal(
+            { updatedAt: board.lastEditedAt, updatedBy: '이 기기', cardCount: localCardCount },
+            { updatedAt: remoteMeta.updatedAt, updatedBy: remoteMeta.updatedBy || '다른 기기' },
+            () => resolve('pull'),
+            () => resolve('push'),
+            () => resolve('cancel')
+          );
+        });
+        if (choice === 'cancel') {
+          SrelloProjects.setStatus(projectId, 'dirty');
+          renderProjectBar();
+          updateSyncButtons(false);
+          return;
+        }
+        if (choice === 'pull') {
+          await executePull(projectId, project.sheetId);
+          return;
+        }
+        // choice === 'push' → 계속 진행
+      }
+
+      const pushedAt = await SrelloSync.pushBoard(project.sheetId, projectId, board);
+      const now = new Date().toISOString();
+      SrelloProjects.setStatus(projectId, 'synced', { lastSyncedAt: now, lastRemoteUpdatedAt: pushedAt });
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('보드를 Google Sheets에 저장했습니다.', 'success');
+
+    } catch (err) {
+      SrelloProjects.setStatus(projectId, 'failed');
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('저장 실패: ' + err.message, 'error');
+    }
+  }
+
+  /* ── Pull ── */
+  async function handlePull() {
+    if (typeof SrelloProjects === 'undefined' || typeof SrelloSync === 'undefined') return;
+    const projectId = SrelloProjects.getCurrentId();
+    const project   = SrelloProjects.getProjects().find(p => p.id === projectId);
+
+    if (!project?.sheetId) {
+      openConnectSheetModal(projectId, () => toast('시트 연결 후 불러오기를 다시 시도하세요.', 'info'));
+      return;
+    }
+    const status = SrelloProjects.getStatus(projectId);
+    if (status.state === 'syncing') return;
+
+    SrelloProjects.setStatus(projectId, 'syncing');
+    renderProjectBar();
+    updateSyncButtons(true);
+
+    try {
+      if (!SrelloSync.isConnected()) await SrelloSync.authorize();
+    } catch (err) {
+      SrelloProjects.setStatus(projectId, 'failed');
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('인증 실패: ' + err.message, 'error');
+      return;
+    }
+    await executePull(projectId, project.sheetId);
+  }
+
+  function switchProject(newId) {
+    if (typeof SrelloProjects === 'undefined') return;
+    if (SrelloProjects.getCurrentId() === newId) return;
+    SrelloProjects.setCurrentId(newId);
+    board = null;
+    load();
+    render();
+    renderProjectBar();
+    const name = SrelloProjects.getProjects().find(p => p.id === newId)?.name;
+    if (name) toast(`「${name}」 프로젝트로 전환했습니다.`, 'info');
+  }
+
+  /* ── 시트 연결 모달 ── */
+  function openConnectSheetModal(projectId, onSuccess) {
+    if (typeof SrelloSync === 'undefined') {
+      toast('SrelloSync 모듈이 로드되지 않았습니다.', 'error');
+      return;
+    }
+    document.querySelector('.modal-overlay.srello-connect-modal')?.remove();
+
+    const project = SrelloProjects.getProjects().find(p => p.id === projectId);
+    if (!project) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay srello-connect-modal';
+    overlay.innerHTML = `
+      <div class="modal srello-modal">
+        <div class="srello-modal-hdr">📊 Google Sheets 연결 — ${escHtml(project.name)}</div>
+        <div class="srello-modal-body">
+          <p class="srello-connect-desc">
+            이 프로젝트를 Google Sheets에 연결하면 다른 기기에서도 보드를 불러올 수 있습니다.<br>
+            <span class="srello-connect-warn">GCP 프로젝트에서 Google Sheets API가 활성화되어 있어야 합니다.</span>
+          </p>
+          <div class="srello-connect-section">
+            <div class="srello-connect-section-title">새 시트 만들기</div>
+            <p class="srello-connect-hint">Google Drive에 「Srello — ${escHtml(project.name)}」 파일을 자동 생성합니다.</p>
+            <button type="button" class="btn btn-primary btn-sm" id="srello-connect-create">새 시트 만들기</button>
+          </div>
+          <div class="srello-connect-divider">또는</div>
+          <div class="srello-connect-section">
+            <div class="srello-connect-section-title">기존 시트 연결</div>
+            <div class="srello-connect-url-row">
+              <input type="text" class="input" id="srello-connect-url"
+                placeholder="Google Sheets URL 또는 ID" autocomplete="off">
+              <button type="button" class="btn btn-sm btn-primary" id="srello-connect-link">연결</button>
+            </div>
+            <p class="srello-connect-hint">URL 예시: docs.google.com/spreadsheets/d/<strong>시트ID</strong>/…</p>
+          </div>
+          <div class="srello-connect-error" id="srello-connect-error" style="display:none"></div>
+        </div>
+        <div class="srello-modal-footer">
+          <div></div>
+          <button type="button" class="btn" id="srello-connect-close">닫기</button>
+        </div>
+      </div>`;
+
+    function setLoading(on) {
+      overlay.querySelectorAll('button:not(#srello-connect-close)').forEach(b => { b.disabled = on; });
+      overlay.querySelector('#srello-connect-create').textContent = on ? '처리 중…' : '새 시트 만들기';
+      overlay.querySelector('#srello-connect-link').textContent   = on ? '처리 중…' : '연결';
+    }
+
+    function setError(msg) {
+      const el = overlay.querySelector('#srello-connect-error');
+      if (!el) return;
+      el.textContent = msg ? '⚠ ' + msg : '';
+      el.style.display = msg ? '' : 'none';
+    }
+
+    async function runWithAuth(fn) {
+      setLoading(true);
+      setError('');
+      try {
+        if (!SrelloSync.isConnected()) await SrelloSync.authorize();
+        await fn();
+        overlay.remove();
+        renderProjectBar();
+        if (onSuccess) onSuccess();
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    }
+
+    overlay.querySelector('#srello-connect-create')?.addEventListener('click', () => {
+      runWithAuth(async () => {
+        await SrelloSync.createAndConnect(projectId, project.name);
+        toast(`「${project.name}」를 새 Google Sheets에 연결했습니다.`, 'success');
+      });
+    });
+
+    const linkFn = () => {
+      const input = overlay.querySelector('#srello-connect-url');
+      const sheetId = SrelloSync.parseSheetId(input?.value || '');
+      if (!sheetId) {
+        setError('유효하지 않은 URL 또는 ID입니다. Google Sheets URL 전체 또는 ID(20자 이상)를 입력하세요.');
+        return;
+      }
+      runWithAuth(async () => {
+        await SrelloSync.connectExisting(projectId, sheetId);
+        toast(`「${project.name}」를 기존 Google Sheets에 연결했습니다.`, 'success');
+      });
+    };
+    overlay.querySelector('#srello-connect-link')?.addEventListener('click', linkFn);
+    overlay.querySelector('#srello-connect-url')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); linkFn(); }
+    });
+
+    overlay.querySelector('#srello-connect-close')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+
+  function openProjectModal() {
+    if (typeof SrelloProjects === 'undefined') return;
+    document.querySelector('.modal-overlay.srello-project-modal')?.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay srello-project-modal';
+
+    function renderModal() {
+      const projects  = SrelloProjects.getProjects();
+      const defaultId = SrelloProjects.getDefaultId();
+
+      overlay.innerHTML = `
+        <div class="modal srello-modal">
+          <div class="srello-modal-hdr">⚙ 프로젝트 관리</div>
+          <div class="srello-modal-body">
+            <ul class="srello-project-list" id="srello-project-list">
+              ${projects.map(p => `
+                <li class="srello-project-item">
+                  <div class="srello-project-info">
+                    <span class="srello-project-name">${escHtml(p.name)}</span>
+                    ${p.id === defaultId ? '<span class="srello-project-default-badge">기본</span>' : ''}
+                    ${p.sheetId ? '<span class="srello-project-sheet-badge" title="Google Sheets 연결됨">📊</span>' : ''}
+                  </div>
+                  <div class="srello-project-actions">
+                    ${p.id === defaultId ? '' : `<button type="button" class="btn btn-sm" data-action="set-default" data-id="${p.id}">기본으로</button>`}
+                    <button type="button" class="btn btn-sm" data-action="rename" data-id="${p.id}" data-name="${escHtml(p.name)}">이름 변경</button>
+                    ${p.sheetId
+                      ? `<button type="button" class="btn btn-sm" data-action="disconnect-sheet" data-id="${p.id}" data-name="${escHtml(p.name)}">연결 해제</button>`
+                      : `<button type="button" class="btn btn-sm btn-primary" data-action="connect-sheet" data-id="${p.id}" data-name="${escHtml(p.name)}">시트 연결</button>`}
+                    ${projects.length > 1 ? `<button type="button" class="btn btn-sm" style="color:var(--color-game)" data-action="delete" data-id="${p.id}" data-name="${escHtml(p.name)}">삭제</button>` : ''}
+                  </div>
+                </li>`).join('')}
+            </ul>
+            <div class="srello-project-add-row">
+              <input type="text" class="input" id="srello-new-project-name" placeholder="새 프로젝트 이름" maxlength="40">
+              <button type="button" class="btn btn-sm btn-primary" id="srello-add-project-btn">+ 만들기</button>
+            </div>
+          </div>
+          <div class="srello-modal-footer">
+            <div></div>
+            <button type="button" class="btn" id="srello-project-modal-close">닫기</button>
+          </div>
+        </div>`;
+      bindModalEvents();
+    }
+
+    function bindModalEvents() {
+      overlay.querySelector('#srello-project-modal-close')?.addEventListener('click', () => overlay.remove());
+      overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+      const addProject = () => {
+        const input = overlay.querySelector('#srello-new-project-name');
+        const name = input?.value.trim();
+        if (!name) { toast('프로젝트 이름을 입력하세요.', 'error'); return; }
+        SrelloProjects.createProject(name);
+        if (input) input.value = '';
+        renderModal();
+        renderProjectBar();
+        toast(`프로젝트 「${name}」를 만들었습니다.`, 'success');
+      };
+      overlay.querySelector('#srello-add-project-btn')?.addEventListener('click', addProject);
+      overlay.querySelector('#srello-new-project-name')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); addProject(); }
+      });
+
+      overlay.querySelector('#srello-project-list')?.addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const { action, id, name } = btn.dataset;
+
+        if (action === 'set-default') {
+          SrelloProjects.setDefaultId(id);
+          renderModal();
+          toast('기본 프로젝트로 설정했습니다.', 'info');
+          return;
+        }
+
+        if (action === 'rename') {
+          const newName = prompt('프로젝트 이름 변경', name);
+          if (newName === null) return;
+          const trimmed = newName.trim();
+          if (!trimmed) { toast('이름을 입력하세요.', 'error'); return; }
+          SrelloProjects.renameProject(id, trimmed);
+          renderModal();
+          renderProjectBar();
+          toast('이름이 변경되었습니다.', 'info');
+          return;
+        }
+
+        if (action === 'connect-sheet') {
+          overlay.remove();
+          openConnectSheetModal(id, () => openProjectModal());
+          return;
+        }
+
+        if (action === 'disconnect-sheet') {
+          if (!confirm(`「${name}」의 Google Sheets 연결을 해제할까요?\n로컬 데이터는 유지됩니다.`)) return;
+          if (typeof SrelloSync !== 'undefined') SrelloSync.disconnect(id);
+          renderModal();
+          renderProjectBar();
+          toast('시트 연결이 해제되었습니다.', 'info');
+          return;
+        }
+
+        if (action === 'delete') {
+          if (!confirm(`「${name}」 프로젝트의 모든 로컬 데이터가 삭제됩니다.\n계속할까요?`)) return;
+          const wasCurrentId = SrelloProjects.getCurrentId();
+          const ok = SrelloProjects.deleteProject(id, true);
+          if (!ok) { toast('마지막 프로젝트는 삭제할 수 없습니다.', 'error'); return; }
+          if (wasCurrentId === id) {
+            board = null;
+            load();
+            render();
+          }
+          renderModal();
+          renderProjectBar();
+          toast(`프로젝트 「${name}」를 삭제했습니다.`, 'info');
+        }
+      });
+    }
+
+    renderModal();
+    document.body.appendChild(overlay);
+  }
+
   let toolbarBound = false;
   function bindToolbar() {
     if (toolbarBound) return;
@@ -259,6 +820,10 @@ const Srello = (() => {
     document.getElementById('srello-view-board')?.addEventListener('click', () => setViewMode('board'));
     document.getElementById('srello-view-calendar')?.addEventListener('click', () => setViewMode('calendar'));
     document.getElementById('srello-settings-btn')?.addEventListener('click', openSettingsModal);
+    document.getElementById('srello-project-manage')?.addEventListener('click', openProjectModal);
+    document.getElementById('srello-project-select')?.addEventListener('change', e => switchProject(e.target.value));
+    document.getElementById('srello-push-btn')?.addEventListener('click', handlePush);
+    document.getElementById('srello-pull-btn')?.addEventListener('click', handlePull);
     toolbarBound = true;
   }
 
@@ -613,9 +1178,9 @@ const Srello = (() => {
     const listsHtml = board.lists.map((list, listIdx) => {
       const cards = sortCards(list.cards).filter(cardMatchesFilter);
       return `
-      <div class="srello-list" data-list-id="${list.id}" data-list-idx="${listIdx}" draggable="true">
+      <div class="srello-list" data-list-id="${list.id}" data-list-idx="${listIdx}">
         <div class="srello-list-header">
-          <span class="srello-list-handle" title="드래그하여 순서 변경">⋮⋮</span>
+          <span class="srello-list-handle" draggable="true" title="드래그하여 순서 변경">⋮⋮</span>
           <input type="text" class="srello-list-title input" value="${escHtml(list.title)}"
             aria-label="리스트 제목" maxlength="80"
             data-action="rename-list" data-list-id="${list.id}">
@@ -768,18 +1333,25 @@ const Srello = (() => {
       el.addEventListener('dragend', onDragEnd);
     });
 
-    // 리스트 드래그 — 리스트 자체가 draggable="true"
-    // handle mousedown → listDragHandle=true → list dragstart 허용
+    // 리스트 드래그 — 핸들 자체가 draggable="true" (플래그 경쟁 없음)
     container.querySelectorAll('.srello-list-handle').forEach(handle => {
-      handle.addEventListener('mousedown', () => { listDragHandle = true; });
+      handle.addEventListener('dragstart', (e) => {
+        const listEl = handle.closest('.srello-list');
+        if (!listEl) return;
+        drag = { kind: 'list', listId: listEl.dataset.listId, fromIdx: parseInt(listEl.dataset.listIdx, 10) };
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', listEl.dataset.listId);
+        e.dataTransfer.setDragImage(listEl, 20, 20);
+        // ghost 캡처 이후에 클래스 적용
+        requestAnimationFrame(() => listEl.classList.add('srello-list--dragging'));
+      });
+      handle.addEventListener('dragend', () => {
+        handle.closest('.srello-list')?.classList.remove('srello-list--dragging');
+        listPlaceholder?.remove();
+        if (drag?.kind === 'list') drag = null;
+      });
     });
     container.querySelectorAll('.srello-list:not(.srello-list--add)').forEach(el => {
-      el.addEventListener('dragstart', (e) => {
-        if (!listDragHandle) { e.preventDefault(); return; } // 핸들 외 영역 drag 차단
-        listDragHandle = false;
-        onListDragStart(e);
-      });
-      el.addEventListener('dragend',   onListDragEnd);
       el.addEventListener('dragover',  onListDragOver);
       el.addEventListener('dragleave', onListDragLeave);
       el.addEventListener('drop',      onListDrop);
@@ -808,6 +1380,7 @@ const Srello = (() => {
   function onDragEnd(e) {
     e.currentTarget.classList.remove('srello-card--dragging');
     document.querySelectorAll('.srello-list-cards--over').forEach(z => z.classList.remove('srello-list-cards--over'));
+    cardPlaceholder?.remove();
     drag = null;
   }
 
@@ -815,12 +1388,23 @@ const Srello = (() => {
     if (drag?.kind !== 'card') return;
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    e.currentTarget.classList.add('srello-list-cards--over');
+    const zone = e.currentTarget;
+    zone.classList.add('srello-list-cards--over');
+    // 플레이스홀더를 커서 위치에 맞게 삽입
+    const ph = getCardPlaceholder();
+    const cards = [...zone.querySelectorAll('.srello-card:not(.srello-card--dragging)')];
+    let insertBefore = null;
+    for (const card of cards) {
+      const mid = card.getBoundingClientRect().top + card.offsetHeight / 2;
+      if (e.clientY < mid) { insertBefore = card; break; }
+    }
+    insertBefore ? zone.insertBefore(ph, insertBefore) : zone.appendChild(ph);
   }
 
   function onDragLeave(e) {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       e.currentTarget.classList.remove('srello-list-cards--over');
+      cardPlaceholder?.remove();
     }
   }
 
@@ -838,41 +1422,45 @@ const Srello = (() => {
     if (handle) e.dataTransfer.setDragImage(handle, handle.offsetWidth / 2, handle.offsetHeight / 2);
   }
 
-  function onListDragEnd(e) {
-    listDragHandle = false;
-    e.currentTarget.classList.remove('srello-list--dragging');
-    document.querySelectorAll('.srello-list--drop-over').forEach(el => el.classList.remove('srello-list--drop-over'));
-    if (drag?.kind === 'list') drag = null;
-  }
-
   function onListDragOver(e) {
     if (drag?.kind !== 'list') return;
     e.preventDefault();
     e.stopPropagation();
     const listEl = e.currentTarget;
     if (listEl.dataset.listId === drag.listId) return;
-    document.querySelectorAll('.srello-list--drop-over').forEach(el => el.classList.remove('srello-list--drop-over'));
-    listEl.classList.add('srello-list--drop-over');
+    const scroll = listEl.closest('.srello-board-scroll');
+    if (!scroll) return;
+    const ph = getListPlaceholder();
+    const rect = listEl.getBoundingClientRect();
+    e.clientX < rect.left + rect.width / 2
+      ? scroll.insertBefore(ph, listEl)
+      : scroll.insertBefore(ph, listEl.nextSibling);
   }
 
   function onListDragLeave(e) {
-    if (drag?.kind !== 'list') return;
-    const listEl = e.currentTarget;
-    if (!listEl.contains(e.relatedTarget)) {
-      listEl.classList.remove('srello-list--drop-over');
-    }
+    // 플레이스홀더는 dragover에서 계속 갱신되므로 여기서 제거하지 않음
   }
 
   function onListDrop(e) {
     if (drag?.kind !== 'list') return;
     e.preventDefault();
     e.stopPropagation();
-    const targetEl = e.currentTarget;
-    targetEl.classList.remove('srello-list--drop-over');
-    const toIdx = parseInt(targetEl.dataset.listIdx, 10);
+    const scroll = e.currentTarget.closest('.srello-board-scroll');
+    let toIdx = 0;
+    if (listPlaceholder && listPlaceholder.parentElement === scroll) {
+      for (const child of scroll.children) {
+        if (child === listPlaceholder) break;
+        if (child.classList.contains('srello-list') &&
+            !child.classList.contains('srello-list--add') &&
+            !child.classList.contains('srello-list--dragging')) toIdx++;
+      }
+    } else {
+      toIdx = parseInt(e.currentTarget.dataset.listIdx, 10);
+    }
+    listPlaceholder?.remove();
     const fromIdx = drag.fromIdx;
-    if (isNaN(toIdx) || fromIdx === toIdx) return;
-    reorderList(fromIdx, toIdx);
+    drag = null;
+    if (!isNaN(toIdx) && fromIdx !== toIdx) reorderList(fromIdx, toIdx);
   }
 
   function reorderList(fromIdx, toIdx) {
@@ -890,13 +1478,27 @@ const Srello = (() => {
     zone.classList.remove('srello-list-cards--over');
     if (!drag || drag.kind !== 'card') return;
     const toListId = zone.dataset.listId;
-    const toIndex = getDropIndex(zone, e.clientY);
+    // 플레이스홀더 위치로 삽입 인덱스 결정
+    let toIndex = 0;
+    if (cardPlaceholder && cardPlaceholder.parentElement === zone) {
+      for (const child of zone.children) {
+        if (child === cardPlaceholder) break;
+        if (child.classList.contains('srello-card') && !child.classList.contains('srello-card--dragging')) toIndex++;
+      }
+    } else {
+      toIndex = getDropIndex(zone, e.clientY);
+    }
+    cardPlaceholder?.remove();
+    // 플레이스홀더 기반 toIndex는 제거 후 삽입 위치와 동일 — 단순 비교로 no-op 판별
     if (drag.fromListId === toListId) {
       const list = findList(toListId);
       const fromIdx = list.cards.findIndex(c => c.id === drag.cardId);
-      let targetIdx = toIndex;
-      if (fromIdx < targetIdx) targetIdx -= 1;
-      if (fromIdx === targetIdx) return;
+      if (toIndex === fromIdx) return;
+    }
+    // 드래그로 순서 변경 시 수동 정렬로 전환
+    if (sortMode !== 'manual') {
+      sortMode = 'manual';
+      localStorage.setItem(SORT_KEY, 'manual');
     }
     moveCard(drag.cardId, drag.fromListId, toListId, toIndex);
   }
@@ -1601,10 +2203,23 @@ const Srello = (() => {
   }
 
   function init() {
+    let migrateResult = null;
+    if (typeof SrelloProjects !== 'undefined') {
+      migrateResult = SrelloProjects.migrate();
+      if (migrateResult === 'migrated') board = null; // 새 키에서 다시 로드
+    }
+
     if (!board) load();
     bindToolbar();
+    initOfflineDetection();
+    renderProjectBar();
+    updateSyncButtons(false);
     setViewMode(viewMode);
-    // 드래그 없이 mouseup만 발생한 경우 플래그 초기화 (최초 1회)
+
+    if (migrateResult === 'migrated') {
+      setTimeout(() => toast('기존 보드 데이터를 Personal 프로젝트로 이전했습니다.', 'info'), 400);
+    }
+
     if (!init._mouseUpBound) {
       document.addEventListener('mouseup', () => { listDragHandle = false; });
       init._mouseUpBound = true;
