@@ -344,6 +344,107 @@ const Srello = (() => {
     if (name) toast(`「${name}」 프로젝트로 전환했습니다.`, 'info');
   }
 
+  /* ── 시트 연결 모달 ── */
+  function openConnectSheetModal(projectId, onSuccess) {
+    if (typeof SrelloSync === 'undefined') {
+      toast('SrelloSync 모듈이 로드되지 않았습니다.', 'error');
+      return;
+    }
+    document.querySelector('.modal-overlay.srello-connect-modal')?.remove();
+
+    const project = SrelloProjects.getProjects().find(p => p.id === projectId);
+    if (!project) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay srello-connect-modal';
+    overlay.innerHTML = `
+      <div class="modal srello-modal">
+        <div class="srello-modal-hdr">📊 Google Sheets 연결 — ${escHtml(project.name)}</div>
+        <div class="srello-modal-body">
+          <p class="srello-connect-desc">
+            이 프로젝트를 Google Sheets에 연결하면 다른 기기에서도 보드를 불러올 수 있습니다.<br>
+            <span class="srello-connect-warn">GCP 프로젝트에서 Google Sheets API가 활성화되어 있어야 합니다.</span>
+          </p>
+          <div class="srello-connect-section">
+            <div class="srello-connect-section-title">새 시트 만들기</div>
+            <p class="srello-connect-hint">Google Drive에 「Srello — ${escHtml(project.name)}」 파일을 자동 생성합니다.</p>
+            <button type="button" class="btn btn-primary btn-sm" id="srello-connect-create">새 시트 만들기</button>
+          </div>
+          <div class="srello-connect-divider">또는</div>
+          <div class="srello-connect-section">
+            <div class="srello-connect-section-title">기존 시트 연결</div>
+            <div class="srello-connect-url-row">
+              <input type="text" class="input" id="srello-connect-url"
+                placeholder="Google Sheets URL 또는 ID" autocomplete="off">
+              <button type="button" class="btn btn-sm btn-primary" id="srello-connect-link">연결</button>
+            </div>
+            <p class="srello-connect-hint">URL 예시: docs.google.com/spreadsheets/d/<strong>시트ID</strong>/…</p>
+          </div>
+          <div class="srello-connect-error" id="srello-connect-error" style="display:none"></div>
+        </div>
+        <div class="srello-modal-footer">
+          <div></div>
+          <button type="button" class="btn" id="srello-connect-close">닫기</button>
+        </div>
+      </div>`;
+
+    function setLoading(on) {
+      overlay.querySelectorAll('button:not(#srello-connect-close)').forEach(b => { b.disabled = on; });
+      overlay.querySelector('#srello-connect-create').textContent = on ? '처리 중…' : '새 시트 만들기';
+      overlay.querySelector('#srello-connect-link').textContent   = on ? '처리 중…' : '연결';
+    }
+
+    function setError(msg) {
+      const el = overlay.querySelector('#srello-connect-error');
+      if (!el) return;
+      el.textContent = msg ? '⚠ ' + msg : '';
+      el.style.display = msg ? '' : 'none';
+    }
+
+    async function runWithAuth(fn) {
+      setLoading(true);
+      setError('');
+      try {
+        if (!SrelloSync.isConnected()) await SrelloSync.authorize();
+        await fn();
+        overlay.remove();
+        renderProjectBar();
+        if (onSuccess) onSuccess();
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    }
+
+    overlay.querySelector('#srello-connect-create')?.addEventListener('click', () => {
+      runWithAuth(async () => {
+        await SrelloSync.createAndConnect(projectId, project.name);
+        toast(`「${project.name}」를 새 Google Sheets에 연결했습니다.`, 'success');
+      });
+    });
+
+    const linkFn = () => {
+      const input = overlay.querySelector('#srello-connect-url');
+      const sheetId = SrelloSync.parseSheetId(input?.value || '');
+      if (!sheetId) {
+        setError('유효하지 않은 URL 또는 ID입니다. Google Sheets URL 전체 또는 ID(20자 이상)를 입력하세요.');
+        return;
+      }
+      runWithAuth(async () => {
+        await SrelloSync.connectExisting(projectId, sheetId);
+        toast(`「${project.name}」를 기존 Google Sheets에 연결했습니다.`, 'success');
+      });
+    };
+    overlay.querySelector('#srello-connect-link')?.addEventListener('click', linkFn);
+    overlay.querySelector('#srello-connect-url')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); linkFn(); }
+    });
+
+    overlay.querySelector('#srello-connect-close')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+
   function openProjectModal() {
     if (typeof SrelloProjects === 'undefined') return;
     document.querySelector('.modal-overlay.srello-project-modal')?.remove();
@@ -362,11 +463,17 @@ const Srello = (() => {
             <ul class="srello-project-list" id="srello-project-list">
               ${projects.map(p => `
                 <li class="srello-project-item">
-                  <span class="srello-project-name">${escHtml(p.name)}</span>
-                  ${p.id === defaultId ? '<span class="srello-project-default-badge">기본</span>' : ''}
+                  <div class="srello-project-info">
+                    <span class="srello-project-name">${escHtml(p.name)}</span>
+                    ${p.id === defaultId ? '<span class="srello-project-default-badge">기본</span>' : ''}
+                    ${p.sheetId ? '<span class="srello-project-sheet-badge" title="Google Sheets 연결됨">📊</span>' : ''}
+                  </div>
                   <div class="srello-project-actions">
                     ${p.id === defaultId ? '' : `<button type="button" class="btn btn-sm" data-action="set-default" data-id="${p.id}">기본으로</button>`}
                     <button type="button" class="btn btn-sm" data-action="rename" data-id="${p.id}" data-name="${escHtml(p.name)}">이름 변경</button>
+                    ${p.sheetId
+                      ? `<button type="button" class="btn btn-sm" data-action="disconnect-sheet" data-id="${p.id}" data-name="${escHtml(p.name)}">연결 해제</button>`
+                      : `<button type="button" class="btn btn-sm btn-primary" data-action="connect-sheet" data-id="${p.id}" data-name="${escHtml(p.name)}">시트 연결</button>`}
                     ${projects.length > 1 ? `<button type="button" class="btn btn-sm" style="color:var(--color-game)" data-action="delete" data-id="${p.id}" data-name="${escHtml(p.name)}">삭제</button>` : ''}
                   </div>
                 </li>`).join('')}
@@ -424,6 +531,21 @@ const Srello = (() => {
           renderModal();
           renderProjectBar();
           toast('이름이 변경되었습니다.', 'info');
+          return;
+        }
+
+        if (action === 'connect-sheet') {
+          overlay.remove();
+          openConnectSheetModal(id, () => openProjectModal());
+          return;
+        }
+
+        if (action === 'disconnect-sheet') {
+          if (!confirm(`「${name}」의 Google Sheets 연결을 해제할까요?\n로컬 데이터는 유지됩니다.`)) return;
+          if (typeof SrelloSync !== 'undefined') SrelloSync.disconnect(id);
+          renderModal();
+          renderProjectBar();
+          toast('시트 연결이 해제되었습니다.', 'info');
           return;
         }
 

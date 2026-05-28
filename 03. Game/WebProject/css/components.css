@@ -780,6 +780,19 @@ select.input option {
   font-weight: 600;
 }
 
+.srello-project-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.srello-project-sheet-badge {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
 .srello-project-actions {
   display: flex;
   gap: 4px;
@@ -794,6 +807,76 @@ select.input option {
 
 .srello-project-add-row .input {
   flex: 1;
+}
+
+/* ── Srello 시트 연결 모달 ── */
+.srello-connect-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.srello-connect-warn {
+  color: #ffd166;
+  font-size: 0.83rem;
+}
+
+.srello-connect-section {
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.srello-connect-section-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.srello-connect-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 4px 0 10px;
+}
+
+.srello-connect-divider {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 4px 0;
+  position: relative;
+}
+
+.srello-connect-divider::before,
+.srello-connect-divider::after {
+  content: '';
+  display: inline-block;
+  width: 40%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+  margin: 0 8px;
+}
+
+.srello-connect-url-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.srello-connect-url-row .input {
+  flex: 1;
+}
+
+.srello-connect-error {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255, 107, 157, 0.1);
+  color: #ff6b9d;
+  font-size: 0.83rem;
+  line-height: 1.5;
 }
 
 .srello-toolbar {
