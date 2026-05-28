@@ -879,6 +879,51 @@ select.input option {
   line-height: 1.5;
 }
 
+/* ── Srello 충돌 모달 ── */
+.srello-conflict-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.srello-conflict-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.srello-conflict-side {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.srello-conflict-side-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.srello-conflict-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.84rem;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.srello-conflict-row:last-child {
+  border-bottom: none;
+}
+
+.srello-conflict-label { color: var(--text-muted); }
+.srello-conflict-value { color: var(--text-main); text-align: right; }
+
 .srello-toolbar {
   display: flex;
   gap: 8px;

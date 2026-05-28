@@ -74,6 +74,6 @@
 
 - [ ] 뉴스 카테고리 필터 버튼 (기술·게임·개발) 활성화
 - [ ] 홈 카드 — 오늘 일정 미리보기 표시
-- [ ] Srello Google Sheets 연동 (1b) — Sheets scope 추가, URL 파싱, 시트 자동 생성/기존 연결
-- [ ] Srello 수동 Push/Pull (1c) — 저장/불러오기 버튼, 상태 머신, 충돌 3선택 UI
+- [x] Srello Google Sheets 연동 (1b) — Sheets scope OAuth, URL 파싱, 시트 자동 생성/기존 연결, srello-sync.js
+- [x] Srello 수동 Push/Pull (1c) — ⬆ 저장 / ⬇ 불러오기 버튼, dirty 마킹, 충돌 3선택 모달, executePull, lastRemoteUpdatedAt 검사
 - [ ] Srello 동기화 피드백 (1e) — lastSyncedAt 표시, Google 계정 상태, 오프라인 감지

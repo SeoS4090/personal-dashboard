@@ -16,6 +16,7 @@ const Srello = (() => {
 
   let board = null;
   let drag = null;          // { kind:'card'|'list', cardId?, fromListId?, listId?, fromIdx? }
+  let _inSync = false;      // Pull 중 save() dirty 마킹 차단용
   let viewMode = localStorage.getItem(VIEW_KEY) || 'board';
   let filterPriority = '';
   let filterCategory = '';
@@ -176,6 +177,17 @@ const Srello = (() => {
   function save() {
     board.lastEditedAt = new Date().toISOString();
     localStorage.setItem(getBoardKey(), JSON.stringify(board));
+    if (!_inSync && typeof SrelloProjects !== 'undefined') {
+      const id = SrelloProjects.getCurrentId();
+      const project = SrelloProjects.getProjects().find(p => p.id === id);
+      if (project?.sheetId) {
+        const status = SrelloProjects.getStatus(id);
+        if (['synced', 'never_synced', 'failed'].includes(status.state)) {
+          SrelloProjects.setStatus(id, 'dirty');
+          renderProjectBar();
+        }
+      }
+    }
     if (typeof App !== 'undefined') App.updateHomeLifePreview();
   }
 
@@ -330,6 +342,197 @@ const Srello = (() => {
     const b = BADGE[status.state] || BADGE.never_synced;
     badge.textContent = b.label;
     badge.className = `srello-sync-badge ${b.cls}`;
+    if (status.lastSyncedAt) badge.title = `마지막 동기화: ${relativeTime(status.lastSyncedAt)}`;
+  }
+
+  /* ── 시간 포맷 헬퍼 ── */
+  function relativeTime(iso) {
+    if (!iso) return '—';
+    const d = Date.now() - new Date(iso).getTime();
+    if (d < 60000)    return '방금 전';
+    if (d < 3600000)  return `${Math.floor(d / 60000)}분 전`;
+    if (d < 86400000) return `${Math.floor(d / 3600000)}시간 전`;
+    return `${Math.floor(d / 86400000)}일 전`;
+  }
+
+  /* ── Push / Pull 버튼 상태 ── */
+  function updateSyncButtons(loading) {
+    const push = document.getElementById('srello-push-btn');
+    const pull = document.getElementById('srello-pull-btn');
+    if (push) { push.disabled = loading; push.textContent = loading ? '저장 중…'    : '⬆ 저장'; }
+    if (pull) { pull.disabled = loading; pull.textContent = loading ? '불러오는 중…' : '⬇ 불러오기'; }
+  }
+
+  /* ── 충돌 모달 ── */
+  function openConflictModal(localInfo, remoteInfo, onPull, onPush, onCancel) {
+    document.querySelector('.modal-overlay.srello-conflict-modal')?.remove();
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay srello-conflict-modal';
+    overlay.innerHTML = `
+      <div class="modal srello-modal">
+        <div class="srello-modal-hdr">⚠ 충돌이 감지되었습니다</div>
+        <div class="srello-modal-body">
+          <p class="srello-conflict-desc">마지막 동기화 이후 원격과 로컬 모두 변경되었습니다. 어떤 버전을 유지할지 선택하세요.</p>
+          <div class="srello-conflict-grid">
+            <div class="srello-conflict-side">
+              <div class="srello-conflict-side-title">원격 (Google Sheets)</div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정자</span>
+                <span class="srello-conflict-value">${escHtml(remoteInfo.updatedBy || '—')}</span>
+              </div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정 시각</span>
+                <span class="srello-conflict-value">${escHtml(relativeTime(remoteInfo.updatedAt))}</span>
+              </div>
+            </div>
+            <div class="srello-conflict-side">
+              <div class="srello-conflict-side-title">로컬 (이 브라우저)</div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정자</span>
+                <span class="srello-conflict-value">${escHtml(localInfo.updatedBy)}</span>
+              </div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">수정 시각</span>
+                <span class="srello-conflict-value">${escHtml(relativeTime(localInfo.updatedAt))}</span>
+              </div>
+              <div class="srello-conflict-row">
+                <span class="srello-conflict-label">카드 수</span>
+                <span class="srello-conflict-value">${localInfo.cardCount}개</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="srello-modal-footer">
+          <button type="button" class="btn" id="srello-conflict-cancel">취소</button>
+          <div class="srello-modal-footer-right">
+            <button type="button" class="btn" id="srello-conflict-pull">원격으로 덮어쓰기</button>
+            <button type="button" class="btn btn-primary" id="srello-conflict-push">로컬로 덮어쓰기</button>
+          </div>
+        </div>
+      </div>`;
+
+    overlay.querySelector('#srello-conflict-cancel')?.addEventListener('click', () => { overlay.remove(); onCancel(); });
+    overlay.querySelector('#srello-conflict-pull')?.addEventListener('click',   () => { overlay.remove(); onPull(); });
+    overlay.querySelector('#srello-conflict-push')?.addEventListener('click',   () => { overlay.remove(); onPush(); });
+    overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.remove(); onCancel(); } });
+    document.body.appendChild(overlay);
+  }
+
+  /* ── Pull 실행 (handlePush 충돌 분기에서도 재사용) ── */
+  async function executePull(projectId, sheetId) {
+    _inSync = true;
+    try {
+      const { meta, boardJson } = await SrelloSync.pullBoard(sheetId);
+      board = JSON.parse(boardJson);
+      if (!board.lists) board.lists = [];
+      board.lastEditedAt = meta.updatedAt;
+      migrateBoardFields();
+      save(); // _inSync=true → dirty 마킹 없음
+      const now = new Date().toISOString();
+      SrelloProjects.setStatus(projectId, 'synced', { lastSyncedAt: now, lastRemoteUpdatedAt: meta.updatedAt });
+      render();
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('Google Sheets에서 보드를 불러왔습니다.', 'success');
+    } catch (err) {
+      SrelloProjects.setStatus(projectId, 'failed');
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('불러오기 실패: ' + err.message, 'error');
+    } finally {
+      _inSync = false;
+    }
+  }
+
+  /* ── Push ── */
+  async function handlePush() {
+    if (typeof SrelloProjects === 'undefined' || typeof SrelloSync === 'undefined') return;
+    const projectId = SrelloProjects.getCurrentId();
+    const project   = SrelloProjects.getProjects().find(p => p.id === projectId);
+
+    if (!project?.sheetId) {
+      openConnectSheetModal(projectId, () => toast('시트 연결 후 저장을 다시 시도하세요.', 'info'));
+      return;
+    }
+    const status = SrelloProjects.getStatus(projectId);
+    if (status.state === 'syncing') return;
+
+    SrelloProjects.setStatus(projectId, 'syncing');
+    renderProjectBar();
+    updateSyncButtons(true);
+
+    try {
+      if (!SrelloSync.isConnected()) await SrelloSync.authorize();
+
+      const remoteMeta = await SrelloSync.fetchRemoteMeta(project.sheetId);
+
+      // 충돌 감지: 원격 updatedAt이 있고, 마지막으로 우리가 쓴 값과 다를 때
+      if (remoteMeta?.updatedAt && remoteMeta.updatedAt !== status.lastRemoteUpdatedAt) {
+        const localCardCount = board.lists.reduce((acc, l) => acc + l.cards.length, 0);
+        const choice = await new Promise(resolve => {
+          openConflictModal(
+            { updatedAt: board.lastEditedAt, updatedBy: '이 기기', cardCount: localCardCount },
+            { updatedAt: remoteMeta.updatedAt, updatedBy: remoteMeta.updatedBy || '다른 기기' },
+            () => resolve('pull'),
+            () => resolve('push'),
+            () => resolve('cancel')
+          );
+        });
+        if (choice === 'cancel') {
+          SrelloProjects.setStatus(projectId, 'dirty');
+          renderProjectBar();
+          updateSyncButtons(false);
+          return;
+        }
+        if (choice === 'pull') {
+          await executePull(projectId, project.sheetId);
+          return;
+        }
+        // choice === 'push' → 계속 진행
+      }
+
+      const pushedAt = await SrelloSync.pushBoard(project.sheetId, projectId, board);
+      const now = new Date().toISOString();
+      SrelloProjects.setStatus(projectId, 'synced', { lastSyncedAt: now, lastRemoteUpdatedAt: pushedAt });
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('보드를 Google Sheets에 저장했습니다.', 'success');
+
+    } catch (err) {
+      SrelloProjects.setStatus(projectId, 'failed');
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('저장 실패: ' + err.message, 'error');
+    }
+  }
+
+  /* ── Pull ── */
+  async function handlePull() {
+    if (typeof SrelloProjects === 'undefined' || typeof SrelloSync === 'undefined') return;
+    const projectId = SrelloProjects.getCurrentId();
+    const project   = SrelloProjects.getProjects().find(p => p.id === projectId);
+
+    if (!project?.sheetId) {
+      openConnectSheetModal(projectId, () => toast('시트 연결 후 불러오기를 다시 시도하세요.', 'info'));
+      return;
+    }
+    const status = SrelloProjects.getStatus(projectId);
+    if (status.state === 'syncing') return;
+
+    SrelloProjects.setStatus(projectId, 'syncing');
+    renderProjectBar();
+    updateSyncButtons(true);
+
+    try {
+      if (!SrelloSync.isConnected()) await SrelloSync.authorize();
+    } catch (err) {
+      SrelloProjects.setStatus(projectId, 'failed');
+      renderProjectBar();
+      updateSyncButtons(false);
+      toast('인증 실패: ' + err.message, 'error');
+      return;
+    }
+    await executePull(projectId, project.sheetId);
   }
 
   function switchProject(newId) {
@@ -583,6 +786,8 @@ const Srello = (() => {
     document.getElementById('srello-settings-btn')?.addEventListener('click', openSettingsModal);
     document.getElementById('srello-project-manage')?.addEventListener('click', openProjectModal);
     document.getElementById('srello-project-select')?.addEventListener('change', e => switchProject(e.target.value));
+    document.getElementById('srello-push-btn')?.addEventListener('click', handlePush);
+    document.getElementById('srello-pull-btn')?.addEventListener('click', handlePull);
     toolbarBound = true;
   }
 

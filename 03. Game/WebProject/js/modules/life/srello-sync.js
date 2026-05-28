@@ -7,6 +7,8 @@ const SrelloSync = (() => {
   const API           = 'https://sheets.googleapis.com/v4/spreadsheets';
   const SHEET_TAB     = 'SrelloSync';
   const HEADER_ROW    = ['schemaVersion', 'updatedAt', 'updatedBy', 'projectId', 'boardJson'];
+  const SCHEMA_VER    = '1';
+  const CLIENT_ID_LS  = 'srello_client_id';
 
   let tokenClient  = null;
   let accessToken  = null;
@@ -142,6 +144,16 @@ const SrelloSync = (() => {
     return resp.json();
   }
 
+  /* ── 클라이언트 ID (updatedBy 식별용) ── */
+  function getClientId() {
+    let id = localStorage.getItem(CLIENT_ID_LS);
+    if (!id) {
+      id = 'client_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      localStorage.setItem(CLIENT_ID_LS, id);
+    }
+    return id;
+  }
+
   /* ── 시트 조작 ── */
 
   // 새 스프레드시트 생성 → sheetId 반환
@@ -181,6 +193,66 @@ const SrelloSync = (() => {
     return true;
   }
 
+  /* ── Push / Pull / Meta ── */
+
+  // 원격 메타 읽기 (A1:D1) — 충돌 검사용. 데이터 없으면 null 반환
+  async function fetchRemoteMeta(sheetId) {
+    try {
+      const data = await _fetch(`${API}/${sheetId}/values/${SHEET_TAB}!A1:D1`);
+      const row = data.values?.[0];
+      // B1 이 'updatedAt' 이면 헤더 플레이스홀더 상태 (push 전)
+      if (!row || !row[1] || row[1] === 'updatedAt') return null;
+      return {
+        schemaVersion: parseInt(row[0]) || 1,
+        updatedAt:     row[1] || null,
+        updatedBy:     row[2] || '',
+        projectId:     row[3] || '',
+      };
+    } catch (err) {
+      // 탭 범위 오류 → 데이터 없음으로 처리
+      if (err.message?.includes('Unable to parse range') || err.message?.includes('exceeds grid')) return null;
+      throw err;
+    }
+  }
+
+  // 보드 Push — 셀 한계(45,000자) 초과 시 에러
+  async function pushBoard(sheetId, projectId, boardData) {
+    const boardJson = JSON.stringify(boardData);
+    if (boardJson.length > 45000) {
+      throw new Error(
+        `보드 크기(${boardJson.length.toLocaleString()}자)가 시트 한계(45,000자)를 초과합니다. ` +
+        '카드나 활동 내역을 줄이거나 프로젝트를 분리하세요.'
+      );
+    }
+    const now = new Date().toISOString();
+    await _fetch(
+      `${API}/${sheetId}/values/${SHEET_TAB}!A1:E1?valueInputOption=RAW`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ values: [[SCHEMA_VER, now, getClientId(), projectId, boardJson]] }),
+      }
+    );
+    return now; // 방금 쓴 updatedAt → lastRemoteUpdatedAt 으로 저장
+  }
+
+  // 보드 Pull — { meta, boardJson } 반환
+  async function pullBoard(sheetId) {
+    const data = await _fetch(`${API}/${sheetId}/values/${SHEET_TAB}!A1:E1`);
+    const row = data.values?.[0];
+    if (!row || !row[4] || row[1] === 'updatedAt') {
+      throw new Error('시트에 저장된 보드 데이터가 없습니다. 먼저 저장해주세요.');
+    }
+    return {
+      meta: {
+        schemaVersion: parseInt(row[0]) || 1,
+        updatedAt:     row[1],
+        updatedBy:     row[2] || '',
+        projectId:     row[3] || '',
+      },
+      boardJson: row[4],
+    };
+  }
+
   /* ── 프로젝트 연결/해제 ── */
 
   // 기존 시트를 프로젝트에 연결
@@ -218,8 +290,9 @@ const SrelloSync = (() => {
 
   return {
     isConnected, authorize, resetAuth,
-    parseSheetId,
+    parseSheetId, getClientId,
     createSheet, validateSheet, ensureSheet,
+    fetchRemoteMeta, pushBoard, pullBoard,
     connectExisting, createAndConnect, disconnect,
   };
 })();

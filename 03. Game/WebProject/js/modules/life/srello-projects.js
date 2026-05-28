@@ -43,16 +43,19 @@ const SrelloProjects = (() => {
   function getStatus(projectId) {
     try {
       const all = JSON.parse(localStorage.getItem(STATUS_KEY)) || {};
-      return all[projectId] || { state: 'never_synced', lastSyncedAt: null };
-    } catch { return { state: 'never_synced', lastSyncedAt: null }; }
+      return all[projectId] || { state: 'never_synced', lastSyncedAt: null, lastRemoteUpdatedAt: null };
+    } catch { return { state: 'never_synced', lastSyncedAt: null, lastRemoteUpdatedAt: null }; }
   }
 
-  function setStatus(projectId, state, lastSyncedAt = null) {
+  // opts: { lastSyncedAt?, lastRemoteUpdatedAt? }
+  function setStatus(projectId, state, opts = {}) {
     try {
-      const all = JSON.parse(localStorage.getItem(STATUS_KEY)) || {};
+      const all  = JSON.parse(localStorage.getItem(STATUS_KEY)) || {};
+      const prev = all[projectId] || {};
       all[projectId] = {
         state,
-        lastSyncedAt: lastSyncedAt ?? all[projectId]?.lastSyncedAt ?? null,
+        lastSyncedAt:        opts.lastSyncedAt        ?? prev.lastSyncedAt        ?? null,
+        lastRemoteUpdatedAt: opts.lastRemoteUpdatedAt ?? prev.lastRemoteUpdatedAt ?? null,
       };
       localStorage.setItem(STATUS_KEY, JSON.stringify(all));
     } catch {}
