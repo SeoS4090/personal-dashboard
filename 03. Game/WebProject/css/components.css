@@ -744,6 +744,7 @@ select.input option {
 .srello-sync-syncing      { background: rgba(124, 131, 255, 0.2);  color: #7c83ff; animation: srello-pulse 1.2s ease-in-out infinite; }
 .srello-sync-failed       { background: rgba(255, 107, 157, 0.15); color: #ff6b9d; }
 .srello-sync-disconnected { background: rgba(136, 153, 170, 0.15); color: #8899aa; }
+.srello-sync-offline      { background: rgba(255, 159, 67, 0.15);  color: #ff9f43; }
 
 @keyframes srello-pulse {
   0%, 100% { opacity: 1; }

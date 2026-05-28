@@ -25,6 +25,7 @@ const Srello = (() => {
   let listDragHandle = false;
   let cardPlaceholder = null;
   let listPlaceholder = null;
+  let _offlineListenerBound = false;
 
   function getCardPlaceholder() {
     if (!cardPlaceholder) {
@@ -322,27 +323,53 @@ const Srello = (() => {
       .join('');
 
     if (!badge) return;
+
+    // 오프라인 오버레이 — 다른 상태보다 우선 표시
+    if (!navigator.onLine) {
+      badge.textContent = '오프라인';
+      badge.className = 'srello-sync-badge srello-sync-offline';
+      badge.title = '인터넷에 연결되어 있지 않습니다';
+      return;
+    }
+
     const project = projects.find(p => p.id === currentId);
     const status  = SrelloProjects.getStatus(currentId);
 
     if (!project?.sheetId) {
       badge.textContent = '로컬 전용';
       badge.className = 'srello-sync-badge srello-sync-local';
+      badge.title = '';
+      return;
+    }
+
+    // OAuth Client ID 미설정 경고
+    if (!localStorage.getItem('gcal_client_id')) {
+      badge.textContent = 'OAuth 미설정';
+      badge.className = 'srello-sync-badge srello-sync-failed';
+      badge.title = 'Google OAuth Client ID를 설정 패널에서 입력하세요 (일정 탭과 동일)';
       return;
     }
 
     const BADGE = {
-      never_synced:  { label: '미동기화',     cls: 'srello-sync-never' },
-      dirty:         { label: '변경됨',       cls: 'srello-sync-dirty' },
-      synced:        { label: '동기화됨',     cls: 'srello-sync-synced' },
-      syncing:       { label: '동기화 중…',  cls: 'srello-sync-syncing' },
-      failed:        { label: '동기화 실패',  cls: 'srello-sync-failed' },
-      disconnected:  { label: '연결 해제',    cls: 'srello-sync-disconnected' },
+      never_synced:  { label: '미동기화',    cls: 'srello-sync-never' },
+      dirty:         { label: '변경됨',      cls: 'srello-sync-dirty' },
+      synced:        { label: '동기화됨',    cls: 'srello-sync-synced' },
+      syncing:       { label: '동기화 중…', cls: 'srello-sync-syncing' },
+      failed:        { label: '동기화 실패', cls: 'srello-sync-failed' },
+      disconnected:  { label: '연결 해제',   cls: 'srello-sync-disconnected' },
     };
     const b = BADGE[status.state] || BADGE.never_synced;
-    badge.textContent = b.label;
+
+    // synced 상태일 때 배지 레이블에 상대 시간 포함
+    let label = b.label;
+    if (status.state === 'synced' && status.lastSyncedAt) {
+      label = `동기화됨 · ${relativeTime(status.lastSyncedAt)}`;
+    }
+    badge.textContent = label;
     badge.className = `srello-sync-badge ${b.cls}`;
-    if (status.lastSyncedAt) badge.title = `마지막 동기화: ${relativeTime(status.lastSyncedAt)}`;
+    badge.title = status.lastSyncedAt
+      ? `마지막 동기화: ${new Date(status.lastSyncedAt).toLocaleString('ko-KR')}`
+      : '';
   }
 
   /* ── 시간 포맷 헬퍼 ── */
@@ -359,8 +386,17 @@ const Srello = (() => {
   function updateSyncButtons(loading) {
     const push = document.getElementById('srello-push-btn');
     const pull = document.getElementById('srello-pull-btn');
-    if (push) { push.disabled = loading; push.textContent = loading ? '저장 중…'    : '⬆ 저장'; }
-    if (pull) { pull.disabled = loading; pull.textContent = loading ? '불러오는 중…' : '⬇ 불러오기'; }
+    const offline = !navigator.onLine;
+    if (push) { push.disabled = loading || offline; push.textContent = loading ? '저장 중…'    : '⬆ 저장'; }
+    if (pull) { pull.disabled = loading || offline; pull.textContent = loading ? '불러오는 중…' : '⬇ 불러오기'; }
+  }
+
+  /* ── 오프라인 감지 ── */
+  function initOfflineDetection() {
+    if (_offlineListenerBound) return;
+    window.addEventListener('online',  () => { renderProjectBar(); updateSyncButtons(false); });
+    window.addEventListener('offline', () => { renderProjectBar(); updateSyncButtons(false); });
+    _offlineListenerBound = true;
   }
 
   /* ── 충돌 모달 ── */
@@ -2175,7 +2211,9 @@ const Srello = (() => {
 
     if (!board) load();
     bindToolbar();
+    initOfflineDetection();
     renderProjectBar();
+    updateSyncButtons(false);
     setViewMode(viewMode);
 
     if (migrateResult === 'migrated') {

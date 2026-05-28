@@ -76,4 +76,4 @@
 - [ ] 홈 카드 — 오늘 일정 미리보기 표시
 - [x] Srello Google Sheets 연동 (1b) — Sheets scope OAuth, URL 파싱, 시트 자동 생성/기존 연결, srello-sync.js
 - [x] Srello 수동 Push/Pull (1c) — ⬆ 저장 / ⬇ 불러오기 버튼, dirty 마킹, 충돌 3선택 모달, executePull, lastRemoteUpdatedAt 검사
-- [ ] Srello 동기화 피드백 (1e) — lastSyncedAt 표시, Google 계정 상태, 오프라인 감지
+- [x] Srello 동기화 피드백 (1e) — lastSyncedAt 배지 표시(동기화됨 · N분 전), OAuth 미설정 경고 배지, 오프라인 감지(online/offline 이벤트, 버튼 비활성화/복원)

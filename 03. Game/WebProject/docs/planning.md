@@ -54,7 +54,7 @@ created: 2026-05-26
 | Srello — 멀티 프로젝트 기반 1a (`srello-projects.js`, 마이그레이션, 프로젝트 드롭다운·관리 모달) | ✅ 완료 |
 | Srello — Google Sheets 연동 1b (OAuth Sheets scope, URL 파싱, 시트 생성/연결) | ✅ 완료 |
 | Srello — 수동 Push/Pull 1c (⬆저장/⬇불러오기, dirty 마킹, 충돌 3선택 모달) | ✅ 완료 |
-| Srello — 동기화 피드백 1e (오프라인 감지, Google 계정 상태, lastSyncedAt 표시) | 🔲 예정 |
+| Srello — 동기화 피드백 1e (오프라인 감지, Google 계정 상태, lastSyncedAt 표시) | ✅ 완료 |
 | 메모 — `life-memo` 패널 | ❌ 제거 → Srello로 대체 |
 
 ### 설정 / 공통
