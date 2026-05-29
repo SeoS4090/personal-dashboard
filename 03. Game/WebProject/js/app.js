@@ -7,8 +7,10 @@ const App = (() => {
     'life-srello':    { parent: 'life',  title: 'Life',  sub: 'Srello' },
     'game-readme':    { parent: 'game',  title: 'Game',  sub: 'ReadMe' },
     'game-dashboard': { parent: 'game',  title: 'Game',  sub: '대시보드' },
+    'game-tarkov':    { parent: 'game',  title: 'Game',  sub: 'Tarkov' },
     'dev-readme':     { parent: 'dev',   title: 'Dev',   sub: 'ReadMe' },
     'dev-dashboard':  { parent: 'dev',   title: 'Dev',   sub: '프로젝트' },
+    'dev-claude':     { parent: 'dev',   title: 'Dev',   sub: 'Claude' },
     'media-readme':   { parent: 'media', title: 'Media', sub: 'ReadMe' },
     'media-dashboard':{ parent: 'media', title: 'Media', sub: '대시보드' },
     'settings':       { parent: null,    title: '설정',  sub: '' },
@@ -99,6 +101,8 @@ const App = (() => {
     if (panelId === 'life-srello')   Srello.init();
     if (panelId === 'life-news')     News.init();
     if (panelId === 'life-calendar') Calendar.init();
+    if (panelId === 'game-tarkov' && typeof Tarkov !== 'undefined') Tarkov.init();
+    if (panelId === 'dev-claude'  && typeof ClaudeMon !== 'undefined') ClaudeMon.init();
     if (panelId === 'settings')      Settings.load();
   }
 

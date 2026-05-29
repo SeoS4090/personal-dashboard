@@ -84,7 +84,10 @@ created: 2026-05-26
 
 | 항목 | 상태 |
 |------|------|
-| Game 섹션 | 🚧 준비 중 |
+| Game — Tarkov 패널 뼈대/미리보기 데이터 | ✅ 완료 |
+| Game — Tarkov JSON 스키마 샘플 (`data/tarkov-questlines.example.json`) | ✅ 완료 |
+| Game — Tarkov 퀘스트 라인 그래프 렌더러 (SVG swim-lane·줌·Kappa) | ✅ 완료 |
+| Game — Tarkov 상세 플로팅 패널·필터 바·포커스 격리 (가시성 개선) | ✅ 완료 |
 | Dev 섹션 | 🚧 준비 중 |
 | Media 섹션 | 🚧 준비 중 |
 

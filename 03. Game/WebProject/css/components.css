@@ -1805,3 +1805,230 @@ select.input option {
   color: var(--text-muted);
   margin-top: 6px;
 }
+
+/* ── Tarkov 퀘스트 그래프 ─────────────────────────────────────── */
+
+/* 상세 정보 플로팅 오버레이 — 그래프 뷰포트 우상단에 고정, 스크롤과 무관 */
+.tarkov-detail-float {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 330px;
+  max-width: calc(100% - 24px);
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  z-index: 20;
+  padding: 14px !important;
+  background: var(--bg-accent);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--shadow-glass);
+  animation: tarkovDetailIn 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tarkov-detail-float:hover { border-color: var(--glass-border-strong); }
+
+@keyframes tarkovDetailIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 선행/후속 퀘스트 링크 */
+.tarkov-rel-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--glass-border-strong);
+  transition: color var(--transition);
+}
+.tarkov-rel-link:hover { color: var(--color-game); }
+
+/* 필터 토글 활성 상태 (게임 핑크) */
+.tarkov-f-on {
+  background: rgba(255, 107, 157, 0.15) !important;
+  border-color: rgba(255, 107, 157, 0.45) !important;
+  color: var(--color-game) !important;
+}
+
+/* 좁은 화면: 오버레이를 하단 전체폭으로 */
+@media (max-width: 640px) {
+  .tarkov-detail-float {
+    top: auto;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-height: 55%;
+  }
+}
+
+/* ── Dev · Claude 모니터 ──────────────────────────────────────── */
+.claude-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.claude-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.claude-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.claude-card-meta { flex: 1; min-width: 0; }
+.claude-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.claude-name {
+  font-size: var(--fs-card);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.claude-plan { background: rgba(124, 131, 255, 0.16); color: var(--color-dev); }
+.claude-countdown {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.claude-statestr { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
+.claude-edit { flex: none; }
+
+/* 카운트다운 링 + 캐릭터 아바타 */
+.claude-ring {
+  --pct: 0;
+  --ring: var(--color-dev);
+  width: 76px;
+  height: 76px;
+  flex: none;
+  border-radius: 50%;
+  background: conic-gradient(var(--ring) calc(var(--pct) * 1%), rgba(255, 255, 255, 0.08) 0);
+  display: grid;
+  place-items: center;
+  transition: background 0.9s linear;
+}
+.claude-avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: grid;
+  place-items: center;
+  position: relative;
+  font-size: 32px;
+  line-height: 1;
+}
+.claude-face { display: block; }
+.claude-fx {
+  position: absolute;
+  font-size: 16px;
+  display: none;
+  pointer-events: none;
+}
+.fx-type  { right: -2px; bottom: -2px; }
+.fx-zzz   { right: -4px; top: -8px; }
+.fx-sweat { right: -2px; top: -2px; }
+.fx-fire  { left: -4px; bottom: -2px; font-size: 15px; }
+
+.claude-avatar.is-working .fx-type  { display: block; animation: claude-type 0.45s steps(2) infinite; }
+.claude-avatar.is-resting .fx-zzz   { display: block; animation: claude-zzz 2.4s ease-in-out infinite; }
+.claude-avatar.is-tired   .fx-sweat { display: block; animation: claude-sweat 1.3s ease-in-out infinite; }
+.claude-avatar.has-fire   .fx-fire  { display: block; animation: claude-fire 0.4s ease-in-out infinite alternate; }
+
+.claude-avatar.is-working .claude-face { animation: claude-bob 0.9s ease-in-out infinite; }
+.claude-avatar.is-tired   .claude-face { animation: claude-wobble 1.4s ease-in-out infinite; }
+.claude-avatar.is-resting .claude-face { animation: claude-breathe 3s ease-in-out infinite; }
+
+@keyframes claude-bob     { 0%, 100% { transform: translateY(0); }      50% { transform: translateY(-3px); } }
+@keyframes claude-wobble  { 0%, 100% { transform: rotate(-5deg); }      50% { transform: rotate(5deg); } }
+@keyframes claude-breathe { 0%, 100% { transform: scale(1); }           50% { transform: scale(1.06); } }
+@keyframes claude-type    { 0% { transform: translateY(0); }            100% { transform: translateY(-2px); } }
+@keyframes claude-fire    { from { transform: scale(0.9) rotate(-6deg); } to { transform: scale(1.1) rotate(6deg); } }
+@keyframes claude-zzz {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.8); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(7px, -13px) scale(1.1); }
+}
+@keyframes claude-sweat {
+  0%   { opacity: 0; transform: translateY(-2px); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(7px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .claude-avatar .claude-face,
+  .claude-avatar .claude-fx { animation: none !important; }
+}
+
+/* 통계 + sparkline */
+.claude-stats { display: flex; gap: 8px; }
+.claude-stat {
+  flex: 1;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 6px;
+  text-align: center;
+}
+.claude-stat b {
+  display: block;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.claude-stat small { display: block; margin-top: 2px; font-size: 10px; color: var(--text-muted); }
+
+.claude-spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 40px;
+  padding: 0 2px;
+}
+.claude-bar {
+  flex: 1;
+  min-width: 4px;
+  background: var(--acc, var(--color-dev));
+  opacity: 0.5;
+  border-radius: 2px 2px 0 0;
+  transition: opacity 0.2s;
+}
+.claude-bar:hover { opacity: 1; }
+.claude-spark-empty {
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.claude-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.claude-sub { font-size: 11px; color: var(--text-muted); text-align: right; }
+
+/* 계정 추가/편집 모달 */
+.claude-modal { max-width: 420px; }
+.claude-modal-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+.claude-field { display: block; margin-bottom: 12px; }
+.claude-field > span { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
+.claude-pick-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.claude-pick {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  cursor: pointer;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  transition: all var(--transition);
+}
+.claude-pick:hover { border-color: var(--glass-border-strong); }
+.claude-pick.active { border-color: var(--color-dev); box-shadow: 0 0 0 2px rgba(124, 131, 255, 0.3); }
+.claude-pick-color { border: 2px solid transparent; }
+.claude-pick-color.active { outline: 2px solid var(--text-primary); outline-offset: 2px; box-shadow: none; }
+.claude-modal-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; }
+.btn-danger { color: #ff6b6b !important; border-color: rgba(255, 107, 107, 0.5) !important; }

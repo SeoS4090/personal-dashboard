@@ -11,7 +11,8 @@
 | **Life · 일정** | Google Calendar API (OAuth 2.0, 월/주/목록 뷰) |
 | **Life · 뉴스** | NewsAPI.org 키워드 피드 |
 | **Life · Srello** | Trello 스타일 칸반 (드래그 앤 드롭, P0–P3 우선순위) |
-| **Game / Dev / Media** | ReadMe·대시보드 틀 (기능 확장 예정) |
+| **Game · Tarkov** | 퀘스트 라인 시각화 패널 뼈대 + 미리보기 데이터 |
+| **Dev / Media** | ReadMe·대시보드 틀 (기능 확장 예정) |
 | **설정** | 테마, 글자 크기, API 키 |
 
 ## 로컬 실행
@@ -32,6 +33,7 @@ python -m http.server 8080
 - **복원:** **↑ 가져오기** → JSON 선택
 - **개인 템플릿:** `data/srello-board.local.json` (`.gitignore` — 커밋되지 않음)
 - **형식 예시:** `data/srello-board.example.json`
+- **Tarkov 예시 스키마:** `data/tarkov-questlines.example.json`
 
 ## 설정
 
@@ -52,6 +54,7 @@ WebProject/
 ├── panels/             # 지연 로드 패널 HTML
 ├── js/app.js           # 라우터, 설정
 ├── js/modules/life/    # calendar, news, srello
+├── js/modules/game/    # tarkov
 ├── css/                # variables, layout, components
 ├── data/               # Srello JSON (local 파일은 Git 제외)
 └── docs/               # Obsidian 기획 문서 (MOC)

@@ -1,0 +1,17 @@
+{
+  "_comment": "이 파일을 'claude-accounts.config.json' 으로 복사한 뒤 본인 계정에 맞게 수정하세요. 실제 파일은 로컬 경로를 담으므로 .gitignore 됩니다. 한 PC에서 여러 Claude Code 계정을 쓰려면 계정마다 CLAUDE_CONFIG_DIR 를 다르게 두고, 각 디렉터리를 아래 configDir 에 등록합니다. configDir 를 비우면 ~/.claude 가 사용됩니다.",
+  "accounts": [
+    {
+      "id": "main",
+      "label": "메인 (Max20)",
+      "plan": "max20",
+      "configDir": "~/.claude"
+    },
+    {
+      "id": "work",
+      "label": "회사 (Max5)",
+      "plan": "max5",
+      "configDir": "C:\\Users\\admin\\.claude-work"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "version": 2,
+  "updatedAt": "2026-05-28",
+  "description": "Tarkov quest schema v2 — flat quests array, nextQuestIds derived at runtime",
+  "quests": [
+    {
+      "id": "debut",
+      "name": "Debut",
+      "trader": "Prapor",
+      "minLevel": 1,
+      "maps": ["Ground Zero", "Customs"],
+      "prerequisites": [],
+      "kappaContainer": false,
+      "objectives": [
+        { "text": "Survive and extract from Ground Zero 1 time" },
+        { "text": "Survive and extract from Customs 1 time" }
+      ],
+      "rewards": [
+        { "type": "xp", "amount": 1500 },
+        { "type": "item", "name": "Salewa first aid kit", "count": 2 }
+      ],
+      "wikiUrl": "https://escapefromtarkov.fandom.com/wiki/Debut",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "search-mission",
+      "name": "Search Mission",
+      "trader": "Prapor",
+      "minLevel": 5,
+      "maps": ["Woods"],
+      "prerequisites": ["debut"],
+      "kappaContainer": false,
+      "objectives": [
+        { "text": "Find the abandoned camp at Woods" }
+      ],
+      "rewards": [
+        { "type": "xp", "amount": 2400 },
+        { "type": "item", "name": "Morphine injector", "count": 1 }
+      ],
+      "wikiUrl": "https://escapefromtarkov.fandom.com/wiki/Search_Mission",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "delivery-from-the-past",
+      "name": "Delivery from the Past",
+      "trader": "Prapor",
+      "minLevel": 5,
+      "maps": ["Customs", "Factory"],
+      "prerequisites": ["search-mission"],
+      "kappaContainer": true,
+      "objectives": [
+        { "text": "Find the Flash drive with information on Customs" },
+        { "text": "Hand over the Flash drive to Prapor" }
+      ],
+      "rewards": [
+        { "type": "xp", "amount": 2700 },
+        { "type": "item", "name": "USEC Bearhand gloves", "count": 1 },
+        { "type": "unlock", "name": "Prapor LL2" }
+      ],
+      "wikiUrl": "https://escapefromtarkov.fandom.com/wiki/Delivery_from_the_Past",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "shooting-cans",
+      "name": "Shooting Cans",
+      "trader": "Mechanic",
+      "minLevel": 1,
+      "maps": ["Factory"],
+      "prerequisites": [],
+      "kappaContainer": false,
+      "objectives": [
+        { "text": "Kill 10 Scavs at Factory with a pistol" }
+      ],
+      "rewards": [
+        { "type": "xp", "amount": 1400 },
+        { "type": "item", "name": "Glock 17 9x19", "count": 1 }
+      ],
+      "wikiUrl": "https://escapefromtarkov.fandom.com/wiki/Shooting_Cans",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "acquaintance",
+      "name": "Acquaintance",
+      "trader": "Mechanic",
+      "minLevel": 2,
+      "maps": ["Factory"],
+      "prerequisites": ["shooting-cans"],
+      "kappaContainer": false,
+      "objectives": [
+        { "text": "Kill 15 Scavs at Factory" }
+      ],
+      "rewards": [
+        { "type": "xp", "amount": 2300 },
+        { "type": "item", "name": "M67 grenade", "count": 2 }
+      ],
+      "wikiUrl": "https://escapefromtarkov.fandom.com/wiki/Acquaintance",
+      "x": null,
+      "y": null
+    }
+  ]
+}

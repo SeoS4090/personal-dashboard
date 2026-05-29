@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-29T00:00:00.000Z",
+  "_comment": "데모용 예시 데이터. 실제 수치는 'node scripts/claude-usage-sync.js' 실행 시 data/claude-usage.generated.json 에 생성됩니다(개인정보 — gitignore). accounts 의 key 는 claude_accounts(localStorage)의 계정 id 와 매칭됩니다.",
+  "accounts": {
+    "demo-main": {
+      "label": "메인 (Max20)",
+      "plan": "max20",
+      "today": { "date": "2026-05-29", "messages": 842, "sessions": 5, "toolCalls": 271, "tokens": 795992 },
+      "daily": [
+        { "date": "2026-05-23", "messages": 475, "tokens": 194193 },
+        { "date": "2026-05-24", "messages": 210, "tokens": 120400 },
+        { "date": "2026-05-25", "messages": 360, "tokens": 305000 },
+        { "date": "2026-05-26", "messages": 1745, "tokens": 932785 },
+        { "date": "2026-05-27", "messages": 1179, "tokens": 795992 },
+        { "date": "2026-05-28", "messages": 640, "tokens": 410233 },
+        { "date": "2026-05-29", "messages": 842, "tokens": 612345 }
+      ],
+      "modelTokens": { "claude-opus-4-8": 352516, "claude-sonnet-4-6": 1311196, "claude-haiku-4-5-20251001": 329187 },
+      "totals": { "sessions": 147, "messages": 17416 },
+      "lastSessionAt": "2026-05-29T10:57:00.000Z",
+      "resetAt": null
+    },
+    "demo-work": {
+      "label": "회사 (Max5)",
+      "plan": "max5",
+      "today": { "date": "2026-05-29", "messages": 318, "sessions": 3, "toolCalls": 96, "tokens": 188324 },
+      "daily": [
+        { "date": "2026-05-23", "messages": 120, "tokens": 60200 },
+        { "date": "2026-05-24", "messages": 0, "tokens": 0 },
+        { "date": "2026-05-25", "messages": 88, "tokens": 41000 },
+        { "date": "2026-05-26", "messages": 402, "tokens": 221540 },
+        { "date": "2026-05-27", "messages": 256, "tokens": 132880 },
+        { "date": "2026-05-28", "messages": 174, "tokens": 90120 },
+        { "date": "2026-05-29", "messages": 318, "tokens": 188324 }
+      ],
+      "modelTokens": { "claude-sonnet-4-6": 560317, "claude-haiku-4-5-20251001": 55084 },
+      "totals": { "sessions": 41, "messages": 4820 },
+      "lastSessionAt": "2026-05-29T09:12:00.000Z",
+      "resetAt": null
+    },
+    "demo-side": {
+      "label": "사이드 (Pro)",
+      "plan": "pro",
+      "today": { "date": "2026-05-29", "messages": 24, "sessions": 1, "toolCalls": 4, "tokens": 12900 },
+      "daily": [
+        { "date": "2026-05-23", "messages": 0, "tokens": 0 },
+        { "date": "2026-05-24", "messages": 0, "tokens": 0 },
+        { "date": "2026-05-25", "messages": 12, "tokens": 5400 },
+        { "date": "2026-05-26", "messages": 0, "tokens": 0 },
+        { "date": "2026-05-27", "messages": 59, "tokens": 28990 },
+        { "date": "2026-05-28", "messages": 0, "tokens": 0 },
+        { "date": "2026-05-29", "messages": 24, "tokens": 12900 }
+      ],
+      "modelTokens": { "claude-sonnet-4-6": 70568 },
+      "totals": { "sessions": 9, "messages": 612 },
+      "lastSessionAt": "2026-05-29T08:40:00.000Z",
+      "resetAt": null
+    }
+  }
+}
