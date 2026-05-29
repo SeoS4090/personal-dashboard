@@ -8,6 +8,7 @@
 
   <div class="readme-tab-bar">
     <button class="readme-tab active" onclick="switchReadmeTab(this,'readme-game-dashboard')">🎯 대시보드</button>
+    <button class="readme-tab" onclick="switchReadmeTab(this,'readme-game-tarkov')">🪖 Tarkov</button>
   </div>
 
   <div class="readme-tab-content active" id="readme-game-dashboard">
@@ -32,6 +33,32 @@
           <li>섹션 UI 틀 완성 — 기능 구현 진행 중</li>
           <li>Steam Web API 연동을 통한 라이브러리 불러오기 우선 개발 예정</li>
           <li>API 키 설정은 ⚙️ 설정 패널에 추가될 예정입니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="readme-tab-content" id="readme-game-tarkov">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" style="color:var(--color-game)">🪖 Tarkov 퀘스트 라인</div>
+        </div>
+        <p style="font-size:var(--fs-body); color:var(--text-secondary); margin-bottom:16px;">Escape from Tarkov 퀘스트를 트레이더별로 연결선 그래프로 시각화하는 기능입니다.</p>
+        <ul class="readme-steps">
+          <li>1차: 수동 JSON 데이터로 퀘스트 노드/선 표시</li>
+          <li>2차: 필터(트레이더, 레벨, 맵) + 검색</li>
+          <li>3차: 진행 상태 저장(localStorage) 및 진척도 시각화</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🧱 데이터 소스 메모</div>
+        </div>
+        <ul class="readme-steps">
+          <li>Fandom 페이지 HTML은 구조 변경 가능성이 있어 파싱 내구성이 낮습니다.</li>
+          <li>초기 버전은 프로젝트 내부 JSON 스키마를 우선 고정하는 방식을 권장합니다.</li>
+          <li>추후 자동 수집이 필요하면 별도 스크립트로 배치 갱신하는 흐름이 안전합니다.</li>
         </ul>
       </div>
     </div>

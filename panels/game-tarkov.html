@@ -1,0 +1,50 @@
+<section class="panel" id="panel-game-tarkov">
+  <div class="section-header">
+    <div>
+      <div class="section-title" style="color:var(--color-game)">🪖 Escape from Tarkov</div>
+      <div class="section-desc">퀘스트 라인 그래프</div>
+    </div>
+  </div>
+
+  <!-- Controls: 필터 바(좌) + 줌(우) -->
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+    <div id="tarkov-filter-area" style="display:flex; align-items:center; gap:8px; flex:1; flex-wrap:wrap; min-height:28px;">
+      <!-- 검색·트레이더·토글: tarkov.js _buildFilterBar()가 주입 -->
+    </div>
+    <div style="display:flex; align-items:center; gap:4px;">
+      <button id="tarkov-zoom-out" class="btn btn-sm">－</button>
+      <span id="tarkov-zoom-pct" style="font-size:11px; color:var(--text-muted); width:38px; text-align:center;">35%</span>
+      <button id="tarkov-zoom-in" class="btn btn-sm">＋</button>
+      <button id="tarkov-zoom-fit" class="btn btn-sm" style="margin-left:2px;">맞춤</button>
+    </div>
+  </div>
+
+  <!-- Graph stage: 스크롤 캔버스 + 플로팅 상세 오버레이 -->
+  <div id="tarkov-graph-stage" style="position:relative; margin-bottom:10px;">
+    <div id="tarkov-graph-wrap" style="height:600px; overflow:auto; background:rgba(0,0,0,.25); border-radius:8px; border:1px solid rgba(255,255,255,.06);">
+      <div id="tarkov-graph-loading" style="height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:13px;">퀘스트 그래프 로딩 중…</div>
+      <div id="tarkov-graph-empty" style="display:none; height:100%; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:var(--text-muted); font-size:13px;">
+        <div>표시할 퀘스트가 없습니다.</div>
+        <div style="font-size:11px; opacity:.7;">필터 조건을 바꾸거나 초기화하세요.</div>
+      </div>
+      <svg id="tarkov-graph-svg" style="display:none;"></svg>
+    </div>
+
+    <!-- Detail: 그래프 위 플로팅 오버레이 (드래그 없이 항상 보임) -->
+    <div id="tarkov-detail" class="card tarkov-detail-float" style="display:none;"></div>
+  </div>
+
+  <!-- Legend + stats -->
+  <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+    <div style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-secondary);">
+      <span style="width:10px; height:10px; border-radius:2px; background:#2a4872; border:1px solid #4a7acf; display:inline-block;"></span>일반
+    </div>
+    <div style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-secondary);">
+      <span style="width:10px; height:10px; border-radius:2px; background:#5c450a; border:1px solid #c9a820; display:inline-block;"></span>Kappa 필요
+    </div>
+    <div style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-secondary);">
+      <span style="width:10px; height:10px; border-radius:2px; background:#1e5230; border:1px solid #3ab870; display:inline-block;"></span>완료
+    </div>
+    <div id="tarkov-stats" style="margin-left:auto; font-size:11px; color:var(--text-muted);"></div>
+  </div>
+</section>

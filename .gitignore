@@ -3,5 +3,14 @@ data/srello-board.local.json
 srello-board.local.json
 srello-board-*.local.json
 
+# Tarkov 파이프라인 산출물 (scripts/tarkov-sync.js 생성)
+data/tarkov-questlines.generated.json
+data/tarkov-questlines.raw.json
+data/tarkov-questlines*.backup-*.json
+
+# Claude 모니터 — 개인 사용량·로컬 경로 (scripts/claude-usage-sync.js 생성)
+data/claude-usage.generated.json
+scripts/claude-accounts.config.json
+
 # 로컬 잡파일
 *.stackdump

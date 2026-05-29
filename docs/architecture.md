@@ -26,7 +26,8 @@ created: 2026-05-26
 WebProject/
 ├── data/
 │   ├── srello-board.example.json  ← Srello JSON 형식 예시 (Git 포함)
-│   └── srello-board.local.json    ← 개인 보드 백업 (Git 제외, .gitignore)
+│   ├── srello-board.local.json    ← 개인 보드 백업 (Git 제외, .gitignore)
+│   └── tarkov-questlines.example.json ← Tarkov 퀘스트 라인 스키마 예시
 ├── docs/
 │   ├── planning.md          ← 기획 인덱스 (MOC)
 │   ├── architecture.md      ← 현재 문서
@@ -40,6 +41,7 @@ WebProject/
 │   ├── life-readme.html
 │   ├── game-dashboard.html
 │   ├── game-readme.html
+│   ├── game-tarkov.html
 │   ├── dev-dashboard.html
 │   ├── dev-readme.html
 │   ├── media-dashboard.html
@@ -52,10 +54,12 @@ WebProject/
 ├── js/
 │   ├── app.js               ← 라우터, Settings 모듈, toast()
 │   └── modules/
-│       └── life/
-│           ├── calendar.js  ← Google Calendar API 연동 + 토큰 복원
-│           ├── news.js      ← NewsAPI.org 연동
-│           └── srello.js    ← Srello 칸반 CRUD + DnD + JSON 백업
+│       ├── life/
+│       │   ├── calendar.js  ← Google Calendar API 연동 + 토큰 복원
+│       │   ├── news.js      ← NewsAPI.org 연동
+│       │   └── srello.js    ← Srello 칸반 CRUD + DnD + JSON 백업
+│       └── game/
+│           └── tarkov.js    ← Tarkov 그래프 렌더·상세 플로팅 패널·필터·포커스 격리
 ├── .gitignore               ← srello-board.local.json 등 개인 데이터 제외
 └── index.html               ← shell + 홈 패널 인라인 (패널은 fetch 지연 로드)
 ```
